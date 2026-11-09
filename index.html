@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="rw">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ElectroShop RW — Ibyuma by'ikoranabuhanga</title>
+
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: { primary: '#0ea5e9', dark: '#0f172a', accent: '#f59e0b', purple: '#8b5cf6' },
+      fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] }
+    }
+  }
+}
+</script>
+
+<!-- Icons & Fonts -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+<style>
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Inter', sans-serif; overflow-x: hidden; background-color: #f8fafc; }
+  
+  /* UI Elements */
+  .gradient-hero { background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0ea5e9 100%); }
+  .card-hover { transition: all .3s cubic-bezier(0.16, 1, 0.3, 1); }
+  .card-hover:hover { transform: translateY(-8px); box-shadow: 0 20px 40px rgba(14,165,233,.15); }
+  .btn-primary { background: linear-gradient(135deg,#0ea5e9,#2563eb); transition: all .3s ease; }
+  .btn-primary:hover { background: linear-gradient(135deg,#0284c7,#1d4ed8); transform: translateY(-2px); box-shadow: 0 10px 25px rgba(14,165,233,.4); }
+  
+  .page { display: none; }
+  .page.active { display: block; animation: fadeIn 0.4s ease; }
+  .line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 8px; }
+  ::-webkit-scrollbar-track { background: #f1f5f9; }
+  ::-webkit-scrollbar-thumb { background: #0ea5e9; border-radius: 4px; }
+  
+  /* Animations */
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+  .skeleton { background: linear-gradient(90deg,#f0f0f0 25%,#e0e0e0 50%,#f0f0f0 75%); background-size: 200% 100%; animation: loading 1.5s infinite; }
+  @keyframes loading { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+</style>
+</head>
+
+<body class="text-slate-800">
+
+<!-- ================= TOP BAR ================= -->
+<div class="bg-dark text-slate-300 text-xs py-2">
+  <div class="max-w-7xl mx-auto px-4 flex flex-wrap justify-between items-center gap-2">
+    <div class="flex items-center gap-4">
+      <span><i class="fas fa-phone text-primary mr-1"></i> +250 788 000 000</span>
+      <span class="hidden sm:inline"><i class="fas fa-envelope text-primary mr-1"></i> info@electro.rw</span>
+    </div>
+    <div class="flex items-center gap-4">
+      <span><i class="fas fa-truck text-accent mr-1"></i> Delivery mu Kigali: 24h</span>
+    </div>
+  </div>
+</div>
+
+<!-- ================= HEADER ================= -->
+<header id="mainHeader" class="bg-white shadow-sm sticky top-0 z-40">
+  <div class="max-w-7xl mx-auto px-4">
+    <div class="flex items-center justify-between h-16 md:h-20 gap-4">
+      <!-- Logo -->
+      <a href="#" onclick="showPage('home')" class="flex items-center gap-2 flex-shrink-0">
+        <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-primary to-blue-700 flex items-center justify-center text-white font-bold text-lg">
+          <i class="fas fa-bolt"></i>
+        </div>
+        <span class="text-xl md:text-2xl font-extrabold text-dark">Electro<span class="text-primary">Shop</span></span>
+      </a>
+
+      <!-- Desktop Search -->
+      <div class="hidden md:flex flex-1 max-w-xl">
+        <div class="relative w-full">
+          <input type="text" id="searchInput" placeholder="Shakisha telefoni, laptop, accessories..."
+            class="w-full pl-4 pr-12 py-2.5 rounded-full border border-slate-200 focus:border-primary outline-none transition text-sm" />
+          <button class="absolute right-1 top-1 bottom-1 px-4 rounded-full btn-primary text-white">
+            <i class="fas fa-search"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Cart Icon -->
+      <div class="flex items-center gap-2 md:gap-4">
+        <a href="#" onclick="showPage('cart')" class="relative flex flex-col items-center text-xs text-slate-600 hover:text-primary transition">
+          <i class="fas fa-shopping-cart text-lg mb-0.5"></i><span>Agatebo</span>
+          <span id="cartCount" class="absolute -top-1 -right-1 bg-accent text-white text-[10px] font-bold rounded-full w-5 h-5 flex items-center justify-center">0</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Mobile Search -->
+    <div class="md:hidden pb-3">
+      <div class="relative w-full">
+        <input type="text" id="mobileSearch" placeholder="Shakisha ibicuruzwa..."
+          class="w-full pl-4 pr-12 py-2.5 rounded-full border border-slate-200 focus:border-primary outline-none text-sm" />
+        <button class="absolute right-1 top-1 bottom-1 px-4 rounded-full btn-primary text-white">
+          <i class="fas fa-search"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Category Nav -->
+  <nav class="border-t border-slate-100 bg-white">
+    <div class="max-w-7xl mx-auto px-4">
+      <ul class="flex items-center gap-1 md:gap-6 overflow-x-auto py-2 text-sm font-medium text-slate-600 whitespace-nowrap">
+        <li><a href="#" onclick="loadProducts()" class="px-3 py-2 rounded-lg hover:bg-primary/10 hover:text-primary transition block"><i class="fas fa-th-large mr-1 text-primary"></i> Byose</a></li>
+        <li><a href="#" data-cat="Telefoni" class="cat-link px-3 py-2 rounded-lg hover:bg-primary/10 hover:text-primary transition block"><i class="fas fa-mobile-alt mr-1"></i> Telefoni</a></li>
+        <li><a href="#" data-cat="Laptops" class="cat-link px-3 py-2 rounded-lg hover:bg-primary/10 hover:text-primary transition block"><i class="fas fa-laptop mr-1"></i> Laptops</a></li>
+        <li><a href="#" data-cat="Audio" class="cat-link px-3 py-2 rounded-lg hover:bg-primary/10 hover:text-primary transition block"><i class="fas fa-headphones mr-1"></i> Audio</a></li>
+        <li><a href="#" data-cat="Accessories" class="cat-link px-3 py-2 rounded-lg hover:bg-primary/10 hover:text-primary transition block"><i class="fas fa-plug mr-1"></i> Accessories</a></li>
+      </ul>
+    </div>
+  </nav>
+</header>
+
+<!-- ================= PAGE: HOME ================= -->
+<main id="page-home" class="page active">
+
+  <!-- HERO SECTION -->
+  <section class="gradient-hero text-white relative overflow-hidden">
+    <div class="max-w-7xl mx-auto px-4 py-12 md:py-20 relative grid md:grid-cols-2 gap-8 items-center">
+      <div>
+        <h1 class="text-3xl md:text-5xl font-extrabold leading-tight mb-4">
+          Ibyuma by'ikoranabuhanga <br /><span class="text-primary">Byiza, Bhendutse</span>
+        </h1>
+        <p class="text-slate-300 text-base md:text-lg mb-6 max-w-md">
+          Telefoni, laptops, accessories n'ibindi — delivery mu Kigali mu masaha 24.
+        </p>
+        <a href="#products" class="btn-primary px-6 py-3 rounded-full font-semibold text-sm inline-flex items-center gap-2">
+          <i class="fas fa-shopping-bag"></i> Tangira kugura
+        </a>
+      </div>
+      <div class="hidden md:block">
+        <div class="bg-white/10 backdrop-blur-md rounded-3xl p-6 border border-white/20">
+          <img src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=600&q=80" alt="Smartphone"
+            class="rounded-2xl w-full h-80 object-cover shadow-2xl" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRODUCTS GRID -->
+  <section id="products" class="max-w-7xl mx-auto px-4 py-12 min-h-[50vh]">
+    <div class="flex items-center justify-between mb-6">
+      <div>
+        <h2 class="text-2xl md:text-3xl font-extrabold text-dark">Ibicuruzwa</h2>
+        <p class="text-slate-500 text-sm mt-1">Byose biri kuri Internet</p>
+      </div>
+    </div>
+    
+    <div id="productGrid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      <!-- Skeletons zagaragara mbere yo kubona data -->
+      <div class="skeleton h-72 rounded-2xl"></div>
+      <div class="skeleton h-72 rounded-2xl"></div>
+      <div class="skeleton h-72 rounded-2xl"></div>
+      <div class="skeleton h-72 rounded-2xl"></div>
+    </div>
+    
+    <div id="emptyState" class="hidden text-center py-16">
+      <i class="fas fa-box-open text-6xl text-slate-200 mb-4 block"></i>
+      <p class="text-slate-500 font-bold">Nta bicuruzwa birahari kuri Internet.</p>
+    </div>
+  </section>
+
+</main>
+
+<!-- ================= PAGE: CART ================= -->
+<main id="page-cart" class="page">
+  <div class="max-w-5xl mx-auto px-4 py-8 min-h-[60vh]">
+    <h1 class="text-2xl md:text-3xl font-extrabold text-dark mb-6"><i class="fas fa-shopping-cart text-primary mr-2"></i>Agatebo kawe</h1>
+    
+    <div class="grid md:grid-cols-3 gap-6">
+      <div class="md:col-span-2 space-y-3" id="cartItems"></div>
+      
+      <div class="bg-white rounded-2xl p-6 border border-slate-100 h-fit sticky top-24 shadow-sm">
+        <h3 class="font-bold text-lg mb-4">Incamake</h3>
+        <div class="space-y-2 text-sm mb-4">
+          <div class="flex justify-between"><span class="text-slate-500">Ibicuruzwa:</span><span id="cartSubtotal" class="font-bold">0 RWF</span></div>
+          <div class="flex justify-between"><span class="text-slate-500">Delivery:</span><span class="text-green-600 font-bold">Ubuntu</span></div>
+          <div class="border-t border-slate-100 pt-2 flex justify-between font-black text-lg"><span>Total:</span><span id="cartTotal" class="text-primary">0 RWF</span></div>
+        </div>
+        <button onclick="checkoutWhatsApp()" class="w-full btn-primary text-white py-3.5 rounded-xl font-bold text-sm shadow-lg mb-2">
+          <i class="fab fa-whatsapp mr-2 text-lg"></i>Komeza kuri WhatsApp
+        </button>
+        <a href="#" onclick="showPage('home')" class="block text-center text-primary text-sm mt-3 font-semibold hover:underline">← Komeza kugura</a>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- ================= FOOTER ================= -->
+<footer class="bg-dark text-slate-400 py-10 mt-auto">
+  <div class="max-w-7xl mx-auto px-4 text-center">
+    <div class="flex items-center justify-center gap-2 mb-4">
+      <div class="w-9 h-9 rounded-lg bg-primary flex items-center justify-center text-white font-bold"><i class="fas fa-bolt"></i></div>
+      <span class="text-lg font-extrabold text-white">Electro<span class="text-primary">Shop</span></span>
+    </div>
+    <p class="text-sm">&copy; 2025 ElectroShop RW. Uburenganzira bwose burafitwe.</p>
+  </div>
+</footer>
+
+<!-- ================= TOAST ================= -->
+<div id="toast" class="fixed bottom-6 right-6 bg-dark text-white px-6 py-3 rounded-xl shadow-2xl opacity-0 translate-y-4 transition-all duration-300 z-[100] pointer-events-none font-bold">
+  <span id="toastMsg">Ibyakunze!</span>
+</div>
+
+<!-- ============================================================ -->
+<!-- ================= FIREBASE SETUP =========================== -->
+<!-- ============================================================ -->
+<script type="module">
+  // ==== KOPA IZI NYUGUTI MURI FIREBASE CONSOLE YAWE ====
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+  import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+    projectId: "YOUR_PROJECT_ID",
+    storageBucket: "YOUR_PROJECT_ID.appspot.com",
+    messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+    appId: "YOUR_APP_ID"
+  };
+
+  // Tangiza Firebase
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  // ============================================================
+  // ================== LOGIC Y'URUBUGA =========================
+  // ============================================================
+  
+  let allProducts = [];
+  let cart = []; // Iyi ni temporary (memory) gusa
+
+  // Utilities
+  const formatRWF = (n) => new Intl.NumberFormat('rw-RW',{style:'currency',currency:'RWF',maximumFractionDigits:0}).format(n);
+
+  window.showToast = (msg) => {
+    const t = document.getElementById('toast'), m = document.getElementById('toastMsg');
+    m.textContent = msg;
+    t.classList.remove('opacity-0', 'translate-y-4'); t.classList.add('opacity-100', 'translate-y-0');
+    setTimeout(() => { t.classList.add('opacity-0', 'translate-y-4'); t.classList.remove('opacity-100', 'translate-y-0'); }, 2500);
+  };
+
+  window.showPage = (name) => {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById(`page-${name}`).classList.add('active');
+    window.scrollTo(0, 0);
+    if(name === 'cart') renderCart();
+  };
+
+  window.updateCartCount = () => {
+    const count = cart.reduce((s, i) => s + i.quantity, 0);
+    document.getElementById('cartCount').textContent = count;
+  };
+
+  // ==== FETCH PRODUCTS FROM FIREBASE ====
+  window.loadProducts = async (category = null) => {
+    const grid = document.getElementById('productGrid');
+    const empty = document.getElementById('emptyState');
+    grid.innerHTML = Array(4).fill('<div class="skeleton h-72 rounded-2xl"></div>').join('');
+    empty.classList.add('hidden');
+
+    try {
+      const querySnapshot = await getDocs(collection(db, "products"));
+      allProducts = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+      let displayProducts = allProducts;
+      if (category) {
+        displayProducts = allProducts.filter(p => p.category === category);
+      }
+
+      if (displayProducts.length === 0) {
+        grid.innerHTML = '';
+        empty.classList.remove('hidden');
+        return;
+      }
+
+      grid.innerHTML = displayProducts.map(p => {
+        const img = p.image || 'https://via.placeholder.com/400x300?text=Electronics';
+        const oos = p.stock <= 0;
+        
+        return `
+        <div class="bg-white rounded-2xl overflow-hidden border border-slate-100 card-hover flex flex-col group">
+          <div class="relative aspect-[4/3] overflow-hidden bg-slate-100 cursor-pointer">
+            <img src="${img}" alt="${p.name}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" onerror="this.src='https://via.placeholder.com/400x300?text=No+Image'" />
+            ${oos ? '<span class="absolute inset-0 bg-black/50 flex items-center justify-center text-white font-bold text-sm">BYASHIZE</span>' : ''}
+          </div>
+          <div class="p-4 flex-1 flex flex-col">
+            <p class="text-[10px] uppercase tracking-wide text-primary font-bold mb-1">${p.category || 'General'}</p>
+            <h3 class="font-bold text-sm text-dark line-clamp-2 mb-2 flex-1">${p.name}</h3>
+            <div class="flex items-center justify-between mt-auto pt-2">
+              <span class="text-primary font-black text-base">${formatRWF(p.price)}</span>
+              <button onclick="addToCart('${p.id}', '${p.name.replace(/'/g, "\\'")}', ${p.price}, '${img}')" ${oos ? 'disabled' : ''} class="w-9 h-9 rounded-full bg-primary/10 text-primary hover:bg-primary hover:text-white transition flex items-center justify-center disabled:opacity-50">
+                <i class="fas fa-plus text-sm"></i>
+              </button>
+            </div>
+          </div>
+        </div>`;
+      }).join('');
+
+    } catch (error) {
+      console.error("Error fetching products: ", error);
+      grid.innerHTML = `<p class="col-span-full text-center text-red-500 font-bold">Habaye ikibazo cyo kubona ibicuruzwa. Reba niba amakuru ya Firebase ari mu buryo.</p>`;
+    }
+  };
+
+  // ==== ADD TO CART ====
+  window.addToCart = (id, name, price, image) => {
+    const existing = cart.find(item => item.id === id);
+    if (existing) {
+      existing.quantity++;
+    } else {
+      cart.push({ id, name, price, image, quantity: 1 });
+    }
+    updateCartCount();
+    showToast(`✅ ${name} yongewe mu gatebo`);
+  };
+
+  // ==== RENDER CART ====
+  window.renderCart = () => {
+    const box = document.getElementById('cartItems');
+    if (cart.length === 0) {
+      box.innerHTML = `
+        <div class="bg-white rounded-2xl p-12 text-center border border-slate-100 shadow-sm">
+          <i class="fas fa-shopping-cart text-6xl text-slate-200 mb-4 block"></i>
+          <p class="text-slate-500 font-bold mb-4">Agatebo kawe karimo ubusa</p>
+          <button onclick="showPage('home')" class="btn-primary text-white px-6 py-2.5 rounded-xl text-sm font-bold">Tangira kugura</button>
+        </div>`;
+      document.getElementById('cartSubtotal').textContent = '0 RWF';
+      document.getElementById('cartTotal').textContent = '0 RWF';
+      return;
+    }
+
+    box.innerHTML = cart.map(item => `
+      <div class="bg-white rounded-2xl p-4 border border-slate-100 flex items-center gap-4 shadow-sm">
+        <img src="${item.image}" class="w-16 h-16 rounded-xl object-cover" />
+        <div class="flex-1 min-w-0">
+          <h3 class="font-bold text-sm truncate text-dark">${item.name}</h3>
+          <p class="text-primary font-black text-sm mt-0.5">${formatRWF(item.price)}</p>
+          <div class="flex items-center gap-3 mt-2">
+            <button onclick="changeQty('${item.id}', -1)" class="w-7 h-7 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-xs font-bold"><i class="fas fa-minus"></i></button>
+            <span class="text-sm font-black w-4 text-center">${item.quantity}</span>
+            <button onclick="changeQty('${item.id}', 1)" class="w-7 h-7 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-xs font-bold"><i class="fas fa-plus"></i></button>
+          </div>
+        </div>
+        <div class="text-right">
+          <p class="font-black text-sm text-dark">${formatRWF(item.price * item.quantity)}</p>
+          <button onclick="removeItem('${item.id}')" class="text-red-500 text-xs mt-2 font-bold hover:underline">Kuraho</button>
+        </div>
+      </div>
+    `).join('');
+
+    const sub = cart.reduce((s, i) => s + i.price * i.quantity, 0);
+    document.getElementById('cartSubtotal').textContent = formatRWF(sub);
+    document.getElementById('cartTotal').textContent = formatRWF(sub);
+  };
+
+  window.changeQty = (id, d) => {
+    const item = cart.find(x => x.id === id);
+    if (!item) return;
+    item.quantity += d;
+    if (item.quantity <= 0) return removeItem(id);
+    updateCartCount();
+    renderCart();
+  };
+
+  window.removeItem = (id) => {
+    cart = cart.filter(x => x.id !== id);
+    updateCartCount();
+    renderCart();
+    showToast('Icyo gicuruzwa cyakuweho');
+  };
+
+  // ==== WHATSAPP CHECKOUT ====
+  window.checkoutWhatsApp = () => {
+    if (cart.length === 0) return showToast('Agatebo karimo ubusa!');
+    
+    const phone = "250788000000"; // HINDURA NUMERO UYISHYIREMO IYAWE
+    let message = "Muraho ElectroShop! Ndashaka kugura ibi bicuruzwa:\n\n";
+    
+    cart.forEach((item, index) => {
+      message += `${index + 1}. ${item.name} (x${item.quantity}) - ${formatRWF(item.price * item.quantity)}\n`;
+    });
+    
+    const total = cart.reduce((s, i) => s + i.price * i.quantity, 0);
+    message += `\n*TOTAL: ${formatRWF(total)}*`;
+    
+    window.open(`https://wa.me/${phone}?text=${encodeURIComponent(message)}`, '_blank');
+  };
+
+  // ==== CATEGORY LINKS ====
+  document.querySelectorAll('.cat-link').forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      const cat = link.getAttribute('data-cat');
+      showPage('home');
+      loadProducts(cat);
+      document.getElementById('products').scrollIntoView({ behavior: 'smooth' });
+    });
+  });
+
+  // ==== SEARCH FUNCTIONALITY (Desktop) ====
+  document.getElementById('searchInput').addEventListener('input', (e) => {
+    const term = e.target.value.toLowerCase();
+    if (!term) return loadProducts();
+
+    const filtered = allProducts.filter(p => p.name.toLowerCase().includes(term) || (p.category && p.category.toLowerCase().includes(term)));
+    
+    const grid = document.getElementById('productGrid');
+    if(filtered.length === 0) {
+      grid.innerHTML = `<div class="col-span-full text-center py-10"><p class="text-slate-500 font-bold">Nta gicuruzwa kibonetse kuri "${term}"</p></div>`;
+      return;
+    }
+    
+    grid.innerHTML = filtered.map(p => {
+        const img = p.image || 'https://via.placeholder.com/400x300';
+        return `
+        <div class="bg-white rounded-2xl overflow-hidden border border-slate-100 card-hover flex flex-col group">
+          <div class="relative aspect-[4/3] overflow-hidden bg-slate-100">
+            <img src="${img}" class="w-full h-full object-cover" />
+          </div>
+          <div class="p-4 flex-1 flex flex-col">
+            <p class="text-[10px] text-primary font-bold mb-1">${p.category}</p>
+            <h3 class="font-bold text-sm text-dark line-clamp-2 mb-2 flex-1">${p.name}</h3>
+            <div class="flex items-center justify-between mt-auto pt-2">
+              <span class="text-primary font-black text-base">${formatRWF(p.price)}</span>
+              <button onclick="addToCart('${p.id}', '${p.name.replace(/'/g, "\\'")}', ${p.price}, '${img}')" class="w-9 h-9 rounded-full bg-primary/10 text-primary hover:bg-primary hover:text-white transition flex items-center justify-center"><i class="fas fa-plus text-sm"></i></button>
+            </div>
+          </div>
+        </div>`;
+    }).join('');
+  });
+
+  // ==== INIT ====
+  window.addEventListener('load', () => {
+    updateCartCount();
+    loadProducts();
+  });
+
+</script>
+</body>
+</html>
