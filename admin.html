@@ -27,7 +27,6 @@ tailwind.config = {
   @keyframes slideInRight { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
   @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
   @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
-  @keyframes pulseGlow { 0% { box-shadow: 0 0 0 0 rgba(14,165,233,.4); } 70% { box-shadow: 0 0 0 15px rgba(14,165,233,0); } 100% { box-shadow: 0 0 0 0 rgba(14,165,233,0); } }
 
   .anim-fade-up { animation: fadeInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; }
   .anim-scale { animation: fadeInScale 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; }
@@ -47,8 +46,6 @@ tailwind.config = {
   ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
   ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
 
-  .glass-panel { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.3); }
-  
   /* SIDEBAR */
   .sidebar-link { border-left: 3px solid transparent; transition: all 0.2s ease; }
   .sidebar-link.active { background: rgba(14,165,233,.1); color: #0ea5e9; border-left-color: #0ea5e9; font-weight: 700; }
@@ -86,41 +83,44 @@ tailwind.config = {
 
 <body class="text-slate-800">
 
-<!-- ================= LOGIN SCREEN ================= -->
-<div id="loginScreen" class="fixed inset-0 z-[60] bg-dark flex items-center justify-center p-4 overflow-hidden transition-opacity duration-500">
-  <div class="absolute inset-0 opacity-40">
+<!-- ================= LOGIN SCREEN (SCROLLABLE) ================= -->
+<!-- Hano nongeyeho overflow-y-auto kugira ngo ishobore kuzamuka kuri mobile -->
+<div id="loginScreen" class="fixed inset-0 z-[60] bg-dark overflow-y-auto flex items-center justify-center p-4 transition-opacity duration-500">
+  <!-- Animated Background -->
+  <div class="fixed inset-0 opacity-40 pointer-events-none">
     <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-primary rounded-full mix-blend-multiply filter blur-3xl" style="animation: float 6s ease-in-out infinite;"></div>
     <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple rounded-full mix-blend-multiply filter blur-3xl" style="animation: float 7s ease-in-out infinite reverse;"></div>
   </div>
 
-  <div class="bg-white/95 backdrop-blur-2xl rounded-[2rem] shadow-2xl max-w-md w-full p-10 relative anim-scale border border-white/40">
-    <div class="text-center mb-10">
-      <div class="w-24 h-24 mx-auto rounded-3xl bg-gradient-to-br from-dark to-slate-800 text-white flex items-center justify-center text-4xl mb-5 shadow-2xl relative">
+  <!-- Login Card -->
+  <div class="bg-white/95 backdrop-blur-2xl rounded-[2rem] shadow-2xl max-w-md w-full p-8 md:p-10 relative anim-scale border border-white/40 my-auto">
+    <div class="text-center mb-8 md:mb-10">
+      <div class="w-20 h-20 md:w-24 md:h-24 mx-auto rounded-3xl bg-gradient-to-br from-dark to-slate-800 text-white flex items-center justify-center text-3xl md:text-4xl mb-5 shadow-2xl relative">
         <i class="fas fa-bolt text-accent relative z-10" style="animation: float 2s ease-in-out infinite;"></i>
       </div>
-      <h1 class="text-3xl font-black text-dark tracking-tight">Admin <span class="bg-clip-text text-transparent bg-gradient-to-r from-primary to-purple">Panel</span></h1>
+      <h1 class="text-2xl md:text-3xl font-black text-dark tracking-tight">Admin <span class="bg-clip-text text-transparent bg-gradient-to-r from-primary to-purple">Panel</span></h1>
       <p class="text-slate-500 text-sm mt-2 font-medium">Injira mu bucuruzi bwawe</p>
     </div>
     
-    <form id="adminLoginForm" class="space-y-6">
+    <form id="adminLoginForm" class="space-y-5 md:space-y-6">
       <div class="anim-fade-up stagger-1">
         <label class="text-xs font-bold text-slate-700 mb-2 block uppercase tracking-wider">Email</label>
         <div class="relative group">
           <i class="fas fa-envelope absolute left-5 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors text-lg"></i>
-          <input required id="adEmail" type="email" value="admin@electro.rw" class="w-full pl-12 pr-5 py-4 rounded-2xl border border-slate-200 text-sm bg-slate-50 focus:bg-white font-semibold transition" />
+          <input required id="adEmail" type="email" value="admin@electro.rw" class="w-full pl-12 pr-5 py-3.5 md:py-4 rounded-2xl border border-slate-200 text-sm bg-slate-50 focus:bg-white font-semibold transition" />
         </div>
       </div>
       <div class="anim-fade-up stagger-2">
         <label class="text-xs font-bold text-slate-700 mb-2 block uppercase tracking-wider">Ijambo ry'ibanga</label>
         <div class="relative group">
           <i class="fas fa-lock absolute left-5 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors text-lg"></i>
-          <input required id="adPassword" type="password" value="Admin@123" class="w-full pl-12 pr-12 py-4 rounded-2xl border border-slate-200 text-sm bg-slate-50 focus:bg-white font-semibold transition" />
+          <input required id="adPassword" type="password" value="Admin@123" class="w-full pl-12 pr-12 py-3.5 md:py-4 rounded-2xl border border-slate-200 text-sm bg-slate-50 focus:bg-white font-semibold transition" />
         </div>
       </div>
       <div id="loginError" class="hidden text-red-500 text-xs font-bold text-center anim-shake bg-red-50 py-3 rounded-xl border border-red-100">
         <i class="fas fa-exclamation-circle mr-1"></i> Email cyangwa password sibyo!
       </div>
-      <button type="submit" class="btn-add w-full justify-center py-4 rounded-2xl text-base font-black tracking-wide anim-fade-up stagger-3">
+      <button type="submit" class="btn-add w-full justify-center py-3.5 md:py-4 rounded-2xl text-base font-black tracking-wide anim-fade-up stagger-3">
         <i class="fas fa-sign-in-alt mr-2"></i> Injira muri Sisitemu
       </button>
     </form>
@@ -130,9 +130,9 @@ tailwind.config = {
 <!-- ================= MAIN APP ================= -->
 <div id="app" class="flex min-h-screen">
 
-  <!-- SIDEBAR (FEATURES ZOSE) -->
+  <!-- SIDEBAR -->
   <aside id="sidebar" class="fixed left-0 top-0 bottom-0 w-64 bg-white border-r border-slate-200 z-40 flex flex-col transform -translate-x-full md:translate-x-0 transition-transform duration-300">
-    <div class="flex items-center gap-3 px-6 h-20 border-b border-slate-100">
+    <div class="flex items-center gap-3 px-6 h-20 border-b border-slate-100 shrink-0">
       <div class="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-white font-bold shadow-lg shadow-primary/30">
         <i class="fas fa-bolt"></i>
       </div>
@@ -160,42 +160,43 @@ tailwind.config = {
       <a href="#" data-panel="settings" class="sidebar-link flex items-center gap-3 px-6 py-3 text-slate-600"><i class="fas fa-cog w-5 text-center"></i> Igenamiterere</a>
     </nav>
 
-    <div class="border-t border-slate-100 p-4">
+    <div class="border-t border-slate-100 p-4 shrink-0">
       <div class="flex items-center gap-3 px-3 py-3 rounded-2xl bg-slate-50 border border-slate-100">
         <div class="w-10 h-10 rounded-full bg-dark flex items-center justify-center text-white font-bold text-sm">A</div>
         <div class="flex-1 min-w-0">
           <p class="text-sm font-bold text-dark truncate">Super Admin</p>
           <p class="text-[10px] text-slate-500 font-medium truncate">admin@electro.rw</p>
         </div>
-        <button onclick="logout()" class="text-slate-400 hover:text-red-500 hover:bg-red-50 w-8 h-8 rounded-lg transition" title="Sohoka"><i class="fas fa-sign-out-alt"></i></button>
+        <button onclick="logout()" class="text-slate-400 hover:text-red-500 hover:bg-red-50 w-8 h-8 rounded-lg transition shrink-0" title="Sohoka"><i class="fas fa-sign-out-alt"></i></button>
       </div>
     </div>
   </aside>
 
   <!-- MAIN CONTENT -->
-  <div class="flex-1 md:ml-64 flex flex-col min-h-screen relative">
+  <div class="flex-1 md:ml-64 flex flex-col min-h-screen relative w-full overflow-hidden">
 
     <!-- TOPBAR -->
-    <header class="bg-white/90 backdrop-blur-md border-b border-slate-200 h-20 flex items-center justify-between px-6 sticky top-0 z-30">
-      <div class="flex items-center gap-4">
-        <button onclick="toggleSidebar()" class="md:hidden text-slate-600 w-10 h-10 rounded-xl hover:bg-slate-100 transition"><i class="fas fa-bars"></i></button>
+    <header class="bg-white/90 backdrop-blur-md border-b border-slate-200 h-20 flex items-center justify-between px-4 md:px-6 sticky top-0 z-30 shrink-0">
+      <div class="flex items-center gap-3 md:gap-4">
+        <button onclick="toggleSidebar()" class="md:hidden text-slate-600 w-10 h-10 rounded-xl hover:bg-slate-100 transition flex items-center justify-center"><i class="fas fa-bars text-lg"></i></button>
         <div>
           <h1 id="pageTitle" class="font-black text-dark text-lg tracking-tight">Dashboard</h1>
           <p id="pageSubtitle" class="text-xs font-medium text-slate-400 hidden md:block">Murakaza neza!</p>
         </div>
       </div>
-      <div class="flex items-center gap-3">
+      <div class="flex items-center gap-2 md:gap-3">
         <div class="relative hidden sm:block group">
           <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-sm group-focus-within:text-primary transition"></i>
-          <input id="globalSearch" placeholder="Shakisha..." class="pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 text-sm w-64 bg-slate-50 focus:bg-white transition-all font-medium" />
+          <input id="globalSearch" placeholder="Shakisha..." class="pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 text-sm w-48 lg:w-64 bg-slate-50 focus:bg-white transition-all font-medium" />
         </div>
         <div class="relative">
-          <button onclick="toggleNotif()" class="w-10 h-10 rounded-xl bg-white border border-slate-200 hover:bg-slate-50 text-slate-600 relative transition shadow-sm">
+          <button onclick="toggleNotif()" class="w-10 h-10 rounded-xl bg-white border border-slate-200 hover:bg-slate-50 text-slate-600 relative transition shadow-sm flex items-center justify-center">
             <i class="fas fa-bell"></i>
             <span class="absolute top-2 right-2 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white animate-ping"></span>
             <span class="absolute top-2 right-2 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white"></span>
           </button>
-          <div id="notifDropdown" class="hidden absolute right-0 mt-3 w-80 bg-white rounded-2xl shadow-2xl border border-slate-100 overflow-hidden anim-fade-up">
+          <!-- Notif Dropdown -->
+          <div id="notifDropdown" class="hidden absolute right-0 mt-3 w-72 md:w-80 bg-white rounded-2xl shadow-2xl border border-slate-100 overflow-hidden anim-fade-up z-50">
             <div class="px-5 py-4 border-b border-slate-50 flex justify-between items-center bg-slate-50/50">
               <span class="font-bold text-sm text-dark">Amatangazo</span>
             </div>
@@ -211,93 +212,59 @@ tailwind.config = {
             </div>
           </div>
         </div>
-        <a href="index.html" target="_blank" class="hidden sm:flex items-center gap-2 bg-dark hover:bg-slate-800 px-4 py-2.5 rounded-xl text-xs font-bold text-white transition shadow-md">
-          <i class="fas fa-external-link-alt"></i> Reba Site
-        </a>
       </div>
     </header>
 
     <!-- CONTENT AREA -->
-    <main class="flex-1 p-6 overflow-x-hidden">
+    <main class="flex-1 p-4 md:p-6 overflow-x-hidden w-full">
 
       <!-- PANEL: OVERVIEW -->
       <section id="panel-overview" class="panel active">
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          <div class="stat-card bg-white rounded-3xl p-6 border border-slate-100 anim-fade-up stagger-1 shadow-sm">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-6 md:mb-8">
+          <div class="stat-card bg-white rounded-3xl p-5 md:p-6 border border-slate-100 anim-fade-up stagger-1 shadow-sm">
             <div class="flex items-center justify-between mb-4">
-              <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-green-400 to-green-600 text-white flex items-center justify-center shadow-lg shadow-green-200"><i class="fas fa-money-bill-wave text-lg"></i></div>
+              <div class="w-10 h-10 md:w-12 md:h-12 rounded-2xl bg-gradient-to-br from-green-400 to-green-600 text-white flex items-center justify-center shadow-lg shadow-green-200"><i class="fas fa-money-bill-wave text-base md:text-lg"></i></div>
               <span class="text-[10px] font-bold bg-green-50 text-green-600 px-2 py-1 rounded-lg"><i class="fas fa-arrow-up"></i> +12.5%</span>
             </div>
-            <p class="text-sm font-bold text-slate-500 mb-1">Amafaranga yose</p>
-            <p class="text-2xl font-black text-dark" id="stRevenue">0 RWF</p>
+            <p class="text-xs md:text-sm font-bold text-slate-500 mb-1">Amafaranga yose</p>
+            <p class="text-xl md:text-2xl font-black text-dark" id="stRevenue">0 RWF</p>
           </div>
-          <div class="stat-card bg-white rounded-3xl p-6 border border-slate-100 anim-fade-up stagger-2 shadow-sm">
+          <div class="stat-card bg-white rounded-3xl p-5 md:p-6 border border-slate-100 anim-fade-up stagger-2 shadow-sm">
             <div class="flex items-center justify-between mb-4">
-              <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-primary to-blue-600 text-white flex items-center justify-center shadow-lg shadow-blue-200"><i class="fas fa-shopping-bag text-lg"></i></div>
+              <div class="w-10 h-10 md:w-12 md:h-12 rounded-2xl bg-gradient-to-br from-primary to-blue-600 text-white flex items-center justify-center shadow-lg shadow-blue-200"><i class="fas fa-shopping-bag text-base md:text-lg"></i></div>
               <span class="text-[10px] font-bold bg-blue-50 text-blue-600 px-2 py-1 rounded-lg"><i class="fas fa-arrow-up"></i> +8</span>
             </div>
-            <p class="text-sm font-bold text-slate-500 mb-1">Orders zose</p>
-            <p class="text-2xl font-black text-dark" id="stOrders">0</p>
+            <p class="text-xs md:text-sm font-bold text-slate-500 mb-1">Orders zose</p>
+            <p class="text-xl md:text-2xl font-black text-dark" id="stOrders">0</p>
           </div>
-          <div class="stat-card bg-white rounded-3xl p-6 border border-slate-100 anim-fade-up stagger-3 shadow-sm">
+          <div class="stat-card bg-white rounded-3xl p-5 md:p-6 border border-slate-100 anim-fade-up stagger-3 shadow-sm">
             <div class="flex items-center justify-between mb-4">
-              <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-purple-400 to-purple-600 text-white flex items-center justify-center shadow-lg shadow-purple-200"><i class="fas fa-users text-lg"></i></div>
+              <div class="w-10 h-10 md:w-12 md:h-12 rounded-2xl bg-gradient-to-br from-purple-400 to-purple-600 text-white flex items-center justify-center shadow-lg shadow-purple-200"><i class="fas fa-users text-base md:text-lg"></i></div>
               <span class="text-[10px] font-bold bg-purple-50 text-purple-600 px-2 py-1 rounded-lg"><i class="fas fa-arrow-up"></i> +3</span>
             </div>
-            <p class="text-sm font-bold text-slate-500 mb-1">Abakoresha</p>
-            <p class="text-2xl font-black text-dark" id="stUsers">0</p>
+            <p class="text-xs md:text-sm font-bold text-slate-500 mb-1">Abakoresha</p>
+            <p class="text-xl md:text-2xl font-black text-dark" id="stUsers">0</p>
           </div>
-          <div class="stat-card bg-white rounded-3xl p-6 border border-slate-100 anim-fade-up stagger-4 shadow-sm">
+          <div class="stat-card bg-white rounded-3xl p-5 md:p-6 border border-slate-100 anim-fade-up stagger-4 shadow-sm">
             <div class="flex items-center justify-between mb-4">
-              <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-accent to-orange-600 text-white flex items-center justify-center shadow-lg shadow-orange-200"><i class="fas fa-box text-lg"></i></div>
+              <div class="w-10 h-10 md:w-12 md:h-12 rounded-2xl bg-gradient-to-br from-accent to-orange-600 text-white flex items-center justify-center shadow-lg shadow-orange-200"><i class="fas fa-box text-base md:text-lg"></i></div>
               <span class="text-[10px] font-bold bg-red-50 text-red-600 px-2 py-1 rounded-lg"><i class="fas fa-exclamation-triangle"></i> 5 bishize</span>
             </div>
-            <p class="text-sm font-bold text-slate-500 mb-1">Ibicuruzwa</p>
-            <p class="text-2xl font-black text-dark" id="stProducts">0</p>
+            <p class="text-xs md:text-sm font-bold text-slate-500 mb-1">Ibicuruzwa</p>
+            <p class="text-xl md:text-2xl font-black text-dark" id="stProducts">0</p>
           </div>
         </div>
 
-        <div class="grid lg:grid-cols-3 gap-6">
-          <div class="lg:col-span-2 bg-white rounded-3xl p-6 border border-slate-100 anim-fade-up stagger-2 shadow-sm">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
+          <div class="lg:col-span-2 bg-white rounded-3xl p-5 md:p-6 border border-slate-100 anim-fade-up stagger-2 shadow-sm">
             <div class="flex justify-between items-center mb-6">
               <h3 class="font-black text-dark text-base">Amafaranga ku kwezi</h3>
             </div>
-            <div class="h-72"><canvas id="salesChart"></canvas></div>
+            <div class="h-64 md:h-72 w-full"><canvas id="salesChart"></canvas></div>
           </div>
-          <div class="bg-white rounded-3xl p-6 border border-slate-100 anim-fade-up stagger-3 shadow-sm">
+          <div class="bg-white rounded-3xl p-5 md:p-6 border border-slate-100 anim-fade-up stagger-3 shadow-sm">
             <h3 class="font-black text-dark text-base mb-6">Ibicuruzwa bikundwa</h3>
-            <div class="h-64"><canvas id="categoryChart"></canvas></div>
-          </div>
-        </div>
-      </section>
-
-      <!-- PANEL: ANALYTICS -->
-      <section id="panel-analytics" class="panel">
-        <div class="grid md:grid-cols-3 gap-6 mb-6">
-          <div class="bg-white rounded-3xl p-6 border border-slate-100 anim-scale stagger-1 shadow-sm">
-            <p class="text-sm font-bold text-slate-500 mb-2">Conversion Rate</p>
-            <p class="text-4xl font-black text-primary">3.24%</p>
-            <p class="text-xs font-bold text-green-600 mt-3 bg-green-50 inline-block px-2 py-1 rounded"><i class="fas fa-arrow-up"></i> +0.8%</p>
-          </div>
-          <div class="bg-white rounded-3xl p-6 border border-slate-100 anim-scale stagger-2 shadow-sm">
-            <p class="text-sm font-bold text-slate-500 mb-2">Average Order Value</p>
-            <p class="text-4xl font-black text-green-600">285K</p>
-            <p class="text-xs font-bold text-green-600 mt-3 bg-green-50 inline-block px-2 py-1 rounded"><i class="fas fa-arrow-up"></i> +5.2%</p>
-          </div>
-          <div class="bg-white rounded-3xl p-6 border border-slate-100 anim-scale stagger-3 shadow-sm">
-            <p class="text-sm font-bold text-slate-500 mb-2">Abasuye urubuga</p>
-            <p class="text-4xl font-black text-purple-600">12,847</p>
-            <p class="text-xs font-bold text-green-600 mt-3 bg-green-50 inline-block px-2 py-1 rounded"><i class="fas fa-arrow-up"></i> +18%</p>
-          </div>
-        </div>
-        <div class="grid lg:grid-cols-2 gap-6">
-          <div class="bg-white rounded-3xl p-6 border border-slate-100 anim-fade-up shadow-sm">
-            <h3 class="font-black text-dark text-base mb-6">Abasuye ku munsi</h3>
-            <div class="h-64"><canvas id="visitorsChart"></canvas></div>
-          </div>
-          <div class="bg-white rounded-3xl p-6 border border-slate-100 anim-fade-up stagger-2 shadow-sm">
-            <h3 class="font-black text-dark text-base mb-6">Uburyo bwo kwishyura</h3>
-            <div class="h-64"><canvas id="paymentChart"></canvas></div>
+            <div class="h-64 w-full"><canvas id="categoryChart"></canvas></div>
           </div>
         </div>
       </section>
@@ -305,25 +272,25 @@ tailwind.config = {
       <!-- PANEL: PRODUCTS -->
       <section id="panel-products" class="panel">
         <div class="bg-white rounded-3xl border border-slate-100 overflow-hidden anim-fade-up shadow-sm">
-          <div class="p-5 border-b border-slate-100 flex flex-wrap gap-4 justify-between items-center bg-slate-50/50">
-            <div class="flex gap-3 flex-wrap">
-              <div class="relative">
+          <div class="p-4 md:p-5 border-b border-slate-100 flex flex-col md:flex-row gap-4 justify-between items-start md:items-center bg-slate-50/50">
+            <div class="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
+              <div class="relative w-full sm:w-64">
                 <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
-                <input id="productSearch" placeholder="Shakisha ibicuruzwa..." class="pl-11 pr-4 py-2.5 rounded-xl border border-slate-200 text-sm w-64 font-medium" />
+                <input id="productSearch" placeholder="Shakisha ibicuruzwa..." class="pl-11 pr-4 py-2.5 rounded-xl border border-slate-200 text-sm w-full font-medium" />
               </div>
-              <select id="productCatFilter" class="px-4 py-2.5 rounded-xl border border-slate-200 text-sm font-bold text-slate-600">
+              <select id="productCatFilter" class="px-4 py-2.5 rounded-xl border border-slate-200 text-sm font-bold text-slate-600 w-full sm:w-auto">
                 <option value="">Ibyiciro byose</option>
                 <option>Telefoni</option><option>Laptops</option><option>Audio</option>
                 <option>Accessories</option><option>TV</option><option>Gaming</option>
               </select>
             </div>
-            <button onclick="openProductModal()" class="btn-add">
+            <button onclick="openProductModal()" class="btn-add w-full md:w-auto justify-center">
               <i class="fas fa-plus-circle"></i> Ongeramo Igicuruzwa
             </button>
           </div>
           
-          <div class="overflow-x-auto">
-            <table class="w-full text-sm">
+          <div class="overflow-x-auto w-full">
+            <table class="w-full text-sm min-w-[600px]">
               <thead class="bg-white text-slate-400 text-[11px] uppercase tracking-wider border-b border-slate-100">
                 <tr>
                   <th class="text-left px-6 py-4 font-black">Igicuruzwa</th>
@@ -342,9 +309,9 @@ tailwind.config = {
       <!-- PANEL: ORDERS -->
       <section id="panel-orders" class="panel">
         <div class="bg-white rounded-3xl border border-slate-100 overflow-hidden anim-fade-up shadow-sm">
-          <div class="p-5 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
+          <div class="p-4 md:p-5 border-b border-slate-100 flex flex-col sm:flex-row gap-3 justify-between items-start sm:items-center bg-slate-50/50">
             <h3 class="font-black text-dark text-base">Orders zose</h3>
-            <select id="orderStatusFilter" class="px-4 py-2.5 rounded-xl border border-slate-200 text-sm font-bold text-slate-600">
+            <select id="orderStatusFilter" class="px-4 py-2.5 rounded-xl border border-slate-200 text-sm font-bold text-slate-600 w-full sm:w-auto">
               <option value="">Status yose</option>
               <option value="pending">Pending</option>
               <option value="processing">Processing</option>
@@ -352,8 +319,8 @@ tailwind.config = {
               <option value="delivered">Delivered</option>
             </select>
           </div>
-          <div class="overflow-x-auto">
-            <table class="w-full text-sm">
+          <div class="overflow-x-auto w-full">
+            <table class="w-full text-sm min-w-[600px]">
               <thead class="bg-white text-slate-400 text-[11px] uppercase tracking-wider border-b border-slate-100">
                 <tr>
                   <th class="text-left px-6 py-4 font-black">#</th>
@@ -371,23 +338,23 @@ tailwind.config = {
 
       <!-- PANEL: INVENTORY -->
       <section id="panel-inventory" class="panel">
-        <div class="grid md:grid-cols-3 gap-6 mb-6">
-          <div class="bg-white rounded-3xl p-6 border border-slate-100 anim-scale stagger-1 shadow-sm">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mb-6">
+          <div class="bg-white rounded-3xl p-5 md:p-6 border border-slate-100 anim-scale stagger-1 shadow-sm">
             <p class="text-sm font-bold text-slate-500 mb-1">Stock yose</p>
-            <p class="text-3xl font-black text-dark" id="invTotal">0</p>
+            <p class="text-2xl md:text-3xl font-black text-dark" id="invTotal">0</p>
           </div>
-          <div class="bg-white rounded-3xl p-6 border border-slate-100 anim-scale stagger-2 shadow-sm">
+          <div class="bg-white rounded-3xl p-5 md:p-6 border border-slate-100 anim-scale stagger-2 shadow-sm">
             <p class="text-sm font-bold text-slate-500 mb-1">Bishize</p>
-            <p class="text-3xl font-black text-red-500" id="invOut">0</p>
+            <p class="text-2xl md:text-3xl font-black text-red-500" id="invOut">0</p>
           </div>
-          <div class="bg-white rounded-3xl p-6 border border-slate-100 anim-scale stagger-3 shadow-sm">
+          <div class="bg-white rounded-3xl p-5 md:p-6 border border-slate-100 anim-scale stagger-3 shadow-sm">
             <p class="text-sm font-bold text-slate-500 mb-1">Stock nkeya (&lt;5)</p>
-            <p class="text-3xl font-black text-accent" id="invLow">0</p>
+            <p class="text-2xl md:text-3xl font-black text-accent" id="invLow">0</p>
           </div>
         </div>
         <div class="bg-white rounded-3xl border border-slate-100 overflow-hidden anim-fade-up shadow-sm">
-          <div class="overflow-x-auto">
-            <table class="w-full text-sm">
+          <div class="overflow-x-auto w-full">
+            <table class="w-full text-sm min-w-[600px]">
               <thead class="bg-white text-slate-400 text-[11px] uppercase tracking-wider border-b border-slate-100">
                 <tr>
                   <th class="text-left px-6 py-4 font-black">Igicuruzwa</th>
@@ -405,8 +372,8 @@ tailwind.config = {
       <!-- PANEL: USERS -->
       <section id="panel-users" class="panel">
         <div class="bg-white rounded-3xl border border-slate-100 overflow-hidden anim-fade-up shadow-sm">
-          <div class="overflow-x-auto">
-            <table class="w-full text-sm">
+          <div class="overflow-x-auto w-full">
+            <table class="w-full text-sm min-w-[600px]">
               <thead class="bg-white text-slate-400 text-[11px] uppercase tracking-wider border-b border-slate-100">
                 <tr>
                   <th class="text-left px-6 py-4 font-black">Amazina</th>
@@ -423,31 +390,31 @@ tailwind.config = {
 
       <!-- PANEL: MESSAGES (CHAT) -->
       <section id="panel-messages" class="panel">
-        <div class="bg-white rounded-3xl border border-slate-100 overflow-hidden anim-fade-up flex h-[650px] shadow-sm">
-          <div class="w-full md:w-1/3 border-r border-slate-100 flex flex-col bg-slate-50/30">
-            <div class="p-5 border-b border-slate-100 bg-white">
+        <div class="bg-white rounded-3xl border border-slate-100 overflow-hidden anim-fade-up flex flex-col md:flex-row h-[600px] md:h-[650px] shadow-sm">
+          <div class="w-full md:w-1/3 border-b md:border-b-0 md:border-r border-slate-100 flex flex-col bg-slate-50/30 h-1/3 md:h-full">
+            <div class="p-4 md:p-5 border-b border-slate-100 bg-white shrink-0">
               <h3 class="font-black text-dark text-base"><i class="fas fa-comments text-primary mr-2"></i> Ubutumwa</h3>
             </div>
             <div class="flex-1 overflow-y-auto p-3 space-y-1" id="chatList"></div>
           </div>
 
-          <div class="hidden md:flex flex-1 flex-col bg-white">
-            <div class="p-5 border-b border-slate-100 bg-white flex items-center gap-4">
-              <div class="w-12 h-12 rounded-full bg-primary text-white flex items-center justify-center font-black text-lg shadow-md" id="chatAvatar">?</div>
+          <div class="flex-1 flex flex-col bg-white h-2/3 md:h-full">
+            <div class="p-4 md:p-5 border-b border-slate-100 bg-white flex items-center gap-4 shrink-0">
+              <div class="w-10 h-10 md:w-12 md:h-12 rounded-full bg-primary text-white flex items-center justify-center font-black text-base md:text-lg shadow-md" id="chatAvatar">?</div>
               <div>
-                <p class="text-base font-black text-dark" id="chatName">Hitamo umukiriya</p>
-                <p class="text-[11px] font-bold text-green-500 flex items-center gap-1"><span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span> Online</p>
+                <p class="text-sm md:text-base font-black text-dark" id="chatName">Hitamo umukiriya</p>
+                <p class="text-[10px] md:text-[11px] font-bold text-green-500 flex items-center gap-1"><span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span> Online</p>
               </div>
             </div>
             
-            <div class="flex-1 p-6 overflow-y-auto space-y-4 flex flex-col bg-slate-50/50" id="chatMessages">
-              <div class="text-center text-sm font-bold text-slate-400 mt-20"><i class="fas fa-comments text-6xl mb-4 text-slate-200 block"></i> Hitamo umukiriya kugira ngo utangire ubutumwa.</div>
+            <div class="flex-1 p-4 md:p-6 overflow-y-auto space-y-4 flex flex-col bg-slate-50/50" id="chatMessages">
+              <div class="text-center text-sm font-bold text-slate-400 mt-10 md:mt-20"><i class="fas fa-comments text-4xl md:text-6xl mb-3 md:mb-4 text-slate-200 block"></i> Hitamo umukiriya kugira ngo utangire ubutumwa.</div>
             </div>
 
-            <div class="p-4 bg-white border-t border-slate-100">
-              <form id="chatForm" class="flex gap-3">
-                <input id="chatInput" placeholder="Andika ubutumwa hano..." class="flex-1 px-5 py-4 rounded-2xl border border-slate-200 text-sm bg-slate-50 focus:bg-white font-medium transition" autocomplete="off" />
-                <button type="submit" class="bg-primary hover:bg-blue-600 text-white w-14 h-14 rounded-2xl flex items-center justify-center shadow-lg transition-all transform hover:scale-105"><i class="fas fa-paper-plane text-lg"></i></button>
+            <div class="p-3 md:p-4 bg-white border-t border-slate-100 shrink-0">
+              <form id="chatForm" class="flex gap-2 md:gap-3">
+                <input id="chatInput" placeholder="Andika ubutumwa hano..." class="flex-1 px-4 md:px-5 py-3 md:py-4 rounded-xl md:rounded-2xl border border-slate-200 text-sm bg-slate-50 focus:bg-white font-medium transition" autocomplete="off" />
+                <button type="submit" class="bg-primary hover:bg-blue-600 text-white w-12 h-12 md:w-14 md:h-14 rounded-xl md:rounded-2xl flex items-center justify-center shadow-lg transition-all transform hover:scale-105 shrink-0"><i class="fas fa-paper-plane text-base md:text-lg"></i></button>
               </form>
             </div>
           </div>
@@ -456,8 +423,8 @@ tailwind.config = {
 
       <!-- PANEL: SETTINGS -->
       <section id="panel-settings" class="panel">
-        <div class="grid md:grid-cols-2 gap-6">
-          <div class="bg-white rounded-3xl p-8 border border-slate-100 anim-fade-up shadow-sm">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+          <div class="bg-white rounded-3xl p-5 md:p-8 border border-slate-100 anim-fade-up shadow-sm">
             <h3 class="font-black text-base mb-6 text-dark flex items-center gap-2"><i class="fas fa-store text-primary"></i> Amakuru y'urubuga</h3>
             <div class="space-y-4">
               <div><label class="text-xs font-bold text-slate-500 mb-1.5 block">Izina ry'urubuga</label><input value="ElectroShop RW" class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm font-medium" /></div>
@@ -465,7 +432,7 @@ tailwind.config = {
               <button onclick="showToast('✅ Byabitswe')" class="btn-primary text-white px-5 py-3 rounded-xl text-sm font-bold w-full mt-2 shadow-lg shadow-primary/30 transition-all hover:-translate-y-0.5">Bika Impinduka</button>
             </div>
           </div>
-          <div class="bg-white rounded-3xl p-8 border border-slate-100 anim-fade-up stagger-2 shadow-sm">
+          <div class="bg-white rounded-3xl p-5 md:p-8 border border-slate-100 anim-fade-up stagger-2 shadow-sm">
             <h3 class="font-black text-base mb-6 text-dark flex items-center gap-2"><i class="fas fa-credit-card text-primary"></i> Uburyo bwo kwishyura</h3>
             <div class="space-y-4">
               <label class="flex items-center justify-between p-4 border border-slate-200 rounded-2xl cursor-pointer hover:bg-slate-50 transition">
@@ -490,29 +457,29 @@ tailwind.config = {
 </div>
 
 <!-- TOAST BOX -->
-<div id="toastBox" class="fixed top-6 right-6 z-[100] space-y-3"></div>
+<div id="toastBox" class="fixed top-4 right-4 md:top-6 md:right-6 z-[100] space-y-3"></div>
 
 <!-- ================= ADD PRODUCT MODAL ================= -->
 <div id="productModal" class="hidden fixed inset-0 z-[70] modal-overlay flex items-center justify-center p-4">
-  <div class="bg-white rounded-[2rem] max-w-lg w-full p-8 max-h-[90vh] overflow-y-auto anim-scale shadow-2xl relative">
-    <button onclick="closeModal('productModal')" class="absolute top-6 right-6 w-8 h-8 rounded-full bg-slate-100 text-slate-500 hover:bg-red-100 hover:text-red-500 transition flex items-center justify-center"><i class="fas fa-times"></i></button>
+  <div class="bg-white rounded-[2rem] max-w-lg w-full p-6 md:p-8 max-h-[90vh] overflow-y-auto anim-scale shadow-2xl relative">
+    <button onclick="closeModal('productModal')" class="absolute top-4 right-4 md:top-6 md:right-6 w-8 h-8 rounded-full bg-slate-100 text-slate-500 hover:bg-red-100 hover:text-red-500 transition flex items-center justify-center"><i class="fas fa-times"></i></button>
     
-    <div class="mb-6">
-      <h3 class="font-black text-2xl text-dark tracking-tight">Ongeramo <span class="text-gradient">Igicuruzwa</span></h3>
-      <p class="text-sm font-medium text-slate-500 mt-1">Ibi bizajya kuri website ako kanya.</p>
+    <div class="mb-6 mt-2">
+      <h3 class="font-black text-xl md:text-2xl text-dark tracking-tight">Ongeramo <span class="text-gradient">Igicuruzwa</span></h3>
+      <p class="text-xs md:text-sm font-medium text-slate-500 mt-1">Ibi bizajya kuri website ako kanya.</p>
     </div>
 
-    <form id="productForm" class="space-y-5">
+    <form id="productForm" class="space-y-4 md:space-y-5">
       <!-- IMAGE UPLOAD -->
       <div>
         <label class="text-xs font-bold text-slate-700 mb-2 block uppercase tracking-wide">Ifoto y'igicuruzwa</label>
-        <div id="uploadArea" class="upload-area rounded-2xl p-6 flex flex-col items-center justify-center relative overflow-hidden" onclick="document.getElementById('pfImageFile').click()">
+        <div id="uploadArea" class="upload-area rounded-2xl p-4 md:p-6 flex flex-col items-center justify-center relative overflow-hidden" onclick="document.getElementById('pfImageFile').click()">
           <input type="file" id="pfImageFile" accept="image/*" class="hidden" onchange="handleImageUpload(event)" />
           <div id="uploadPlaceholder" class="text-center">
-            <div class="w-14 h-14 rounded-full bg-primary/10 text-primary flex items-center justify-center mx-auto mb-3"><i class="fas fa-cloud-upload-alt text-2xl"></i></div>
+            <div class="w-12 h-12 md:w-14 md:h-14 rounded-full bg-primary/10 text-primary flex items-center justify-center mx-auto mb-2 md:mb-3"><i class="fas fa-cloud-upload-alt text-xl md:text-2xl"></i></div>
             <p class="text-sm font-bold text-slate-700">Kanda hano uvuze ifoto</p>
           </div>
-          <img id="imagePreview" class="hidden w-full h-48 object-contain rounded-xl" />
+          <img id="imagePreview" class="hidden w-full h-40 md:h-48 object-contain rounded-xl" />
         </div>
       </div>
 
@@ -521,7 +488,7 @@ tailwind.config = {
         <input required id="pfName" class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm font-medium bg-slate-50 focus:bg-white transition" placeholder="Urugero: iPhone 15 Pro" />
       </div>
 
-      <div class="grid grid-cols-2 gap-4">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
           <label class="text-xs font-bold text-slate-700 mb-1.5 block uppercase tracking-wide">Icyiciro *</label>
           <select id="pfCategory" class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm font-bold text-slate-700 bg-slate-50 focus:bg-white transition">
@@ -540,8 +507,8 @@ tailwind.config = {
       </div>
 
       <div class="pt-2">
-        <button type="submit" id="saveBtn" class="btn-save">
-          <i class="fas fa-save text-lg"></i> Bika Igicuruzwa
+        <button type="submit" id="saveBtn" class="btn-save w-full py-3 md:py-4">
+          <i class="fas fa-save text-base md:text-lg"></i> Bika Igicuruzwa
         </button>
       </div>
     </form>
@@ -583,7 +550,7 @@ tailwind.config = {
   window.showToast = (msg, type='success') => {
     const colors = { success:'bg-green-500', error:'bg-red-500' };
     const el = document.createElement('div');
-    el.className = `${colors[type]} text-white px-6 py-3 rounded-xl shadow-2xl text-sm font-bold flex items-center gap-3 anim-slide`;
+    el.className = `${colors[type]} text-white px-5 md:px-6 py-2 md:py-3 rounded-xl shadow-2xl text-xs md:text-sm font-bold flex items-center gap-3 anim-slide`;
     el.innerHTML = `<i class="fas fa-${type==='success'?'check-circle':'times-circle'}"></i> ${msg}`;
     document.getElementById('toastBox').appendChild(el);
     setTimeout(()=>{ el.style.opacity='0'; setTimeout(()=>el.remove(),300); },3000);
@@ -683,18 +650,18 @@ tailwind.config = {
 
       table.innerHTML = products.map(p => `
         <tr class="hover:bg-slate-50/80 transition-colors group">
-          <td class="px-6 py-4">
-            <div class="flex items-center gap-4">
-              <div class="w-12 h-12 rounded-xl bg-slate-100 overflow-hidden shrink-0 border border-slate-200 shadow-sm">
+          <td class="px-4 md:px-6 py-4">
+            <div class="flex items-center gap-3 md:gap-4">
+              <div class="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-slate-100 overflow-hidden shrink-0 border border-slate-200 shadow-sm">
                 <img src="${p.image || 'https://via.placeholder.com/100'}" class="w-full h-full object-cover" />
               </div>
-              <div><p class="font-bold text-dark text-sm truncate max-w-[200px]">${p.name}</p></div>
+              <div><p class="font-bold text-dark text-sm truncate max-w-[150px] md:max-w-[200px]">${p.name}</p></div>
             </div>
           </td>
-          <td class="px-6 py-4 hidden md:table-cell"><span class="text-[11px] font-bold bg-primary/10 text-primary px-3 py-1.5 rounded-lg">${p.category}</span></td>
-          <td class="px-6 py-4 text-sm font-black text-dark">${formatRWF(p.price)}</td>
-          <td class="px-6 py-4 hidden md:table-cell"><span class="text-[11px] font-bold ${p.stock===0?'bg-red-100 text-red-600':p.stock<5?'bg-accent/10 text-accent':'bg-green-100 text-green-700'} px-3 py-1.5 rounded-lg">${p.stock || 0} pcs</span></td>
-          <td class="px-6 py-4 text-right">
+          <td class="px-4 md:px-6 py-4 hidden md:table-cell"><span class="text-[11px] font-bold bg-primary/10 text-primary px-3 py-1.5 rounded-lg">${p.category}</span></td>
+          <td class="px-4 md:px-6 py-4 text-sm font-black text-dark">${formatRWF(p.price)}</td>
+          <td class="px-4 md:px-6 py-4 hidden md:table-cell"><span class="text-[11px] font-bold ${p.stock===0?'bg-red-100 text-red-600':p.stock<5?'bg-accent/10 text-accent':'bg-green-100 text-green-700'} px-3 py-1.5 rounded-lg">${p.stock || 0} pcs</span></td>
+          <td class="px-4 md:px-6 py-4 text-right">
             <button onclick="deleteProduct('${p.id}')" class="text-red-500 hover:bg-red-50 hover:text-red-600 w-9 h-9 rounded-xl transition inline-flex items-center justify-center"><i class="fas fa-trash"></i></button>
           </td>
         </tr>
