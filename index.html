@@ -3,223 +3,558 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>ElectroShop RW — Ibyuma by'ikoranabuhanga</title>
+<title>Admin Dashboard — ElectroShop RW</title>
 
-<!-- Tailwind CSS -->
 <script src="https://cdn.tailwindcss.com"></script>
 <script>
 tailwind.config = {
   theme: {
     extend: {
-      colors: { primary: '#0ea5e9', dark: '#0f172a', accent: '#f59e0b', purple: '#8b5cf6' },
+      colors: { primary: '#0ea5e9', dark: '#0f172a', accent: '#f59e0b', purple: '#8b5cf6', pink: '#ec4899' },
       fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] }
     }
   }
 }
 </script>
-
-<!-- Icons & Fonts -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
-  html { scroll-behavior: smooth; }
-  body { font-family: 'Inter', sans-serif; overflow-x: hidden; background-color: #f8fafc; }
+  /* ================= ANIMATIONS ================= */
+  @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes fadeInScale { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+  @keyframes slideInRight { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+  @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+  @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+  @keyframes pulseGlow { 0% { box-shadow: 0 0 0 0 rgba(14,165,233,.4); } 70% { box-shadow: 0 0 0 15px rgba(14,165,233,0); } 100% { box-shadow: 0 0 0 0 rgba(14,165,233,0); } }
+
+  .anim-fade-up { animation: fadeInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; }
+  .anim-scale { animation: fadeInScale 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; }
+  .anim-slide { animation: slideInRight 0.4s ease forwards; opacity: 0; }
+  .anim-shake { animation: shake 0.4s ease; }
   
-  /* UI Elements */
-  .gradient-hero { background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0ea5e9 100%); }
-  .card-hover { transition: all .3s cubic-bezier(0.16, 1, 0.3, 1); }
-  .card-hover:hover { transform: translateY(-8px); box-shadow: 0 20px 40px rgba(14,165,233,.15); }
-  .btn-primary { background: linear-gradient(135deg,#0ea5e9,#2563eb); transition: all .3s ease; }
-  .btn-primary:hover { background: linear-gradient(135deg,#0284c7,#1d4ed8); transform: translateY(-2px); box-shadow: 0 10px 25px rgba(14,165,233,.4); }
+  .stagger-1 { animation-delay: 0.1s; }
+  .stagger-2 { animation-delay: 0.2s; }
+  .stagger-3 { animation-delay: 0.3s; }
+  .stagger-4 { animation-delay: 0.4s; }
+
+  /* ================= PREMIUM STYLES ================= */
+  body { font-family: 'Inter', sans-serif; overflow-x: hidden; background-color: #f4f7fb; }
   
-  .page { display: none; }
-  .page.active { display: block; animation: fadeIn 0.4s ease; }
-  .line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-  
-  /* Scrollbar */
-  ::-webkit-scrollbar { width: 8px; }
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
   ::-webkit-scrollbar-track { background: #f1f5f9; }
-  ::-webkit-scrollbar-thumb { background: #0ea5e9; border-radius: 4px; }
+  ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+  ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+  .glass-panel { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.3); }
   
-  /* Animations */
-  @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-  .skeleton { background: linear-gradient(90deg,#f0f0f0 25%,#e0e0e0 50%,#f0f0f0 75%); background-size: 200% 100%; animation: loading 1.5s infinite; }
-  @keyframes loading { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+  /* SIDEBAR */
+  .sidebar-link { border-left: 3px solid transparent; transition: all 0.2s ease; }
+  .sidebar-link.active { background: rgba(14,165,233,.1); color: #0ea5e9; border-left-color: #0ea5e9; font-weight: 700; }
+  .sidebar-link:hover:not(.active) { background: rgba(14,165,233,.05); }
+
+  /* PANELS */
+  .panel { display: none; }
+  .panel.active { display: block; animation: fadeInUp 0.4s ease; }
+  
+  /* MODALS & INPUTS */
+  .modal-overlay { background: rgba(15,23,42,.6); backdrop-filter: blur(8px); }
+  input, select, textarea { transition: all 0.3s ease; }
+  input:focus, select:focus, textarea:focus { outline: none; border-color: #0ea5e9; box-shadow: 0 0 0 4px rgba(14,165,233,.15); }
+  
+  /* PREMIUM BUTTONS */
+  .btn-add { background: linear-gradient(135deg, #0ea5e9 0%, #2563eb 100%); color: white; padding: 10px 24px; border-radius: 12px; font-weight: 800; font-size: 14px; box-shadow: 0 4px 15px rgba(14, 165, 233, 0.4); transition: all 0.3s ease; display: inline-flex; align-items: center; gap: 8px; border: none; cursor: pointer; }
+  .btn-add:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(14, 165, 233, 0.6); filter: brightness(1.1); }
+  .btn-save { background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; padding: 14px 24px; border-radius: 12px; font-weight: 800; font-size: 15px; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4); transition: all 0.3s ease; display: flex; justify-content: center; align-items: center; gap: 10px; width: 100%; border: none; cursor: pointer; margin-top: 10px; }
+  .btn-save:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(16, 185, 129, 0.6); filter: brightness(1.1); }
+
+  /* UPLOAD AREA */
+  .upload-area { border: 2px dashed #cbd5e1; transition: all 0.3s; background: #f8fafc; cursor: pointer; border-radius: 20px; }
+  .upload-area:hover { border-color: #0ea5e9; background: #f0f9ff; }
+  .upload-area.has-image { border-color: #10b981; border-style: solid; background: #fff; }
+
+  /* STATS CARD */
+  .stat-card { transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); position: relative; overflow: hidden; }
+  .stat-card:hover { transform: translateY(-6px) scale(1.02); box-shadow: 0 20px 40px -10px rgba(14,165,233,.2); }
+
+  #app { display: none; }
+  .loader { border: 4px solid #e2e8f0; border-top: 4px solid #0ea5e9; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: auto; }
+  @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 </style>
 </head>
 
 <body class="text-slate-800">
 
-<!-- ================= TOP BAR ================= -->
-<div class="bg-dark text-slate-300 text-xs py-2">
-  <div class="max-w-7xl mx-auto px-4 flex flex-wrap justify-between items-center gap-2">
-    <div class="flex items-center gap-4">
-      <span><i class="fas fa-phone text-primary mr-1"></i> +250 788 000 000</span>
-      <span class="hidden sm:inline"><i class="fas fa-envelope text-primary mr-1"></i> info@electro.rw</span>
+<!-- ================= LOGIN SCREEN ================= -->
+<div id="loginScreen" class="fixed inset-0 z-[60] bg-dark flex items-center justify-center p-4 overflow-hidden transition-opacity duration-500">
+  <div class="absolute inset-0 opacity-40">
+    <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-primary rounded-full mix-blend-multiply filter blur-3xl" style="animation: float 6s ease-in-out infinite;"></div>
+    <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple rounded-full mix-blend-multiply filter blur-3xl" style="animation: float 7s ease-in-out infinite reverse;"></div>
+  </div>
+
+  <div class="bg-white/95 backdrop-blur-2xl rounded-[2rem] shadow-2xl max-w-md w-full p-10 relative anim-scale border border-white/40">
+    <div class="text-center mb-10">
+      <div class="w-24 h-24 mx-auto rounded-3xl bg-gradient-to-br from-dark to-slate-800 text-white flex items-center justify-center text-4xl mb-5 shadow-2xl relative">
+        <i class="fas fa-bolt text-accent relative z-10" style="animation: float 2s ease-in-out infinite;"></i>
+      </div>
+      <h1 class="text-3xl font-black text-dark tracking-tight">Admin <span class="bg-clip-text text-transparent bg-gradient-to-r from-primary to-purple">Panel</span></h1>
+      <p class="text-slate-500 text-sm mt-2 font-medium">Injira mu bucuruzi bwawe</p>
     </div>
-    <div class="flex items-center gap-4">
-      <span><i class="fas fa-truck text-accent mr-1"></i> Delivery mu Kigali: 24h</span>
-    </div>
+    
+    <form id="adminLoginForm" class="space-y-6">
+      <div class="anim-fade-up stagger-1">
+        <label class="text-xs font-bold text-slate-700 mb-2 block uppercase tracking-wider">Email</label>
+        <div class="relative group">
+          <i class="fas fa-envelope absolute left-5 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors text-lg"></i>
+          <input required id="adEmail" type="email" value="admin@electro.rw" class="w-full pl-12 pr-5 py-4 rounded-2xl border border-slate-200 text-sm bg-slate-50 focus:bg-white font-semibold transition" />
+        </div>
+      </div>
+      <div class="anim-fade-up stagger-2">
+        <label class="text-xs font-bold text-slate-700 mb-2 block uppercase tracking-wider">Ijambo ry'ibanga</label>
+        <div class="relative group">
+          <i class="fas fa-lock absolute left-5 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors text-lg"></i>
+          <input required id="adPassword" type="password" value="Admin@123" class="w-full pl-12 pr-12 py-4 rounded-2xl border border-slate-200 text-sm bg-slate-50 focus:bg-white font-semibold transition" />
+        </div>
+      </div>
+      <div id="loginError" class="hidden text-red-500 text-xs font-bold text-center anim-shake bg-red-50 py-3 rounded-xl border border-red-100">
+        <i class="fas fa-exclamation-circle mr-1"></i> Email cyangwa password sibyo!
+      </div>
+      <button type="submit" class="btn-add w-full justify-center py-4 rounded-2xl text-base font-black tracking-wide anim-fade-up stagger-3">
+        <i class="fas fa-sign-in-alt mr-2"></i> Injira muri Sisitemu
+      </button>
+    </form>
   </div>
 </div>
 
-<!-- ================= HEADER ================= -->
-<header id="mainHeader" class="bg-white shadow-sm sticky top-0 z-40">
-  <div class="max-w-7xl mx-auto px-4">
-    <div class="flex items-center justify-between h-16 md:h-20 gap-4">
-      <!-- Logo -->
-      <a href="#" onclick="showPage('home')" class="flex items-center gap-2 flex-shrink-0">
-        <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-primary to-blue-700 flex items-center justify-center text-white font-bold text-lg">
-          <i class="fas fa-bolt"></i>
-        </div>
-        <span class="text-xl md:text-2xl font-extrabold text-dark">Electro<span class="text-primary">Shop</span></span>
-      </a>
+<!-- ================= MAIN APP ================= -->
+<div id="app" class="flex min-h-screen">
 
-      <!-- Desktop Search -->
-      <div class="hidden md:flex flex-1 max-w-xl">
-        <div class="relative w-full">
-          <input type="text" id="searchInput" placeholder="Shakisha telefoni, laptop, accessories..."
-            class="w-full pl-4 pr-12 py-2.5 rounded-full border border-slate-200 focus:border-primary outline-none transition text-sm" />
-          <button class="absolute right-1 top-1 bottom-1 px-4 rounded-full btn-primary text-white">
-            <i class="fas fa-search"></i>
+  <!-- SIDEBAR (FEATURES ZOSE) -->
+  <aside id="sidebar" class="fixed left-0 top-0 bottom-0 w-64 bg-white border-r border-slate-200 z-40 flex flex-col transform -translate-x-full md:translate-x-0 transition-transform duration-300">
+    <div class="flex items-center gap-3 px-6 h-20 border-b border-slate-100">
+      <div class="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-white font-bold shadow-lg shadow-primary/30">
+        <i class="fas fa-bolt"></i>
+      </div>
+      <div>
+        <span class="font-black text-dark text-base tracking-tight block">Electro<span class="text-primary">Shop</span></span>
+        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Admin Panel</span>
+      </div>
+    </div>
+    
+    <nav class="flex-1 overflow-y-auto py-4 text-sm font-medium">
+      <p class="px-6 text-[10px] uppercase tracking-widest text-slate-400 font-bold mb-2">Main</p>
+      <a href="#" data-panel="overview" class="sidebar-link active flex items-center gap-3 px-6 py-3 text-slate-600"><i class="fas fa-chart-pie w-5 text-center"></i> Dashboard</a>
+      <a href="#" data-panel="analytics" class="sidebar-link flex items-center gap-3 px-6 py-3 text-slate-600"><i class="fas fa-chart-line w-5 text-center"></i> Analytics</a>
+
+      <p class="px-6 text-[10px] uppercase tracking-widest text-slate-400 font-bold mt-6 mb-2">Ubucuruzi</p>
+      <a href="#" data-panel="products" class="sidebar-link flex items-center gap-3 px-6 py-3 text-slate-600"><i class="fas fa-box-open w-5 text-center"></i> Ibicuruzwa <span id="badgeProducts" class="ml-auto bg-primary/10 text-primary text-[10px] font-bold px-2 py-0.5 rounded-full">0</span></a>
+      <a href="#" data-panel="orders" class="sidebar-link flex items-center gap-3 px-6 py-3 text-slate-600"><i class="fas fa-shopping-bag w-5 text-center"></i> Orders <span id="badgeOrders" class="ml-auto bg-accent/10 text-accent text-[10px] font-bold px-2 py-0.5 rounded-full">0</span></a>
+      <a href="#" data-panel="inventory" class="sidebar-link flex items-center gap-3 px-6 py-3 text-slate-600"><i class="fas fa-warehouse w-5 text-center"></i> Ububiko</a>
+
+      <p class="px-6 text-[10px] uppercase tracking-widest text-slate-400 font-bold mt-6 mb-2">Abantu</p>
+      <a href="#" data-panel="users" class="sidebar-link flex items-center gap-3 px-6 py-3 text-slate-600"><i class="fas fa-users w-5 text-center"></i> Abakoresha <span id="badgeUsers" class="ml-auto bg-purple-100 text-purple-600 text-[10px] font-bold px-2 py-0.5 rounded-full">0</span></a>
+      <a href="#" data-panel="messages" class="sidebar-link flex items-center gap-3 px-6 py-3 text-slate-600"><i class="fas fa-comments w-5 text-center"></i> Ubutumwa <span id="badgeMessages" class="ml-auto bg-pink-100 text-pink-600 text-[10px] font-bold px-2 py-0.5 rounded-full">0</span></a>
+
+      <p class="px-6 text-[10px] uppercase tracking-widest text-slate-400 font-bold mt-6 mb-2">Sisitemu</p>
+      <a href="#" data-panel="settings" class="sidebar-link flex items-center gap-3 px-6 py-3 text-slate-600"><i class="fas fa-cog w-5 text-center"></i> Igenamiterere</a>
+    </nav>
+
+    <div class="border-t border-slate-100 p-4">
+      <div class="flex items-center gap-3 px-3 py-3 rounded-2xl bg-slate-50 border border-slate-100">
+        <div class="w-10 h-10 rounded-full bg-dark flex items-center justify-center text-white font-bold text-sm">A</div>
+        <div class="flex-1 min-w-0">
+          <p class="text-sm font-bold text-dark truncate">Super Admin</p>
+          <p class="text-[10px] text-slate-500 font-medium truncate">admin@electro.rw</p>
+        </div>
+        <button onclick="logout()" class="text-slate-400 hover:text-red-500 hover:bg-red-50 w-8 h-8 rounded-lg transition" title="Sohoka"><i class="fas fa-sign-out-alt"></i></button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <div class="flex-1 md:ml-64 flex flex-col min-h-screen relative">
+
+    <!-- TOPBAR -->
+    <header class="bg-white/90 backdrop-blur-md border-b border-slate-200 h-20 flex items-center justify-between px-6 sticky top-0 z-30">
+      <div class="flex items-center gap-4">
+        <button onclick="toggleSidebar()" class="md:hidden text-slate-600 w-10 h-10 rounded-xl hover:bg-slate-100 transition"><i class="fas fa-bars"></i></button>
+        <div>
+          <h1 id="pageTitle" class="font-black text-dark text-lg tracking-tight">Dashboard</h1>
+          <p id="pageSubtitle" class="text-xs font-medium text-slate-400 hidden md:block">Murakaza neza!</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-3">
+        <div class="relative hidden sm:block group">
+          <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-sm group-focus-within:text-primary transition"></i>
+          <input id="globalSearch" placeholder="Shakisha..." class="pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 text-sm w-64 bg-slate-50 focus:bg-white transition-all font-medium" />
+        </div>
+        <div class="relative">
+          <button onclick="toggleNotif()" class="w-10 h-10 rounded-xl bg-white border border-slate-200 hover:bg-slate-50 text-slate-600 relative transition shadow-sm">
+            <i class="fas fa-bell"></i>
+            <span class="absolute top-2 right-2 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white animate-ping"></span>
+            <span class="absolute top-2 right-2 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white"></span>
           </button>
+          <div id="notifDropdown" class="hidden absolute right-0 mt-3 w-80 bg-white rounded-2xl shadow-2xl border border-slate-100 overflow-hidden anim-fade-up">
+            <div class="px-5 py-4 border-b border-slate-50 flex justify-between items-center bg-slate-50/50">
+              <span class="font-bold text-sm text-dark">Amatangazo</span>
+            </div>
+            <div class="max-h-72 overflow-y-auto text-sm">
+              <div class="px-5 py-4 border-b border-slate-50 hover:bg-slate-50 cursor-pointer transition flex gap-3">
+                <div class="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center shrink-0"><i class="fas fa-shopping-bag text-xs"></i></div>
+                <div><p class="text-xs font-bold text-dark">Order nshya #ORD-1005</p><p class="text-[10px] text-slate-400 mt-0.5">Iminota 5 ishize</p></div>
+              </div>
+              <div class="px-5 py-4 border-b border-slate-50 hover:bg-slate-50 cursor-pointer transition flex gap-3">
+                <div class="w-8 h-8 rounded-full bg-red-100 text-red-500 flex items-center justify-center shrink-0"><i class="fas fa-exclamation-triangle text-xs"></i></div>
+                <div><p class="text-xs font-bold text-dark">Stock nkeya: AirPods Pro 2</p><p class="text-[10px] text-slate-400 mt-0.5">Amasaha 2 ashize</p></div>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-
-      <!-- Cart Icon -->
-      <div class="flex items-center gap-2 md:gap-4">
-        <a href="#" onclick="showPage('cart')" class="relative flex flex-col items-center text-xs text-slate-600 hover:text-primary transition">
-          <i class="fas fa-shopping-cart text-lg mb-0.5"></i><span>Agatebo</span>
-          <span id="cartCount" class="absolute -top-1 -right-1 bg-accent text-white text-[10px] font-bold rounded-full w-5 h-5 flex items-center justify-center">0</span>
+        <a href="index.html" target="_blank" class="hidden sm:flex items-center gap-2 bg-dark hover:bg-slate-800 px-4 py-2.5 rounded-xl text-xs font-bold text-white transition shadow-md">
+          <i class="fas fa-external-link-alt"></i> Reba Site
         </a>
       </div>
-    </div>
+    </header>
 
-    <!-- Mobile Search -->
-    <div class="md:hidden pb-3">
-      <div class="relative w-full">
-        <input type="text" id="mobileSearch" placeholder="Shakisha ibicuruzwa..."
-          class="w-full pl-4 pr-12 py-2.5 rounded-full border border-slate-200 focus:border-primary outline-none text-sm" />
-        <button class="absolute right-1 top-1 bottom-1 px-4 rounded-full btn-primary text-white">
-          <i class="fas fa-search"></i>
-        </button>
-      </div>
-    </div>
+    <!-- CONTENT AREA -->
+    <main class="flex-1 p-6 overflow-x-hidden">
+
+      <!-- PANEL: OVERVIEW -->
+      <section id="panel-overview" class="panel active">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          <div class="stat-card bg-white rounded-3xl p-6 border border-slate-100 anim-fade-up stagger-1 shadow-sm">
+            <div class="flex items-center justify-between mb-4">
+              <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-green-400 to-green-600 text-white flex items-center justify-center shadow-lg shadow-green-200"><i class="fas fa-money-bill-wave text-lg"></i></div>
+              <span class="text-[10px] font-bold bg-green-50 text-green-600 px-2 py-1 rounded-lg"><i class="fas fa-arrow-up"></i> +12.5%</span>
+            </div>
+            <p class="text-sm font-bold text-slate-500 mb-1">Amafaranga yose</p>
+            <p class="text-2xl font-black text-dark" id="stRevenue">0 RWF</p>
+          </div>
+          <div class="stat-card bg-white rounded-3xl p-6 border border-slate-100 anim-fade-up stagger-2 shadow-sm">
+            <div class="flex items-center justify-between mb-4">
+              <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-primary to-blue-600 text-white flex items-center justify-center shadow-lg shadow-blue-200"><i class="fas fa-shopping-bag text-lg"></i></div>
+              <span class="text-[10px] font-bold bg-blue-50 text-blue-600 px-2 py-1 rounded-lg"><i class="fas fa-arrow-up"></i> +8</span>
+            </div>
+            <p class="text-sm font-bold text-slate-500 mb-1">Orders zose</p>
+            <p class="text-2xl font-black text-dark" id="stOrders">0</p>
+          </div>
+          <div class="stat-card bg-white rounded-3xl p-6 border border-slate-100 anim-fade-up stagger-3 shadow-sm">
+            <div class="flex items-center justify-between mb-4">
+              <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-purple-400 to-purple-600 text-white flex items-center justify-center shadow-lg shadow-purple-200"><i class="fas fa-users text-lg"></i></div>
+              <span class="text-[10px] font-bold bg-purple-50 text-purple-600 px-2 py-1 rounded-lg"><i class="fas fa-arrow-up"></i> +3</span>
+            </div>
+            <p class="text-sm font-bold text-slate-500 mb-1">Abakoresha</p>
+            <p class="text-2xl font-black text-dark" id="stUsers">0</p>
+          </div>
+          <div class="stat-card bg-white rounded-3xl p-6 border border-slate-100 anim-fade-up stagger-4 shadow-sm">
+            <div class="flex items-center justify-between mb-4">
+              <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-accent to-orange-600 text-white flex items-center justify-center shadow-lg shadow-orange-200"><i class="fas fa-box text-lg"></i></div>
+              <span class="text-[10px] font-bold bg-red-50 text-red-600 px-2 py-1 rounded-lg"><i class="fas fa-exclamation-triangle"></i> 5 bishize</span>
+            </div>
+            <p class="text-sm font-bold text-slate-500 mb-1">Ibicuruzwa</p>
+            <p class="text-2xl font-black text-dark" id="stProducts">0</p>
+          </div>
+        </div>
+
+        <div class="grid lg:grid-cols-3 gap-6">
+          <div class="lg:col-span-2 bg-white rounded-3xl p-6 border border-slate-100 anim-fade-up stagger-2 shadow-sm">
+            <div class="flex justify-between items-center mb-6">
+              <h3 class="font-black text-dark text-base">Amafaranga ku kwezi</h3>
+            </div>
+            <div class="h-72"><canvas id="salesChart"></canvas></div>
+          </div>
+          <div class="bg-white rounded-3xl p-6 border border-slate-100 anim-fade-up stagger-3 shadow-sm">
+            <h3 class="font-black text-dark text-base mb-6">Ibicuruzwa bikundwa</h3>
+            <div class="h-64"><canvas id="categoryChart"></canvas></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- PANEL: ANALYTICS -->
+      <section id="panel-analytics" class="panel">
+        <div class="grid md:grid-cols-3 gap-6 mb-6">
+          <div class="bg-white rounded-3xl p-6 border border-slate-100 anim-scale stagger-1 shadow-sm">
+            <p class="text-sm font-bold text-slate-500 mb-2">Conversion Rate</p>
+            <p class="text-4xl font-black text-primary">3.24%</p>
+            <p class="text-xs font-bold text-green-600 mt-3 bg-green-50 inline-block px-2 py-1 rounded"><i class="fas fa-arrow-up"></i> +0.8%</p>
+          </div>
+          <div class="bg-white rounded-3xl p-6 border border-slate-100 anim-scale stagger-2 shadow-sm">
+            <p class="text-sm font-bold text-slate-500 mb-2">Average Order Value</p>
+            <p class="text-4xl font-black text-green-600">285K</p>
+            <p class="text-xs font-bold text-green-600 mt-3 bg-green-50 inline-block px-2 py-1 rounded"><i class="fas fa-arrow-up"></i> +5.2%</p>
+          </div>
+          <div class="bg-white rounded-3xl p-6 border border-slate-100 anim-scale stagger-3 shadow-sm">
+            <p class="text-sm font-bold text-slate-500 mb-2">Abasuye urubuga</p>
+            <p class="text-4xl font-black text-purple-600">12,847</p>
+            <p class="text-xs font-bold text-green-600 mt-3 bg-green-50 inline-block px-2 py-1 rounded"><i class="fas fa-arrow-up"></i> +18%</p>
+          </div>
+        </div>
+        <div class="grid lg:grid-cols-2 gap-6">
+          <div class="bg-white rounded-3xl p-6 border border-slate-100 anim-fade-up shadow-sm">
+            <h3 class="font-black text-dark text-base mb-6">Abasuye ku munsi</h3>
+            <div class="h-64"><canvas id="visitorsChart"></canvas></div>
+          </div>
+          <div class="bg-white rounded-3xl p-6 border border-slate-100 anim-fade-up stagger-2 shadow-sm">
+            <h3 class="font-black text-dark text-base mb-6">Uburyo bwo kwishyura</h3>
+            <div class="h-64"><canvas id="paymentChart"></canvas></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- PANEL: PRODUCTS -->
+      <section id="panel-products" class="panel">
+        <div class="bg-white rounded-3xl border border-slate-100 overflow-hidden anim-fade-up shadow-sm">
+          <div class="p-5 border-b border-slate-100 flex flex-wrap gap-4 justify-between items-center bg-slate-50/50">
+            <div class="flex gap-3 flex-wrap">
+              <div class="relative">
+                <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+                <input id="productSearch" placeholder="Shakisha ibicuruzwa..." class="pl-11 pr-4 py-2.5 rounded-xl border border-slate-200 text-sm w-64 font-medium" />
+              </div>
+              <select id="productCatFilter" class="px-4 py-2.5 rounded-xl border border-slate-200 text-sm font-bold text-slate-600">
+                <option value="">Ibyiciro byose</option>
+                <option>Telefoni</option><option>Laptops</option><option>Audio</option>
+                <option>Accessories</option><option>TV</option><option>Gaming</option>
+              </select>
+            </div>
+            <button onclick="openProductModal()" class="btn-add">
+              <i class="fas fa-plus-circle"></i> Ongeramo Igicuruzwa
+            </button>
+          </div>
+          
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+              <thead class="bg-white text-slate-400 text-[11px] uppercase tracking-wider border-b border-slate-100">
+                <tr>
+                  <th class="text-left px-6 py-4 font-black">Igicuruzwa</th>
+                  <th class="text-left px-6 py-4 font-black hidden md:table-cell">Icyiciro</th>
+                  <th class="text-left px-6 py-4 font-black">Igiciro</th>
+                  <th class="text-left px-6 py-4 font-black hidden md:table-cell">Stock</th>
+                  <th class="text-right px-6 py-4 font-black">Ibikorwa</th>
+                </tr>
+              </thead>
+              <tbody id="productTable" class="divide-y divide-slate-50"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- PANEL: ORDERS -->
+      <section id="panel-orders" class="panel">
+        <div class="bg-white rounded-3xl border border-slate-100 overflow-hidden anim-fade-up shadow-sm">
+          <div class="p-5 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
+            <h3 class="font-black text-dark text-base">Orders zose</h3>
+            <select id="orderStatusFilter" class="px-4 py-2.5 rounded-xl border border-slate-200 text-sm font-bold text-slate-600">
+              <option value="">Status yose</option>
+              <option value="pending">Pending</option>
+              <option value="processing">Processing</option>
+              <option value="shipped">Shipped</option>
+              <option value="delivered">Delivered</option>
+            </select>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+              <thead class="bg-white text-slate-400 text-[11px] uppercase tracking-wider border-b border-slate-100">
+                <tr>
+                  <th class="text-left px-6 py-4 font-black">#</th>
+                  <th class="text-left px-6 py-4 font-black">Umukiriya</th>
+                  <th class="text-left px-6 py-4 font-black">Total</th>
+                  <th class="text-left px-6 py-4 font-black">Status</th>
+                  <th class="text-right px-6 py-4 font-black">Ibikorwa</th>
+                </tr>
+              </thead>
+              <tbody id="orderTable" class="divide-y divide-slate-50"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- PANEL: INVENTORY -->
+      <section id="panel-inventory" class="panel">
+        <div class="grid md:grid-cols-3 gap-6 mb-6">
+          <div class="bg-white rounded-3xl p-6 border border-slate-100 anim-scale stagger-1 shadow-sm">
+            <p class="text-sm font-bold text-slate-500 mb-1">Stock yose</p>
+            <p class="text-3xl font-black text-dark" id="invTotal">0</p>
+          </div>
+          <div class="bg-white rounded-3xl p-6 border border-slate-100 anim-scale stagger-2 shadow-sm">
+            <p class="text-sm font-bold text-slate-500 mb-1">Bishize</p>
+            <p class="text-3xl font-black text-red-500" id="invOut">0</p>
+          </div>
+          <div class="bg-white rounded-3xl p-6 border border-slate-100 anim-scale stagger-3 shadow-sm">
+            <p class="text-sm font-bold text-slate-500 mb-1">Stock nkeya (&lt;5)</p>
+            <p class="text-3xl font-black text-accent" id="invLow">0</p>
+          </div>
+        </div>
+        <div class="bg-white rounded-3xl border border-slate-100 overflow-hidden anim-fade-up shadow-sm">
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+              <thead class="bg-white text-slate-400 text-[11px] uppercase tracking-wider border-b border-slate-100">
+                <tr>
+                  <th class="text-left px-6 py-4 font-black">Igicuruzwa</th>
+                  <th class="text-left px-6 py-4 font-black">Stock</th>
+                  <th class="text-left px-6 py-4 font-black">Status</th>
+                  <th class="text-right px-6 py-4 font-black">Hindura</th>
+                </tr>
+              </thead>
+              <tbody id="inventoryTable" class="divide-y divide-slate-50"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- PANEL: USERS -->
+      <section id="panel-users" class="panel">
+        <div class="bg-white rounded-3xl border border-slate-100 overflow-hidden anim-fade-up shadow-sm">
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+              <thead class="bg-white text-slate-400 text-[11px] uppercase tracking-wider border-b border-slate-100">
+                <tr>
+                  <th class="text-left px-6 py-4 font-black">Amazina</th>
+                  <th class="text-left px-6 py-4 font-black">Email</th>
+                  <th class="text-left px-6 py-4 font-black">Telefoni</th>
+                  <th class="text-right px-6 py-4 font-black">Ibikorwa</th>
+                </tr>
+              </thead>
+              <tbody id="userTable" class="divide-y divide-slate-50"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- PANEL: MESSAGES (CHAT) -->
+      <section id="panel-messages" class="panel">
+        <div class="bg-white rounded-3xl border border-slate-100 overflow-hidden anim-fade-up flex h-[650px] shadow-sm">
+          <div class="w-full md:w-1/3 border-r border-slate-100 flex flex-col bg-slate-50/30">
+            <div class="p-5 border-b border-slate-100 bg-white">
+              <h3 class="font-black text-dark text-base"><i class="fas fa-comments text-primary mr-2"></i> Ubutumwa</h3>
+            </div>
+            <div class="flex-1 overflow-y-auto p-3 space-y-1" id="chatList"></div>
+          </div>
+
+          <div class="hidden md:flex flex-1 flex-col bg-white">
+            <div class="p-5 border-b border-slate-100 bg-white flex items-center gap-4">
+              <div class="w-12 h-12 rounded-full bg-primary text-white flex items-center justify-center font-black text-lg shadow-md" id="chatAvatar">?</div>
+              <div>
+                <p class="text-base font-black text-dark" id="chatName">Hitamo umukiriya</p>
+                <p class="text-[11px] font-bold text-green-500 flex items-center gap-1"><span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span> Online</p>
+              </div>
+            </div>
+            
+            <div class="flex-1 p-6 overflow-y-auto space-y-4 flex flex-col bg-slate-50/50" id="chatMessages">
+              <div class="text-center text-sm font-bold text-slate-400 mt-20"><i class="fas fa-comments text-6xl mb-4 text-slate-200 block"></i> Hitamo umukiriya kugira ngo utangire ubutumwa.</div>
+            </div>
+
+            <div class="p-4 bg-white border-t border-slate-100">
+              <form id="chatForm" class="flex gap-3">
+                <input id="chatInput" placeholder="Andika ubutumwa hano..." class="flex-1 px-5 py-4 rounded-2xl border border-slate-200 text-sm bg-slate-50 focus:bg-white font-medium transition" autocomplete="off" />
+                <button type="submit" class="bg-primary hover:bg-blue-600 text-white w-14 h-14 rounded-2xl flex items-center justify-center shadow-lg transition-all transform hover:scale-105"><i class="fas fa-paper-plane text-lg"></i></button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- PANEL: SETTINGS -->
+      <section id="panel-settings" class="panel">
+        <div class="grid md:grid-cols-2 gap-6">
+          <div class="bg-white rounded-3xl p-8 border border-slate-100 anim-fade-up shadow-sm">
+            <h3 class="font-black text-base mb-6 text-dark flex items-center gap-2"><i class="fas fa-store text-primary"></i> Amakuru y'urubuga</h3>
+            <div class="space-y-4">
+              <div><label class="text-xs font-bold text-slate-500 mb-1.5 block">Izina ry'urubuga</label><input value="ElectroShop RW" class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm font-medium" /></div>
+              <div><label class="text-xs font-bold text-slate-500 mb-1.5 block">Email</label><input value="info@electro.rw" class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm font-medium" /></div>
+              <button onclick="showToast('✅ Byabitswe')" class="btn-primary text-white px-5 py-3 rounded-xl text-sm font-bold w-full mt-2 shadow-lg shadow-primary/30 transition-all hover:-translate-y-0.5">Bika Impinduka</button>
+            </div>
+          </div>
+          <div class="bg-white rounded-3xl p-8 border border-slate-100 anim-fade-up stagger-2 shadow-sm">
+            <h3 class="font-black text-base mb-6 text-dark flex items-center gap-2"><i class="fas fa-credit-card text-primary"></i> Uburyo bwo kwishyura</h3>
+            <div class="space-y-4">
+              <label class="flex items-center justify-between p-4 border border-slate-200 rounded-2xl cursor-pointer hover:bg-slate-50 transition">
+                <span class="text-sm font-bold"><i class="fas fa-mobile-alt text-yellow-500 mr-3 text-lg"></i> MTN MoMo</span>
+                <input type="checkbox" checked class="w-5 h-5 accent-primary" />
+              </label>
+              <label class="flex items-center justify-between p-4 border border-slate-200 rounded-2xl cursor-pointer hover:bg-slate-50 transition">
+                <span class="text-sm font-bold"><i class="fas fa-mobile-alt text-red-500 mr-3 text-lg"></i> Airtel Money</span>
+                <input type="checkbox" checked class="w-5 h-5 accent-primary" />
+              </label>
+              <label class="flex items-center justify-between p-4 border border-slate-200 rounded-2xl cursor-pointer hover:bg-slate-50 transition">
+                <span class="text-sm font-bold"><i class="fas fa-money-bill text-green-600 mr-3 text-lg"></i> Cash on delivery</span>
+                <input type="checkbox" checked class="w-5 h-5 accent-primary" />
+              </label>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
   </div>
+</div>
 
-  <!-- Category Nav -->
-  <nav class="border-t border-slate-100 bg-white">
-    <div class="max-w-7xl mx-auto px-4">
-      <ul class="flex items-center gap-1 md:gap-6 overflow-x-auto py-2 text-sm font-medium text-slate-600 whitespace-nowrap">
-        <li><a href="#" onclick="loadProducts()" class="px-3 py-2 rounded-lg hover:bg-primary/10 hover:text-primary transition block"><i class="fas fa-th-large mr-1 text-primary"></i> Byose</a></li>
-        <li><a href="#" data-cat="Telefoni" class="cat-link px-3 py-2 rounded-lg hover:bg-primary/10 hover:text-primary transition block"><i class="fas fa-mobile-alt mr-1"></i> Telefoni</a></li>
-        <li><a href="#" data-cat="Laptops" class="cat-link px-3 py-2 rounded-lg hover:bg-primary/10 hover:text-primary transition block"><i class="fas fa-laptop mr-1"></i> Laptops</a></li>
-        <li><a href="#" data-cat="Audio" class="cat-link px-3 py-2 rounded-lg hover:bg-primary/10 hover:text-primary transition block"><i class="fas fa-headphones mr-1"></i> Audio</a></li>
-        <li><a href="#" data-cat="Accessories" class="cat-link px-3 py-2 rounded-lg hover:bg-primary/10 hover:text-primary transition block"><i class="fas fa-plug mr-1"></i> Accessories</a></li>
-      </ul>
+<!-- TOAST BOX -->
+<div id="toastBox" class="fixed top-6 right-6 z-[100] space-y-3"></div>
+
+<!-- ================= ADD PRODUCT MODAL ================= -->
+<div id="productModal" class="hidden fixed inset-0 z-[70] modal-overlay flex items-center justify-center p-4">
+  <div class="bg-white rounded-[2rem] max-w-lg w-full p-8 max-h-[90vh] overflow-y-auto anim-scale shadow-2xl relative">
+    <button onclick="closeModal('productModal')" class="absolute top-6 right-6 w-8 h-8 rounded-full bg-slate-100 text-slate-500 hover:bg-red-100 hover:text-red-500 transition flex items-center justify-center"><i class="fas fa-times"></i></button>
+    
+    <div class="mb-6">
+      <h3 class="font-black text-2xl text-dark tracking-tight">Ongeramo <span class="text-gradient">Igicuruzwa</span></h3>
+      <p class="text-sm font-medium text-slate-500 mt-1">Ibi bizajya kuri website ako kanya.</p>
     </div>
-  </nav>
-</header>
 
-<!-- ================= PAGE: HOME ================= -->
-<main id="page-home" class="page active">
-
-  <!-- HERO SECTION -->
-  <section class="gradient-hero text-white relative overflow-hidden">
-    <div class="max-w-7xl mx-auto px-4 py-12 md:py-20 relative grid md:grid-cols-2 gap-8 items-center">
+    <form id="productForm" class="space-y-5">
+      <!-- IMAGE UPLOAD -->
       <div>
-        <h1 class="text-3xl md:text-5xl font-extrabold leading-tight mb-4">
-          Ibyuma by'ikoranabuhanga <br /><span class="text-primary">Byiza, Bhendutse</span>
-        </h1>
-        <p class="text-slate-300 text-base md:text-lg mb-6 max-w-md">
-          Telefoni, laptops, accessories n'ibindi — delivery mu Kigali mu masaha 24.
-        </p>
-        <a href="#products" class="btn-primary px-6 py-3 rounded-full font-semibold text-sm inline-flex items-center gap-2">
-          <i class="fas fa-shopping-bag"></i> Tangira kugura
-        </a>
-      </div>
-      <div class="hidden md:block">
-        <div class="bg-white/10 backdrop-blur-md rounded-3xl p-6 border border-white/20">
-          <img src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=600&q=80" alt="Smartphone"
-            class="rounded-2xl w-full h-80 object-cover shadow-2xl" />
+        <label class="text-xs font-bold text-slate-700 mb-2 block uppercase tracking-wide">Ifoto y'igicuruzwa</label>
+        <div id="uploadArea" class="upload-area rounded-2xl p-6 flex flex-col items-center justify-center relative overflow-hidden" onclick="document.getElementById('pfImageFile').click()">
+          <input type="file" id="pfImageFile" accept="image/*" class="hidden" onchange="handleImageUpload(event)" />
+          <div id="uploadPlaceholder" class="text-center">
+            <div class="w-14 h-14 rounded-full bg-primary/10 text-primary flex items-center justify-center mx-auto mb-3"><i class="fas fa-cloud-upload-alt text-2xl"></i></div>
+            <p class="text-sm font-bold text-slate-700">Kanda hano uvuze ifoto</p>
+          </div>
+          <img id="imagePreview" class="hidden w-full h-48 object-contain rounded-xl" />
         </div>
       </div>
-    </div>
-  </section>
 
-  <!-- PRODUCTS GRID -->
-  <section id="products" class="max-w-7xl mx-auto px-4 py-12 min-h-[50vh]">
-    <div class="flex items-center justify-between mb-6">
       <div>
-        <h2 class="text-2xl md:text-3xl font-extrabold text-dark">Ibicuruzwa</h2>
-        <p class="text-slate-500 text-sm mt-1">Byose biri kuri Internet</p>
+        <label class="text-xs font-bold text-slate-700 mb-1.5 block uppercase tracking-wide">Izina ry'igicuruzwa *</label>
+        <input required id="pfName" class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm font-medium bg-slate-50 focus:bg-white transition" placeholder="Urugero: iPhone 15 Pro" />
       </div>
-    </div>
-    
-    <div id="productGrid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-      <!-- Skeletons zagaragara mbere yo kubona data -->
-      <div class="skeleton h-72 rounded-2xl"></div>
-      <div class="skeleton h-72 rounded-2xl"></div>
-      <div class="skeleton h-72 rounded-2xl"></div>
-      <div class="skeleton h-72 rounded-2xl"></div>
-    </div>
-    
-    <div id="emptyState" class="hidden text-center py-16">
-      <i class="fas fa-box-open text-6xl text-slate-200 mb-4 block"></i>
-      <p class="text-slate-500 font-bold">Nta bicuruzwa birahari kuri Internet.</p>
-    </div>
-  </section>
 
-</main>
-
-<!-- ================= PAGE: CART ================= -->
-<main id="page-cart" class="page">
-  <div class="max-w-5xl mx-auto px-4 py-8 min-h-[60vh]">
-    <h1 class="text-2xl md:text-3xl font-extrabold text-dark mb-6"><i class="fas fa-shopping-cart text-primary mr-2"></i>Agatebo kawe</h1>
-    
-    <div class="grid md:grid-cols-3 gap-6">
-      <div class="md:col-span-2 space-y-3" id="cartItems"></div>
-      
-      <div class="bg-white rounded-2xl p-6 border border-slate-100 h-fit sticky top-24 shadow-sm">
-        <h3 class="font-bold text-lg mb-4">Incamake</h3>
-        <div class="space-y-2 text-sm mb-4">
-          <div class="flex justify-between"><span class="text-slate-500">Ibicuruzwa:</span><span id="cartSubtotal" class="font-bold">0 RWF</span></div>
-          <div class="flex justify-between"><span class="text-slate-500">Delivery:</span><span class="text-green-600 font-bold">Ubuntu</span></div>
-          <div class="border-t border-slate-100 pt-2 flex justify-between font-black text-lg"><span>Total:</span><span id="cartTotal" class="text-primary">0 RWF</span></div>
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="text-xs font-bold text-slate-700 mb-1.5 block uppercase tracking-wide">Icyiciro *</label>
+          <select id="pfCategory" class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm font-bold text-slate-700 bg-slate-50 focus:bg-white transition">
+            <option>Telefoni</option><option>Laptops</option><option>Audio</option><option>Accessories</option><option>TV</option><option>Gaming</option>
+          </select>
         </div>
-        <button onclick="checkoutWhatsApp()" class="w-full btn-primary text-white py-3.5 rounded-xl font-bold text-sm shadow-lg mb-2">
-          <i class="fab fa-whatsapp mr-2 text-lg"></i>Komeza kuri WhatsApp
-        </button>
-        <a href="#" onclick="showPage('home')" class="block text-center text-primary text-sm mt-3 font-semibold hover:underline">← Komeza kugura</a>
+        <div>
+          <label class="text-xs font-bold text-slate-700 mb-1.5 block uppercase tracking-wide">Igiciro (RWF) *</label>
+          <input required id="pfPrice" type="number" class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm font-medium bg-slate-50 focus:bg-white transition" placeholder="150000" />
+        </div>
       </div>
-    </div>
-  </div>
-</main>
 
-<!-- ================= FOOTER ================= -->
-<footer class="bg-dark text-slate-400 py-10 mt-auto">
-  <div class="max-w-7xl mx-auto px-4 text-center">
-    <div class="flex items-center justify-center gap-2 mb-4">
-      <div class="w-9 h-9 rounded-lg bg-primary flex items-center justify-center text-white font-bold"><i class="fas fa-bolt"></i></div>
-      <span class="text-lg font-extrabold text-white">Electro<span class="text-primary">Shop</span></span>
-    </div>
-    <p class="text-sm">&copy; 2025 ElectroShop RW. Uburenganzira bwose burafitwe.</p>
-  </div>
-</footer>
+      <div>
+        <label class="text-xs font-bold text-slate-700 mb-1.5 block uppercase tracking-wide">Stock *</label>
+        <input required id="pfStock" type="number" class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm font-medium bg-slate-50 focus:bg-white transition" placeholder="10" />
+      </div>
 
-<!-- ================= TOAST ================= -->
-<div id="toast" class="fixed bottom-6 right-6 bg-dark text-white px-6 py-3 rounded-xl shadow-2xl opacity-0 translate-y-4 transition-all duration-300 z-[100] pointer-events-none font-bold">
-  <span id="toastMsg">Ibyakunze!</span>
+      <div class="pt-2">
+        <button type="submit" id="saveBtn" class="btn-save">
+          <i class="fas fa-save text-lg"></i> Bika Igicuruzwa
+        </button>
+      </div>
+    </form>
+  </div>
 </div>
 
 <!-- ============================================================ -->
-<!-- ================= FIREBASE SETUP =========================== -->
+<!-- ================= FIREBASE & LOGIC ========================= -->
 <!-- ============================================================ -->
 <script type="module">
   // ==== KOPA IZI NYUGUTI MURI FIREBASE CONSOLE YAWE ====
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-  import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+  import { getFirestore, collection, getDocs, addDoc, deleteDoc, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
   const firebaseConfig = {
     apiKey: "YOUR_API_KEY",
@@ -235,218 +570,235 @@ tailwind.config = {
   const db = getFirestore(app);
 
   // ============================================================
-  // ================== LOGIC Y'URUBUGA =========================
+  // ================== LOGIC Y'UBUCURUZI =======================
   // ============================================================
   
-  let allProducts = [];
-  let cart = []; // Iyi ni temporary (memory) gusa
+  let products = [];
+  let currentUploadedImage = null;
+  let charts = {};
 
-  // Utilities
-  const formatRWF = (n) => new Intl.NumberFormat('rw-RW',{style:'currency',currency:'RWF',maximumFractionDigits:0}).format(n);
-
-  window.showToast = (msg) => {
-    const t = document.getElementById('toast'), m = document.getElementById('toastMsg');
-    m.textContent = msg;
-    t.classList.remove('opacity-0', 'translate-y-4'); t.classList.add('opacity-100', 'translate-y-0');
-    setTimeout(() => { t.classList.add('opacity-0', 'translate-y-4'); t.classList.remove('opacity-100', 'translate-y-0'); }, 2500);
+  // Helpers
+  window.formatRWF = (n) => new Intl.NumberFormat('rw-RW',{style:'currency',currency:'RWF',maximumFractionDigits:0}).format(n);
+  
+  window.showToast = (msg, type='success') => {
+    const colors = { success:'bg-green-500', error:'bg-red-500' };
+    const el = document.createElement('div');
+    el.className = `${colors[type]} text-white px-6 py-3 rounded-xl shadow-2xl text-sm font-bold flex items-center gap-3 anim-slide`;
+    el.innerHTML = `<i class="fas fa-${type==='success'?'check-circle':'times-circle'}"></i> ${msg}`;
+    document.getElementById('toastBox').appendChild(el);
+    setTimeout(()=>{ el.style.opacity='0'; setTimeout(()=>el.remove(),300); },3000);
   };
 
-  window.showPage = (name) => {
-    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-    document.getElementById(`page-${name}`).classList.add('active');
-    window.scrollTo(0, 0);
-    if(name === 'cart') renderCart();
+  window.openModal = (id) => document.getElementById(id).classList.remove('hidden');
+  window.closeModal = (id) => document.getElementById(id).classList.add('hidden');
+  window.toggleSidebar = () => document.getElementById('sidebar').classList.toggle('-translate-x-full');
+  window.toggleNotif = () => document.getElementById('notifDropdown').classList.toggle('hidden');
+
+  // Image Upload (Base64 string ibikwa muri Database)
+  window.handleImageUpload = (event) => {
+    const file = event.target.files[0];
+    if(!file) return;
+    if(file.size > 1024 * 1024) return showToast('Ifoto ni nini cyane (Max 1MB)', 'error');
+    
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      currentUploadedImage = e.target.result;
+      document.getElementById('uploadPlaceholder').classList.add('hidden');
+      const img = document.getElementById('imagePreview');
+      img.src = currentUploadedImage;
+      img.classList.remove('hidden');
+      document.getElementById('uploadArea').classList.add('has-image');
+    };
+    reader.readAsDataURL(file);
   };
 
-  window.updateCartCount = () => {
-    const count = cart.reduce((s, i) => s + i.quantity, 0);
-    document.getElementById('cartCount').textContent = count;
+  // LOGIN SYSTEM
+  document.getElementById('adminLoginForm').addEventListener('submit', e => {
+    e.preventDefault();
+    const em = document.getElementById('adEmail').value, pw = document.getElementById('adPassword').value;
+    if(em==='admin@electro.rw' && pw==='Admin@123'){
+      document.getElementById('loginScreen').style.opacity = '0';
+      setTimeout(()=>{
+        document.getElementById('loginScreen').style.display = 'none';
+        document.getElementById('app').style.display = 'flex';
+        initApp(); 
+      }, 400);
+    } else {
+      const err = document.getElementById('loginError');
+      err.classList.remove('hidden');
+      err.classList.add('anim-shake');
+      setTimeout(()=>err.classList.remove('anim-shake'), 400);
+    }
+  });
+
+  window.logout = () => location.reload();
+
+  // NAVIGATION
+  const PANEL_TITLES = {
+    overview:['Dashboard','Incamake y\'ubucuruzi'],
+    analytics:['Analytics','Imibare n\'isesengura'],
+    products:['Ibicuruzwa','Gucunga ibicuruzwa'],
+    orders:['Orders','Gucunga orders'],
+    inventory:['Ububiko','Gucunga stock'],
+    users:['Abakoresha','Gucunga abakiriya'],
+    messages:['Ubutumwa','Chat n\'abakiriya'],
+    settings:['Igenamiterere','Igenamiterere ry\'urubuga'],
   };
+  
+  window.switchPanel = (name) => {
+    document.querySelectorAll('.sidebar-link').forEach(l=>l.classList.remove('active'));
+    document.querySelector(`.sidebar-link[data-panel="${name}"]`)?.classList.add('active');
+    document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+    document.getElementById('panel-'+name)?.classList.add('active');
+    const [t,s] = PANEL_TITLES[name] || ['Dashboard',''];
+    document.getElementById('pageTitle').textContent = t;
+    document.getElementById('pageSubtitle').textContent = s;
+    if(window.innerWidth < 768) toggleSidebar();
+    
+    if(name==='overview') drawCharts();
+  };
+  
+  document.querySelectorAll('.sidebar-link').forEach(l=>{
+    l.addEventListener('click', e=>{ e.preventDefault(); switchPanel(l.dataset.panel); });
+  });
 
   // ==== FETCH PRODUCTS FROM FIREBASE ====
-  window.loadProducts = async (category = null) => {
-    const grid = document.getElementById('productGrid');
-    const empty = document.getElementById('emptyState');
-    grid.innerHTML = Array(4).fill('<div class="skeleton h-72 rounded-2xl"></div>').join('');
-    empty.classList.add('hidden');
+  async function fetchProducts() {
+    const table = document.getElementById('productTable');
+    table.innerHTML = '<tr><td colspan="4" class="text-center py-10"><div class="loader"></div></td></tr>';
 
     try {
       const querySnapshot = await getDocs(collection(db, "products"));
-      allProducts = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      products = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 
-      let displayProducts = allProducts;
-      if (category) {
-        displayProducts = allProducts.filter(p => p.category === category);
-      }
+      // Update Stats
+      document.getElementById('stProducts').textContent = products.length;
+      document.getElementById('badgeProducts').textContent = products.length;
 
-      if (displayProducts.length === 0) {
-        grid.innerHTML = '';
-        empty.classList.remove('hidden');
+      // Render Table
+      if(products.length === 0) {
+        table.innerHTML = '<tr><td colspan="4" class="px-6 py-16 text-center text-slate-400 font-bold"><i class="fas fa-box-open text-5xl mb-4 text-slate-200"></i><br>Nta bicuruzwa birahari kuri Firebase</td></tr>';
         return;
       }
 
-      grid.innerHTML = displayProducts.map(p => {
-        const img = p.image || 'https://via.placeholder.com/400x300?text=Electronics';
-        const oos = p.stock <= 0;
-        
-        return `
-        <div class="bg-white rounded-2xl overflow-hidden border border-slate-100 card-hover flex flex-col group">
-          <div class="relative aspect-[4/3] overflow-hidden bg-slate-100 cursor-pointer">
-            <img src="${img}" alt="${p.name}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" onerror="this.src='https://via.placeholder.com/400x300?text=No+Image'" />
-            ${oos ? '<span class="absolute inset-0 bg-black/50 flex items-center justify-center text-white font-bold text-sm">BYASHIZE</span>' : ''}
-          </div>
-          <div class="p-4 flex-1 flex flex-col">
-            <p class="text-[10px] uppercase tracking-wide text-primary font-bold mb-1">${p.category || 'General'}</p>
-            <h3 class="font-bold text-sm text-dark line-clamp-2 mb-2 flex-1">${p.name}</h3>
-            <div class="flex items-center justify-between mt-auto pt-2">
-              <span class="text-primary font-black text-base">${formatRWF(p.price)}</span>
-              <button onclick="addToCart('${p.id}', '${p.name.replace(/'/g, "\\'")}', ${p.price}, '${img}')" ${oos ? 'disabled' : ''} class="w-9 h-9 rounded-full bg-primary/10 text-primary hover:bg-primary hover:text-white transition flex items-center justify-center disabled:opacity-50">
-                <i class="fas fa-plus text-sm"></i>
-              </button>
+      table.innerHTML = products.map(p => `
+        <tr class="hover:bg-slate-50/80 transition-colors group">
+          <td class="px-6 py-4">
+            <div class="flex items-center gap-4">
+              <div class="w-12 h-12 rounded-xl bg-slate-100 overflow-hidden shrink-0 border border-slate-200 shadow-sm">
+                <img src="${p.image || 'https://via.placeholder.com/100'}" class="w-full h-full object-cover" />
+              </div>
+              <div><p class="font-bold text-dark text-sm truncate max-w-[200px]">${p.name}</p></div>
             </div>
-          </div>
-        </div>`;
-      }).join('');
+          </td>
+          <td class="px-6 py-4 hidden md:table-cell"><span class="text-[11px] font-bold bg-primary/10 text-primary px-3 py-1.5 rounded-lg">${p.category}</span></td>
+          <td class="px-6 py-4 text-sm font-black text-dark">${formatRWF(p.price)}</td>
+          <td class="px-6 py-4 hidden md:table-cell"><span class="text-[11px] font-bold ${p.stock===0?'bg-red-100 text-red-600':p.stock<5?'bg-accent/10 text-accent':'bg-green-100 text-green-700'} px-3 py-1.5 rounded-lg">${p.stock || 0} pcs</span></td>
+          <td class="px-6 py-4 text-right">
+            <button onclick="deleteProduct('${p.id}')" class="text-red-500 hover:bg-red-50 hover:text-red-600 w-9 h-9 rounded-xl transition inline-flex items-center justify-center"><i class="fas fa-trash"></i></button>
+          </td>
+        </tr>
+      `).join('');
 
     } catch (error) {
-      console.error("Error fetching products: ", error);
-      grid.innerHTML = `<p class="col-span-full text-center text-red-500 font-bold">Habaye ikibazo cyo kubona ibicuruzwa. Reba niba amakuru ya Firebase ari mu buryo.</p>`;
+      console.error(error);
+      table.innerHTML = '<tr><td colspan="4" class="text-center py-10 text-red-500 font-bold">Habaye ikibazo cyo guhuza na Firebase. Reba Config yawe.</td></tr>';
     }
+  }
+
+  // ==== ADD PRODUCT TO FIREBASE ====
+  window.openProductModal = () => {
+    document.getElementById('productForm').reset();
+    currentUploadedImage = null;
+    document.getElementById('uploadPlaceholder').classList.remove('hidden');
+    document.getElementById('imagePreview').classList.add('hidden');
+    document.getElementById('uploadArea').classList.remove('has-image');
+    openModal('productModal');
   };
 
-  // ==== ADD TO CART ====
-  window.addToCart = (id, name, price, image) => {
-    const existing = cart.find(item => item.id === id);
-    if (existing) {
-      existing.quantity++;
-    } else {
-      cart.push({ id, name, price, image, quantity: 1 });
+  document.getElementById('productForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const btn = document.getElementById('saveBtn');
+    const originalText = btn.innerHTML;
+    
+    btn.innerHTML = '<i class="fas fa-circle-notch fa-spin text-lg"></i> Turi kubika...';
+    btn.disabled = true;
+
+    const newProduct = {
+      name: document.getElementById('pfName').value,
+      category: document.getElementById('pfCategory').value,
+      price: parseFloat(document.getElementById('pfPrice').value),
+      stock: parseInt(document.getElementById('pfStock').value),
+      image: currentUploadedImage || 'https://via.placeholder.com/100',
+      created_at: new Date().toISOString()
+    };
+
+    try {
+      await addDoc(collection(db, "products"), newProduct);
+      closeModal('productModal');
+      showToast('✅ Igicuruzwa cyongeweho kuri Internet!');
+      fetchProducts(); // Refresh table
+    } catch (error) {
+      console.error(error);
+      showToast('Ntibyakunze kubika igicuruzwa', 'error');
+    } finally {
+      btn.innerHTML = originalText;
+      btn.disabled = false;
     }
-    updateCartCount();
-    showToast(`✅ ${name} yongewe mu gatebo`);
-  };
-
-  // ==== RENDER CART ====
-  window.renderCart = () => {
-    const box = document.getElementById('cartItems');
-    if (cart.length === 0) {
-      box.innerHTML = `
-        <div class="bg-white rounded-2xl p-12 text-center border border-slate-100 shadow-sm">
-          <i class="fas fa-shopping-cart text-6xl text-slate-200 mb-4 block"></i>
-          <p class="text-slate-500 font-bold mb-4">Agatebo kawe karimo ubusa</p>
-          <button onclick="showPage('home')" class="btn-primary text-white px-6 py-2.5 rounded-xl text-sm font-bold">Tangira kugura</button>
-        </div>`;
-      document.getElementById('cartSubtotal').textContent = '0 RWF';
-      document.getElementById('cartTotal').textContent = '0 RWF';
-      return;
-    }
-
-    box.innerHTML = cart.map(item => `
-      <div class="bg-white rounded-2xl p-4 border border-slate-100 flex items-center gap-4 shadow-sm">
-        <img src="${item.image}" class="w-16 h-16 rounded-xl object-cover" />
-        <div class="flex-1 min-w-0">
-          <h3 class="font-bold text-sm truncate text-dark">${item.name}</h3>
-          <p class="text-primary font-black text-sm mt-0.5">${formatRWF(item.price)}</p>
-          <div class="flex items-center gap-3 mt-2">
-            <button onclick="changeQty('${item.id}', -1)" class="w-7 h-7 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-xs font-bold"><i class="fas fa-minus"></i></button>
-            <span class="text-sm font-black w-4 text-center">${item.quantity}</span>
-            <button onclick="changeQty('${item.id}', 1)" class="w-7 h-7 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-xs font-bold"><i class="fas fa-plus"></i></button>
-          </div>
-        </div>
-        <div class="text-right">
-          <p class="font-black text-sm text-dark">${formatRWF(item.price * item.quantity)}</p>
-          <button onclick="removeItem('${item.id}')" class="text-red-500 text-xs mt-2 font-bold hover:underline">Kuraho</button>
-        </div>
-      </div>
-    `).join('');
-
-    const sub = cart.reduce((s, i) => s + i.price * i.quantity, 0);
-    document.getElementById('cartSubtotal').textContent = formatRWF(sub);
-    document.getElementById('cartTotal').textContent = formatRWF(sub);
-  };
-
-  window.changeQty = (id, d) => {
-    const item = cart.find(x => x.id === id);
-    if (!item) return;
-    item.quantity += d;
-    if (item.quantity <= 0) return removeItem(id);
-    updateCartCount();
-    renderCart();
-  };
-
-  window.removeItem = (id) => {
-    cart = cart.filter(x => x.id !== id);
-    updateCartCount();
-    renderCart();
-    showToast('Icyo gicuruzwa cyakuweho');
-  };
-
-  // ==== WHATSAPP CHECKOUT ====
-  window.checkoutWhatsApp = () => {
-    if (cart.length === 0) return showToast('Agatebo karimo ubusa!');
-    
-    const phone = "250788000000"; // HINDURA NUMERO UYISHYIREMO IYAWE
-    let message = "Muraho ElectroShop! Ndashaka kugura ibi bicuruzwa:\n\n";
-    
-    cart.forEach((item, index) => {
-      message += `${index + 1}. ${item.name} (x${item.quantity}) - ${formatRWF(item.price * item.quantity)}\n`;
-    });
-    
-    const total = cart.reduce((s, i) => s + i.price * i.quantity, 0);
-    message += `\n*TOTAL: ${formatRWF(total)}*`;
-    
-    window.open(`https://wa.me/${phone}?text=${encodeURIComponent(message)}`, '_blank');
-  };
-
-  // ==== CATEGORY LINKS ====
-  document.querySelectorAll('.cat-link').forEach(link => {
-    link.addEventListener('click', (e) => {
-      e.preventDefault();
-      const cat = link.getAttribute('data-cat');
-      showPage('home');
-      loadProducts(cat);
-      document.getElementById('products').scrollIntoView({ behavior: 'smooth' });
-    });
   });
 
-  // ==== SEARCH FUNCTIONALITY (Desktop) ====
-  document.getElementById('searchInput').addEventListener('input', (e) => {
-    const term = e.target.value.toLowerCase();
-    if (!term) return loadProducts();
-
-    const filtered = allProducts.filter(p => p.name.toLowerCase().includes(term) || (p.category && p.category.toLowerCase().includes(term)));
-    
-    const grid = document.getElementById('productGrid');
-    if(filtered.length === 0) {
-      grid.innerHTML = `<div class="col-span-full text-center py-10"><p class="text-slate-500 font-bold">Nta gicuruzwa kibonetse kuri "${term}"</p></div>`;
-      return;
+  // ==== DELETE PRODUCT ====
+  window.deleteProduct = async (id) => {
+    if(!confirm('Uraizeza gusiba iki gicuruzwa kuri Internet?')) return;
+    try {
+      await deleteDoc(doc(db, "products", id));
+      showToast(`✅ Igicuruzwa cyasibwe!`);
+      fetchProducts(); // Refresh table
+    } catch (error) {
+      console.error(error);
+      showToast('Ntibyakunze gusiba', 'error');
     }
-    
-    grid.innerHTML = filtered.map(p => {
-        const img = p.image || 'https://via.placeholder.com/400x300';
-        return `
-        <div class="bg-white rounded-2xl overflow-hidden border border-slate-100 card-hover flex flex-col group">
-          <div class="relative aspect-[4/3] overflow-hidden bg-slate-100">
-            <img src="${img}" class="w-full h-full object-cover" />
-          </div>
-          <div class="p-4 flex-1 flex flex-col">
-            <p class="text-[10px] text-primary font-bold mb-1">${p.category}</p>
-            <h3 class="font-bold text-sm text-dark line-clamp-2 mb-2 flex-1">${p.name}</h3>
-            <div class="flex items-center justify-between mt-auto pt-2">
-              <span class="text-primary font-black text-base">${formatRWF(p.price)}</span>
-              <button onclick="addToCart('${p.id}', '${p.name.replace(/'/g, "\\'")}', ${p.price}, '${img}')" class="w-9 h-9 rounded-full bg-primary/10 text-primary hover:bg-primary hover:text-white transition flex items-center justify-center"><i class="fas fa-plus text-sm"></i></button>
-            </div>
-          </div>
-        </div>`;
-    }).join('');
-  });
+  };
 
-  // ==== INIT ====
-  window.addEventListener('load', () => {
-    updateCartCount();
-    loadProducts();
-  });
+  // Charts (Zerekana amakuru ariho ubu)
+  function drawCharts() {
+    const ctxSales = document.getElementById('salesChart');
+    if(ctxSales) {
+      if(charts.sales) charts.sales.destroy();
+      charts.sales = new Chart(ctxSales, {
+        type:'line',
+        data:{
+          labels:['Jan','Feb','Mar','Apr','May','Jun'],
+          datasets:[{
+            label:'Amafaranga',
+            data:[1200000,1800000,1500000,2200000,1900000,2800000],
+            borderColor:'#0ea5e9', backgroundColor:'rgba(14,165,233,.1)', borderWidth: 3, fill:true, tension:.4, pointRadius:4, pointBackgroundColor: '#fff', pointBorderWidth: 2
+          }]
+        },
+        options:{ responsive:true, maintainAspectRatio: false, plugins:{ legend:{display:false} }, scales:{ y:{ ticks:{ callback:v=>(v/1000000).toFixed(1)+'M' }, grid:{ borderDash: [5,5] } }, x:{ grid:{display:false} } } }
+      });
+    }
+
+    const ctxCat = document.getElementById('categoryChart');
+    if(ctxCat) {
+      if(charts.category) charts.category.destroy();
+      const counts = {};
+      products.forEach(p=>counts[p.category]=(counts[p.category]||0)+1);
+      charts.category = new Chart(ctxCat, {
+        type:'doughnut',
+        data:{ labels:Object.keys(counts), datasets:[{ data:Object.values(counts), backgroundColor:['#0ea5e9','#8b5cf6','#ec4899','#10b981','#f59e0b','#6366f1'], borderWidth:0, hoverOffset: 10 }] },
+        options:{ responsive:true, maintainAspectRatio: false, plugins:{ legend:{ position:'bottom', labels:{ font:{size:11, family:'Inter', weight:'bold'} } } }, cutout:'70%' }
+      });
+    }
+  }
+
+  // INIT APP
+  function initApp() {
+    fetchProducts();
+    drawCharts();
+  }
 
 </script>
+
 </body>
 </html>
