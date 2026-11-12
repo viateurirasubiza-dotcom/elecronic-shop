@@ -21,84 +21,84 @@ tailwind.config = {
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
-  /* ================= ANIMATIONS ================= */
   @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
   @keyframes fadeInScale { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
   @keyframes slideInRight { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
   @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
   @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+  @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
   .anim-fade-up { animation: fadeInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; }
   .anim-scale { animation: fadeInScale 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; }
   .anim-slide { animation: slideInRight 0.4s ease forwards; opacity: 0; }
   .anim-shake { animation: shake 0.4s ease; }
-  
   .stagger-1 { animation-delay: 0.1s; }
   .stagger-2 { animation-delay: 0.2s; }
   .stagger-3 { animation-delay: 0.3s; }
   .stagger-4 { animation-delay: 0.4s; }
 
-  /* ================= PREMIUM STYLES ================= */
   body { font-family: 'Inter', sans-serif; overflow-x: hidden; background-color: #f4f7fb; }
-  
   ::-webkit-scrollbar { width: 8px; height: 8px; }
   ::-webkit-scrollbar-track { background: #f1f5f9; }
   ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
   ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
 
-  /* SIDEBAR */
   .sidebar-link { border-left: 3px solid transparent; transition: all 0.2s ease; }
   .sidebar-link.active { background: rgba(14,165,233,.1); color: #0ea5e9; border-left-color: #0ea5e9; font-weight: 700; }
   .sidebar-link:hover:not(.active) { background: rgba(14,165,233,.05); }
 
-  /* PANELS */
   .panel { display: none; }
   .panel.active { display: block; animation: fadeInUp 0.4s ease; }
-  
-  /* MODALS & INPUTS */
+
   .modal-overlay { background: rgba(15,23,42,.6); backdrop-filter: blur(8px); }
   input, select, textarea { transition: all 0.3s ease; }
   input:focus, select:focus, textarea:focus { outline: none; border-color: #0ea5e9; box-shadow: 0 0 0 4px rgba(14,165,233,.15); }
-  
-  /* PREMIUM BUTTONS */
+
   .btn-add { background: linear-gradient(135deg, #0ea5e9 0%, #2563eb 100%); color: white; padding: 10px 24px; border-radius: 12px; font-weight: 800; font-size: 14px; box-shadow: 0 4px 15px rgba(14, 165, 233, 0.4); transition: all 0.3s ease; display: inline-flex; align-items: center; gap: 8px; border: none; cursor: pointer; }
   .btn-add:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(14, 165, 233, 0.6); filter: brightness(1.1); }
   .btn-save { background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; padding: 14px 24px; border-radius: 12px; font-weight: 800; font-size: 15px; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4); transition: all 0.3s ease; display: flex; justify-content: center; align-items: center; gap: 10px; width: 100%; border: none; cursor: pointer; margin-top: 10px; }
   .btn-save:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(16, 185, 129, 0.6); filter: brightness(1.1); }
+  .btn-save:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
 
-  /* UPLOAD AREA */
   .upload-area { border: 2px dashed #cbd5e1; transition: all 0.3s; background: #f8fafc; cursor: pointer; border-radius: 20px; }
   .upload-area:hover { border-color: #0ea5e9; background: #f0f9ff; }
   .upload-area.has-image { border-color: #10b981; border-style: solid; background: #fff; }
 
-  /* STATS CARD */
   .stat-card { transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); position: relative; overflow: hidden; }
   .stat-card:hover { transform: translateY(-6px) scale(1.02); box-shadow: 0 20px 40px -10px rgba(14,165,233,.2); }
 
+  .text-gradient { background: linear-gradient(135deg, #0ea5e9, #8b5cf6); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+  .btn-primary { background: linear-gradient(135deg, #0ea5e9 0%, #2563eb 100%); }
+  .btn-primary:hover { filter: brightness(1.1); }
+
   #app { display: none; }
   .loader { border: 4px solid #e2e8f0; border-top: 4px solid #0ea5e9; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: auto; }
-  @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+  .empty-state { padding: 4rem 1rem; text-align: center; color: #94a3b8; font-weight: 700; }
+  .empty-state i { font-size: 3rem; color: #e2e8f0; margin-bottom: 1rem; display: block; }
+
+  /* Chat bubbles */
+  .chat-bubble { max-width: 75%; padding: 10px 14px; border-radius: 16px; font-size: 13px; line-height: 1.4; word-wrap: break-word; }
+  .chat-bubble.me { background: #0ea5e9; color: white; border-bottom-right-radius: 4px; align-self: flex-end; }
+  .chat-bubble.them { background: white; color: #0f172a; border: 1px solid #e2e8f0; border-bottom-left-radius: 4px; align-self: flex-start; }
+  .chat-time { font-size: 9px; opacity: 0.7; margin-top: 3px; display: block; }
 </style>
 </head>
 
 <body class="text-slate-800">
 
-<!-- ================= LOGIN SCREEN (SCROLLABLE) ================= -->
-<!-- Hano nongeyeho overflow-y-auto kugira ngo ishobore kuzamuka kuri mobile -->
+<!-- LOGIN -->
 <div id="loginScreen" class="fixed inset-0 z-[60] bg-dark overflow-y-auto flex items-center justify-center p-4 transition-opacity duration-500">
-  <!-- Animated Background -->
   <div class="fixed inset-0 opacity-40 pointer-events-none">
     <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-primary rounded-full mix-blend-multiply filter blur-3xl" style="animation: float 6s ease-in-out infinite;"></div>
     <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple rounded-full mix-blend-multiply filter blur-3xl" style="animation: float 7s ease-in-out infinite reverse;"></div>
   </div>
 
-  <!-- Login Card -->
   <div class="bg-white/95 backdrop-blur-2xl rounded-[2rem] shadow-2xl max-w-md w-full p-8 md:p-10 relative anim-scale border border-white/40 my-auto">
     <div class="text-center mb-8 md:mb-10">
       <div class="w-20 h-20 md:w-24 md:h-24 mx-auto rounded-3xl bg-gradient-to-br from-dark to-slate-800 text-white flex items-center justify-center text-3xl md:text-4xl mb-5 shadow-2xl relative">
         <i class="fas fa-bolt text-accent relative z-10" style="animation: float 2s ease-in-out infinite;"></i>
       </div>
-      <h1 class="text-2xl md:text-3xl font-black text-dark tracking-tight">Admin <span class="bg-clip-text text-transparent bg-gradient-to-r from-primary to-purple">Panel</span></h1>
+      <h1 class="text-2xl md:text-3xl font-black text-dark tracking-tight">Admin <span class="text-gradient">Panel</span></h1>
       <p class="text-slate-500 text-sm mt-2 font-medium">Injira mu bucuruzi bwawe</p>
     </div>
     
@@ -107,29 +107,28 @@ tailwind.config = {
         <label class="text-xs font-bold text-slate-700 mb-2 block uppercase tracking-wider">Email</label>
         <div class="relative group">
           <i class="fas fa-envelope absolute left-5 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors text-lg"></i>
-          <input required id="adEmail" type="email" value="admin@electro.rw" class="w-full pl-12 pr-5 py-3.5 md:py-4 rounded-2xl border border-slate-200 text-sm bg-slate-50 focus:bg-white font-semibold transition" />
+          <input required id="adEmail" type="email" placeholder="admin@electro.rw" class="w-full pl-12 pr-5 py-3.5 md:py-4 rounded-2xl border border-slate-200 text-sm bg-slate-50 focus:bg-white font-semibold transition" />
         </div>
       </div>
       <div class="anim-fade-up stagger-2">
         <label class="text-xs font-bold text-slate-700 mb-2 block uppercase tracking-wider">Ijambo ry'ibanga</label>
         <div class="relative group">
           <i class="fas fa-lock absolute left-5 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors text-lg"></i>
-          <input required id="adPassword" type="password" value="Admin@123" class="w-full pl-12 pr-12 py-3.5 md:py-4 rounded-2xl border border-slate-200 text-sm bg-slate-50 focus:bg-white font-semibold transition" />
+          <input required id="adPassword" type="password" placeholder="••••••••" class="w-full pl-12 pr-12 py-3.5 md:py-4 rounded-2xl border border-slate-200 text-sm bg-slate-50 focus:bg-white font-semibold transition" />
         </div>
       </div>
-      <div id="loginError" class="hidden text-red-500 text-xs font-bold text-center anim-shake bg-red-50 py-3 rounded-xl border border-red-100">
-        <i class="fas fa-exclamation-circle mr-1"></i> Email cyangwa password sibyo!
+      <div id="loginError" class="hidden text-red-500 text-xs font-bold text-center bg-red-50 py-3 rounded-xl border border-red-100">
+        <i class="fas fa-exclamation-circle mr-1"></i> <span id="loginErrorMsg">Email cyangwa password sibyo!</span>
       </div>
-      <button type="submit" class="btn-add w-full justify-center py-3.5 md:py-4 rounded-2xl text-base font-black tracking-wide anim-fade-up stagger-3">
+      <button type="submit" id="loginBtn" class="btn-add w-full justify-center py-3.5 md:py-4 rounded-2xl text-base font-black tracking-wide anim-fade-up stagger-3">
         <i class="fas fa-sign-in-alt mr-2"></i> Injira muri Sisitemu
       </button>
     </form>
   </div>
 </div>
 
-<!-- ================= MAIN APP ================= -->
+<!-- MAIN APP -->
 <div id="app" class="flex min-h-screen">
-
   <!-- SIDEBAR -->
   <aside id="sidebar" class="fixed left-0 top-0 bottom-0 w-64 bg-white border-r border-slate-200 z-40 flex flex-col transform -translate-x-full md:translate-x-0 transition-transform duration-300">
     <div class="flex items-center gap-3 px-6 h-20 border-b border-slate-100 shrink-0">
@@ -162,20 +161,18 @@ tailwind.config = {
 
     <div class="border-t border-slate-100 p-4 shrink-0">
       <div class="flex items-center gap-3 px-3 py-3 rounded-2xl bg-slate-50 border border-slate-100">
-        <div class="w-10 h-10 rounded-full bg-dark flex items-center justify-center text-white font-bold text-sm">A</div>
+        <div class="w-10 h-10 rounded-full bg-dark flex items-center justify-center text-white font-bold text-sm" id="userAvatar">A</div>
         <div class="flex-1 min-w-0">
           <p class="text-sm font-bold text-dark truncate">Super Admin</p>
-          <p class="text-[10px] text-slate-500 font-medium truncate">admin@electro.rw</p>
+          <p class="text-[10px] text-slate-500 font-medium truncate" id="userEmailDisplay">admin@electro.rw</p>
         </div>
-        <button onclick="logout()" class="text-slate-400 hover:text-red-500 hover:bg-red-50 w-8 h-8 rounded-lg transition shrink-0" title="Sohoka"><i class="fas fa-sign-out-alt"></i></button>
+        <button onclick="handleLogout()" class="text-slate-400 hover:text-red-500 hover:bg-red-50 w-8 h-8 rounded-lg transition shrink-0" title="Sohoka"><i class="fas fa-sign-out-alt"></i></button>
       </div>
     </div>
   </aside>
 
-  <!-- MAIN CONTENT -->
+  <!-- MAIN -->
   <div class="flex-1 md:ml-64 flex flex-col min-h-screen relative w-full overflow-hidden">
-
-    <!-- TOPBAR -->
     <header class="bg-white/90 backdrop-blur-md border-b border-slate-200 h-20 flex items-center justify-between px-4 md:px-6 sticky top-0 z-30 shrink-0">
       <div class="flex items-center gap-3 md:gap-4">
         <button onclick="toggleSidebar()" class="md:hidden text-slate-600 w-10 h-10 rounded-xl hover:bg-slate-100 transition flex items-center justify-center"><i class="fas fa-bars text-lg"></i></button>
@@ -192,39 +189,29 @@ tailwind.config = {
         <div class="relative">
           <button onclick="toggleNotif()" class="w-10 h-10 rounded-xl bg-white border border-slate-200 hover:bg-slate-50 text-slate-600 relative transition shadow-sm flex items-center justify-center">
             <i class="fas fa-bell"></i>
-            <span class="absolute top-2 right-2 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white animate-ping"></span>
-            <span class="absolute top-2 right-2 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white"></span>
+            <span id="notifDot" class="hidden absolute top-2 right-2 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white animate-ping"></span>
+            <span id="notifDot2" class="hidden absolute top-2 right-2 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white"></span>
           </button>
-          <!-- Notif Dropdown -->
           <div id="notifDropdown" class="hidden absolute right-0 mt-3 w-72 md:w-80 bg-white rounded-2xl shadow-2xl border border-slate-100 overflow-hidden anim-fade-up z-50">
             <div class="px-5 py-4 border-b border-slate-50 flex justify-between items-center bg-slate-50/50">
               <span class="font-bold text-sm text-dark">Amatangazo</span>
             </div>
-            <div class="max-h-72 overflow-y-auto text-sm">
-              <div class="px-5 py-4 border-b border-slate-50 hover:bg-slate-50 cursor-pointer transition flex gap-3">
-                <div class="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center shrink-0"><i class="fas fa-shopping-bag text-xs"></i></div>
-                <div><p class="text-xs font-bold text-dark">Order nshya #ORD-1005</p><p class="text-[10px] text-slate-400 mt-0.5">Iminota 5 ishize</p></div>
-              </div>
-              <div class="px-5 py-4 border-b border-slate-50 hover:bg-slate-50 cursor-pointer transition flex gap-3">
-                <div class="w-8 h-8 rounded-full bg-red-100 text-red-500 flex items-center justify-center shrink-0"><i class="fas fa-exclamation-triangle text-xs"></i></div>
-                <div><p class="text-xs font-bold text-dark">Stock nkeya: AirPods Pro 2</p><p class="text-[10px] text-slate-400 mt-0.5">Amasaha 2 ashize</p></div>
-              </div>
+            <div id="notifList" class="max-h-72 overflow-y-auto text-sm">
+              <div class="px-5 py-6 text-center text-xs text-slate-400 font-bold">Nta matangazo mashya</div>
             </div>
           </div>
         </div>
       </div>
     </header>
 
-    <!-- CONTENT AREA -->
     <main class="flex-1 p-4 md:p-6 overflow-x-hidden w-full">
 
-      <!-- PANEL: OVERVIEW -->
+      <!-- OVERVIEW -->
       <section id="panel-overview" class="panel active">
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-6 md:mb-8">
           <div class="stat-card bg-white rounded-3xl p-5 md:p-6 border border-slate-100 anim-fade-up stagger-1 shadow-sm">
             <div class="flex items-center justify-between mb-4">
               <div class="w-10 h-10 md:w-12 md:h-12 rounded-2xl bg-gradient-to-br from-green-400 to-green-600 text-white flex items-center justify-center shadow-lg shadow-green-200"><i class="fas fa-money-bill-wave text-base md:text-lg"></i></div>
-              <span class="text-[10px] font-bold bg-green-50 text-green-600 px-2 py-1 rounded-lg"><i class="fas fa-arrow-up"></i> +12.5%</span>
             </div>
             <p class="text-xs md:text-sm font-bold text-slate-500 mb-1">Amafaranga yose</p>
             <p class="text-xl md:text-2xl font-black text-dark" id="stRevenue">0 RWF</p>
@@ -232,7 +219,6 @@ tailwind.config = {
           <div class="stat-card bg-white rounded-3xl p-5 md:p-6 border border-slate-100 anim-fade-up stagger-2 shadow-sm">
             <div class="flex items-center justify-between mb-4">
               <div class="w-10 h-10 md:w-12 md:h-12 rounded-2xl bg-gradient-to-br from-primary to-blue-600 text-white flex items-center justify-center shadow-lg shadow-blue-200"><i class="fas fa-shopping-bag text-base md:text-lg"></i></div>
-              <span class="text-[10px] font-bold bg-blue-50 text-blue-600 px-2 py-1 rounded-lg"><i class="fas fa-arrow-up"></i> +8</span>
             </div>
             <p class="text-xs md:text-sm font-bold text-slate-500 mb-1">Orders zose</p>
             <p class="text-xl md:text-2xl font-black text-dark" id="stOrders">0</p>
@@ -240,7 +226,6 @@ tailwind.config = {
           <div class="stat-card bg-white rounded-3xl p-5 md:p-6 border border-slate-100 anim-fade-up stagger-3 shadow-sm">
             <div class="flex items-center justify-between mb-4">
               <div class="w-10 h-10 md:w-12 md:h-12 rounded-2xl bg-gradient-to-br from-purple-400 to-purple-600 text-white flex items-center justify-center shadow-lg shadow-purple-200"><i class="fas fa-users text-base md:text-lg"></i></div>
-              <span class="text-[10px] font-bold bg-purple-50 text-purple-600 px-2 py-1 rounded-lg"><i class="fas fa-arrow-up"></i> +3</span>
             </div>
             <p class="text-xs md:text-sm font-bold text-slate-500 mb-1">Abakoresha</p>
             <p class="text-xl md:text-2xl font-black text-dark" id="stUsers">0</p>
@@ -248,7 +233,6 @@ tailwind.config = {
           <div class="stat-card bg-white rounded-3xl p-5 md:p-6 border border-slate-100 anim-fade-up stagger-4 shadow-sm">
             <div class="flex items-center justify-between mb-4">
               <div class="w-10 h-10 md:w-12 md:h-12 rounded-2xl bg-gradient-to-br from-accent to-orange-600 text-white flex items-center justify-center shadow-lg shadow-orange-200"><i class="fas fa-box text-base md:text-lg"></i></div>
-              <span class="text-[10px] font-bold bg-red-50 text-red-600 px-2 py-1 rounded-lg"><i class="fas fa-exclamation-triangle"></i> 5 bishize</span>
             </div>
             <p class="text-xs md:text-sm font-bold text-slate-500 mb-1">Ibicuruzwa</p>
             <p class="text-xl md:text-2xl font-black text-dark" id="stProducts">0</p>
@@ -269,7 +253,25 @@ tailwind.config = {
         </div>
       </section>
 
-      <!-- PANEL: PRODUCTS -->
+      <!-- ANALYTICS -->
+      <section id="panel-analytics" class="panel">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
+          <div class="bg-white rounded-3xl p-5 md:p-6 border border-slate-100 shadow-sm">
+            <h3 class="font-black text-dark text-base mb-6">Amafaranga buri cyumweru</h3>
+            <div class="h-72 w-full"><canvas id="weeklyChart"></canvas></div>
+          </div>
+          <div class="bg-white rounded-3xl p-5 md:p-6 border border-slate-100 shadow-sm">
+            <h3 class="font-black text-dark text-base mb-6">Status y'ama orders</h3>
+            <div class="h-72 w-full"><canvas id="orderStatusChart"></canvas></div>
+          </div>
+        </div>
+        <div class="mt-6 bg-white rounded-3xl p-5 md:p-6 border border-slate-100 shadow-sm">
+          <h3 class="font-black text-dark text-base mb-4">Top 5 Ibicuruzwa bikoreshwa cyane</h3>
+          <div id="topProductsList" class="space-y-2"></div>
+        </div>
+      </section>
+
+      <!-- PRODUCTS -->
       <section id="panel-products" class="panel">
         <div class="bg-white rounded-3xl border border-slate-100 overflow-hidden anim-fade-up shadow-sm">
           <div class="p-4 md:p-5 border-b border-slate-100 flex flex-col md:flex-row gap-4 justify-between items-start md:items-center bg-slate-50/50">
@@ -284,11 +286,15 @@ tailwind.config = {
                 <option>Accessories</option><option>TV</option><option>Gaming</option>
               </select>
             </div>
-            <button onclick="openProductModal()" class="btn-add w-full md:w-auto justify-center">
-              <i class="fas fa-plus-circle"></i> Ongeramo Igicuruzwa
-            </button>
+            <div class="flex gap-2 w-full md:w-auto">
+              <button onclick="exportProductsCSV()" class="px-4 py-2.5 rounded-xl border border-slate-200 text-sm font-bold text-slate-600 hover:bg-slate-50 transition">
+                <i class="fas fa-download mr-1"></i> Export
+              </button>
+              <button onclick="openProductModal()" class="btn-add flex-1 md:flex-none justify-center">
+                <i class="fas fa-plus-circle"></i> Ongeramo
+              </button>
+            </div>
           </div>
-          
           <div class="overflow-x-auto w-full">
             <table class="w-full text-sm min-w-[600px]">
               <thead class="bg-white text-slate-400 text-[11px] uppercase tracking-wider border-b border-slate-100">
@@ -306,7 +312,7 @@ tailwind.config = {
         </div>
       </section>
 
-      <!-- PANEL: ORDERS -->
+      <!-- ORDERS -->
       <section id="panel-orders" class="panel">
         <div class="bg-white rounded-3xl border border-slate-100 overflow-hidden anim-fade-up shadow-sm">
           <div class="p-4 md:p-5 border-b border-slate-100 flex flex-col sm:flex-row gap-3 justify-between items-start sm:items-center bg-slate-50/50">
@@ -317,17 +323,19 @@ tailwind.config = {
               <option value="processing">Processing</option>
               <option value="shipped">Shipped</option>
               <option value="delivered">Delivered</option>
+              <option value="cancelled">Cancelled</option>
             </select>
           </div>
           <div class="overflow-x-auto w-full">
-            <table class="w-full text-sm min-w-[600px]">
+            <table class="w-full text-sm min-w-[700px]">
               <thead class="bg-white text-slate-400 text-[11px] uppercase tracking-wider border-b border-slate-100">
                 <tr>
                   <th class="text-left px-6 py-4 font-black">#</th>
                   <th class="text-left px-6 py-4 font-black">Umukiriya</th>
                   <th class="text-left px-6 py-4 font-black">Total</th>
                   <th class="text-left px-6 py-4 font-black">Status</th>
-                  <th class="text-right px-6 py-4 font-black">Ibikorwa</th>
+                  <th class="text-left px-6 py-4 font-black">Itariki</th>
+                  <th class="text-right px-6 py-4 font-black">Hindura</th>
                 </tr>
               </thead>
               <tbody id="orderTable" class="divide-y divide-slate-50"></tbody>
@@ -336,7 +344,7 @@ tailwind.config = {
         </div>
       </section>
 
-      <!-- PANEL: INVENTORY -->
+      <!-- INVENTORY -->
       <section id="panel-inventory" class="panel">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mb-6">
           <div class="bg-white rounded-3xl p-5 md:p-6 border border-slate-100 anim-scale stagger-1 shadow-sm">
@@ -369,7 +377,7 @@ tailwind.config = {
         </div>
       </section>
 
-      <!-- PANEL: USERS -->
+      <!-- USERS -->
       <section id="panel-users" class="panel">
         <div class="bg-white rounded-3xl border border-slate-100 overflow-hidden anim-fade-up shadow-sm">
           <div class="overflow-x-auto w-full">
@@ -388,7 +396,7 @@ tailwind.config = {
         </div>
       </section>
 
-      <!-- PANEL: MESSAGES (CHAT) -->
+      <!-- MESSAGES -->
       <section id="panel-messages" class="panel">
         <div class="bg-white rounded-3xl border border-slate-100 overflow-hidden anim-fade-up flex flex-col md:flex-row h-[600px] md:h-[650px] shadow-sm">
           <div class="w-full md:w-1/3 border-b md:border-b-0 md:border-r border-slate-100 flex flex-col bg-slate-50/30 h-1/3 md:h-full">
@@ -407,29 +415,30 @@ tailwind.config = {
               </div>
             </div>
             
-            <div class="flex-1 p-4 md:p-6 overflow-y-auto space-y-4 flex flex-col bg-slate-50/50" id="chatMessages">
-              <div class="text-center text-sm font-bold text-slate-400 mt-10 md:mt-20"><i class="fas fa-comments text-4xl md:text-6xl mb-3 md:mb-4 text-slate-200 block"></i> Hitamo umukiriya kugira ngo utangire ubutumwa.</div>
+            <div class="flex-1 p-4 md:p-6 overflow-y-auto space-y-3 flex flex-col bg-slate-50/50" id="chatMessages">
+              <div class="empty-state"><i class="fas fa-comments"></i> Hitamo umukiriya kugira ngo utangire ubutumwa.</div>
             </div>
 
             <div class="p-3 md:p-4 bg-white border-t border-slate-100 shrink-0">
               <form id="chatForm" class="flex gap-2 md:gap-3">
-                <input id="chatInput" placeholder="Andika ubutumwa hano..." class="flex-1 px-4 md:px-5 py-3 md:py-4 rounded-xl md:rounded-2xl border border-slate-200 text-sm bg-slate-50 focus:bg-white font-medium transition" autocomplete="off" />
-                <button type="submit" class="bg-primary hover:bg-blue-600 text-white w-12 h-12 md:w-14 md:h-14 rounded-xl md:rounded-2xl flex items-center justify-center shadow-lg transition-all transform hover:scale-105 shrink-0"><i class="fas fa-paper-plane text-base md:text-lg"></i></button>
+                <input id="chatInput" placeholder="Andika ubutumwa hano..." class="flex-1 px-4 md:px-5 py-3 md:py-4 rounded-xl md:rounded-2xl border border-slate-200 text-sm bg-slate-50 focus:bg-white font-medium transition" autocomplete="off" disabled />
+                <button type="submit" id="chatSendBtn" class="bg-primary hover:bg-blue-600 text-white w-12 h-12 md:w-14 md:h-14 rounded-xl md:rounded-2xl flex items-center justify-center shadow-lg transition-all transform hover:scale-105 shrink-0 disabled:opacity-50 disabled:cursor-not-allowed" disabled><i class="fas fa-paper-plane text-base md:text-lg"></i></button>
               </form>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- PANEL: SETTINGS -->
+      <!-- SETTINGS -->
       <section id="panel-settings" class="panel">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
           <div class="bg-white rounded-3xl p-5 md:p-8 border border-slate-100 anim-fade-up shadow-sm">
             <h3 class="font-black text-base mb-6 text-dark flex items-center gap-2"><i class="fas fa-store text-primary"></i> Amakuru y'urubuga</h3>
             <div class="space-y-4">
-              <div><label class="text-xs font-bold text-slate-500 mb-1.5 block">Izina ry'urubuga</label><input value="ElectroShop RW" class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm font-medium" /></div>
-              <div><label class="text-xs font-bold text-slate-500 mb-1.5 block">Email</label><input value="info@electro.rw" class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm font-medium" /></div>
-              <button onclick="showToast('✅ Byabitswe')" class="btn-primary text-white px-5 py-3 rounded-xl text-sm font-bold w-full mt-2 shadow-lg shadow-primary/30 transition-all hover:-translate-y-0.5">Bika Impinduka</button>
+              <div><label class="text-xs font-bold text-slate-500 mb-1.5 block">Izina ry'urubuga</label><input id="setSiteName" value="ElectroShop RW" class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm font-medium" /></div>
+              <div><label class="text-xs font-bold text-slate-500 mb-1.5 block">Email</label><input id="setEmail" value="info@electro.rw" class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm font-medium" /></div>
+              <div><label class="text-xs font-bold text-slate-500 mb-1.5 block">Telefoni</label><input id="setPhone" value="+250 788 000 000" class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm font-medium" /></div>
+              <button onclick="saveSettings()" id="saveSettingsBtn" class="btn-primary text-white px-5 py-3 rounded-xl text-sm font-bold w-full mt-2 shadow-lg shadow-primary/30 transition-all hover:-translate-y-0.5">Bika Impinduka</button>
             </div>
           </div>
           <div class="bg-white rounded-3xl p-5 md:p-8 border border-slate-100 anim-fade-up stagger-2 shadow-sm">
@@ -437,16 +446,17 @@ tailwind.config = {
             <div class="space-y-4">
               <label class="flex items-center justify-between p-4 border border-slate-200 rounded-2xl cursor-pointer hover:bg-slate-50 transition">
                 <span class="text-sm font-bold"><i class="fas fa-mobile-alt text-yellow-500 mr-3 text-lg"></i> MTN MoMo</span>
-                <input type="checkbox" checked class="w-5 h-5 accent-primary" />
+                <input type="checkbox" id="payMomo" checked class="w-5 h-5 accent-primary" />
               </label>
               <label class="flex items-center justify-between p-4 border border-slate-200 rounded-2xl cursor-pointer hover:bg-slate-50 transition">
                 <span class="text-sm font-bold"><i class="fas fa-mobile-alt text-red-500 mr-3 text-lg"></i> Airtel Money</span>
-                <input type="checkbox" checked class="w-5 h-5 accent-primary" />
+                <input type="checkbox" id="payAirtel" checked class="w-5 h-5 accent-primary" />
               </label>
               <label class="flex items-center justify-between p-4 border border-slate-200 rounded-2xl cursor-pointer hover:bg-slate-50 transition">
                 <span class="text-sm font-bold"><i class="fas fa-money-bill text-green-600 mr-3 text-lg"></i> Cash on delivery</span>
-                <input type="checkbox" checked class="w-5 h-5 accent-primary" />
+                <input type="checkbox" id="payCash" checked class="w-5 h-5 accent-primary" />
               </label>
+              <button onclick="saveSettings()" class="btn-primary text-white px-5 py-3 rounded-xl text-sm font-bold w-full mt-2 shadow-lg shadow-primary/30 transition-all hover:-translate-y-0.5">Bika Uburyo</button>
             </div>
           </div>
         </div>
@@ -456,21 +466,20 @@ tailwind.config = {
   </div>
 </div>
 
-<!-- TOAST BOX -->
 <div id="toastBox" class="fixed top-4 right-4 md:top-6 md:right-6 z-[100] space-y-3"></div>
 
-<!-- ================= ADD PRODUCT MODAL ================= -->
+<!-- PRODUCT MODAL -->
 <div id="productModal" class="hidden fixed inset-0 z-[70] modal-overlay flex items-center justify-center p-4">
   <div class="bg-white rounded-[2rem] max-w-lg w-full p-6 md:p-8 max-h-[90vh] overflow-y-auto anim-scale shadow-2xl relative">
     <button onclick="closeModal('productModal')" class="absolute top-4 right-4 md:top-6 md:right-6 w-8 h-8 rounded-full bg-slate-100 text-slate-500 hover:bg-red-100 hover:text-red-500 transition flex items-center justify-center"><i class="fas fa-times"></i></button>
     
     <div class="mb-6 mt-2">
-      <h3 class="font-black text-xl md:text-2xl text-dark tracking-tight">Ongeramo <span class="text-gradient">Igicuruzwa</span></h3>
+      <h3 class="font-black text-xl md:text-2xl text-dark tracking-tight" id="modalTitle">Ongeramo <span class="text-gradient">Igicuruzwa</span></h3>
       <p class="text-xs md:text-sm font-medium text-slate-500 mt-1">Ibi bizajya kuri website ako kanya.</p>
     </div>
 
     <form id="productForm" class="space-y-4 md:space-y-5">
-      <!-- IMAGE UPLOAD -->
+      <input type="hidden" id="pfEditId" />
       <div>
         <label class="text-xs font-bold text-slate-700 mb-2 block uppercase tracking-wide">Ifoto y'igicuruzwa</label>
         <div id="uploadArea" class="upload-area rounded-2xl p-4 md:p-6 flex flex-col items-center justify-center relative overflow-hidden" onclick="document.getElementById('pfImageFile').click()">
@@ -497,13 +506,13 @@ tailwind.config = {
         </div>
         <div>
           <label class="text-xs font-bold text-slate-700 mb-1.5 block uppercase tracking-wide">Igiciro (RWF) *</label>
-          <input required id="pfPrice" type="number" class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm font-medium bg-slate-50 focus:bg-white transition" placeholder="150000" />
+          <input required id="pfPrice" type="number" min="0" class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm font-medium bg-slate-50 focus:bg-white transition" placeholder="150000" />
         </div>
       </div>
 
       <div>
         <label class="text-xs font-bold text-slate-700 mb-1.5 block uppercase tracking-wide">Stock *</label>
-        <input required id="pfStock" type="number" class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm font-medium bg-slate-50 focus:bg-white transition" placeholder="10" />
+        <input required id="pfStock" type="number" min="0" class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm font-medium bg-slate-50 focus:bg-white transition" placeholder="10" />
       </div>
 
       <div class="pt-2">
@@ -516,13 +525,19 @@ tailwind.config = {
 </div>
 
 <!-- ============================================================ -->
-<!-- ================= FIREBASE & LOGIC ========================= -->
+<!-- ================== FIREBASE & LOGIC ======================== -->
 <!-- ============================================================ -->
 <script type="module">
-  // ==== KOPA IZI NYUGUTI MURI FIREBASE CONSOLE YAWE ====
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-  import { getFirestore, collection, getDocs, addDoc, deleteDoc, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+  import { 
+    getFirestore, collection, getDocs, addDoc, deleteDoc, doc, updateDoc, 
+    onSnapshot, query, orderBy, serverTimestamp, getDoc, setDoc, where 
+  } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+  import { 
+    getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged 
+  } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
 
+  // ⚠️ SIMBUZA IZI NA CONFIG YAWE NYAYO
   const firebaseConfig = {
     apiKey: "YOUR_API_KEY",
     authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
@@ -532,26 +547,39 @@ tailwind.config = {
     appId: "YOUR_APP_ID"
   };
 
-  // Tangiza Firebase
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
+  const auth = getAuth(app);
 
-  // ============================================================
-  // ================== LOGIC Y'UBUCURUZI =======================
-  // ============================================================
-  
+  // ================= STATE =================
   let products = [];
+  let orders = [];
+  let users = [];
+  let chats = [];
   let currentUploadedImage = null;
   let charts = {};
+  let editingProductId = null;
+  let activeChatId = null;
+  let unsubProducts = null;
+  let unsubOrders = null;
+  let unsubUsers = null;
+  let unsubChats = null;
+  let unsubMessages = null;
 
-  // Helpers
-  window.formatRWF = (n) => new Intl.NumberFormat('rw-RW',{style:'currency',currency:'RWF',maximumFractionDigits:0}).format(n);
-  
+  // ================= HELPERS =================
+  window.formatRWF = (n) => new Intl.NumberFormat('rw-RW',{style:'currency',currency:'RWF',maximumFractionDigits:0}).format(n || 0);
+  window.formatDate = (ts) => {
+    if(!ts) return '-';
+    const d = ts.toDate ? ts.toDate() : new Date(ts);
+    return d.toLocaleDateString('rw-RW', { day:'2-digit', month:'short', year:'numeric' });
+  };
+
   window.showToast = (msg, type='success') => {
-    const colors = { success:'bg-green-500', error:'bg-red-500' };
+    const colors = { success:'bg-green-500', error:'bg-red-500', info:'bg-primary' };
+    const icons = { success:'check-circle', error:'times-circle', info:'info-circle' };
     const el = document.createElement('div');
-    el.className = `${colors[type]} text-white px-5 md:px-6 py-2 md:py-3 rounded-xl shadow-2xl text-xs md:text-sm font-bold flex items-center gap-3 anim-slide`;
-    el.innerHTML = `<i class="fas fa-${type==='success'?'check-circle':'times-circle'}"></i> ${msg}`;
+    el.className = `${colors[type]||colors.success} text-white px-5 md:px-6 py-2 md:py-3 rounded-xl shadow-2xl text-xs md:text-sm font-bold flex items-center gap-3 anim-slide`;
+    el.innerHTML = `<i class="fas fa-${icons[type]||icons.success}"></i> ${msg}`;
     document.getElementById('toastBox').appendChild(el);
     setTimeout(()=>{ el.style.opacity='0'; setTimeout(()=>el.remove(),300); },3000);
   };
@@ -561,46 +589,68 @@ tailwind.config = {
   window.toggleSidebar = () => document.getElementById('sidebar').classList.toggle('-translate-x-full');
   window.toggleNotif = () => document.getElementById('notifDropdown').classList.toggle('hidden');
 
-  // Image Upload (Base64 string ibikwa muri Database)
-  window.handleImageUpload = (event) => {
-    const file = event.target.files[0];
-    if(!file) return;
-    if(file.size > 1024 * 1024) return showToast('Ifoto ni nini cyane (Max 1MB)', 'error');
-    
-    const reader = new FileReader();
-    reader.onload = function(e) {
-      currentUploadedImage = e.target.result;
-      document.getElementById('uploadPlaceholder').classList.add('hidden');
-      const img = document.getElementById('imagePreview');
-      img.src = currentUploadedImage;
-      img.classList.remove('hidden');
-      document.getElementById('uploadArea').classList.add('has-image');
-    };
-    reader.readAsDataURL(file);
+  // ================= AUTH =================
+  document.getElementById('adminLoginForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const btn = document.getElementById('loginBtn');
+    const originalText = btn.innerHTML;
+    btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Turi kwinjira...';
+    btn.disabled = true;
+
+    const em = document.getElementById('adEmail').value.trim();
+    const pw = document.getElementById('adPassword').value;
+
+    try {
+      await signInWithEmailAndPassword(auth, em, pw);
+      // onAuthStateChanged will handle UI
+    } catch (err) {
+      const errorBox = document.getElementById('loginError');
+      const errorMsg = document.getElementById('loginErrorMsg');
+      const messages = {
+        'auth/user-not-found': 'Nta konti ibonetse kuri iyi email.',
+        'auth/wrong-password': 'Ijambo ry\'ibanga sibyo.',
+        'auth/invalid-email': 'Email ntabwo ari yo.',
+        'auth/invalid-credential': 'Email cyangwa password sibyo.',
+        'auth/too-many-requests': 'Wagerageje kenshi. Tegereza gato.',
+      };
+      errorMsg.textContent = messages[err.code] || 'Habaye ikibazo. Ongera ugerageze.';
+      errorBox.classList.remove('hidden');
+      errorBox.classList.add('anim-shake');
+      setTimeout(()=>errorBox.classList.remove('anim-shake'), 500);
+    } finally {
+      btn.innerHTML = originalText;
+      btn.disabled = false;
+    }
+  });
+
+  window.handleLogout = async () => {
+    if(!confirm('Uraizeza gusohoka muri sisitemu?')) return;
+    try {
+      await signOut(auth);
+      location.reload();
+    } catch(e) {
+      showToast('Ntibyakunze gusohoka', 'error');
+    }
   };
 
-  // LOGIN SYSTEM
-  document.getElementById('adminLoginForm').addEventListener('submit', e => {
-    e.preventDefault();
-    const em = document.getElementById('adEmail').value, pw = document.getElementById('adPassword').value;
-    if(em==='admin@electro.rw' && pw==='Admin@123'){
+  onAuthStateChanged(auth, (user) => {
+    if(user) {
+      document.getElementById('userEmailDisplay').textContent = user.email;
+      document.getElementById('userAvatar').textContent = (user.email || 'A')[0].toUpperCase();
       document.getElementById('loginScreen').style.opacity = '0';
       setTimeout(()=>{
         document.getElementById('loginScreen').style.display = 'none';
         document.getElementById('app').style.display = 'flex';
-        initApp(); 
+        initApp();
       }, 400);
     } else {
-      const err = document.getElementById('loginError');
-      err.classList.remove('hidden');
-      err.classList.add('anim-shake');
-      setTimeout(()=>err.classList.remove('anim-shake'), 400);
+      document.getElementById('loginScreen').style.display = 'flex';
+      document.getElementById('loginScreen').style.opacity = '1';
+      document.getElementById('app').style.display = 'none';
     }
   });
 
-  window.logout = () => location.reload();
-
-  // NAVIGATION
+  // ================= NAVIGATION =================
   const PANEL_TITLES = {
     overview:['Dashboard','Incamake y\'ubucuruzi'],
     analytics:['Analytics','Imibare n\'isesengura'],
@@ -621,61 +671,125 @@ tailwind.config = {
     document.getElementById('pageTitle').textContent = t;
     document.getElementById('pageSubtitle').textContent = s;
     if(window.innerWidth < 768) toggleSidebar();
-    
-    if(name==='overview') drawCharts();
+
+    if(name==='overview') { drawCharts(); }
+    if(name==='analytics') { drawAnalyticsCharts(); }
+    if(name==='settings') { loadSettings(); }
+    if(name==='messages') { renderChatList(); }
   };
   
   document.querySelectorAll('.sidebar-link').forEach(l=>{
     l.addEventListener('click', e=>{ e.preventDefault(); switchPanel(l.dataset.panel); });
   });
 
-  // ==== FETCH PRODUCTS FROM FIREBASE ====
-  async function fetchProducts() {
-    const table = document.getElementById('productTable');
-    table.innerHTML = '<tr><td colspan="4" class="text-center py-10"><div class="loader"></div></td></tr>';
-
-    try {
-      const querySnapshot = await getDocs(collection(db, "products"));
-      products = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-
-      // Update Stats
+  // ================= DATA LISTENERS (REAL-TIME) =================
+  function startProductsListener() {
+    if(unsubProducts) unsubProducts();
+    unsubProducts = onSnapshot(collection(db, "products"), (snap) => {
+      products = snap.docs.map(d => ({ id: d.id, ...d.data() }));
       document.getElementById('stProducts').textContent = products.length;
       document.getElementById('badgeProducts').textContent = products.length;
-
-      // Render Table
-      if(products.length === 0) {
-        table.innerHTML = '<tr><td colspan="4" class="px-6 py-16 text-center text-slate-400 font-bold"><i class="fas fa-box-open text-5xl mb-4 text-slate-200"></i><br>Nta bicuruzwa birahari kuri Firebase</td></tr>';
-        return;
-      }
-
-      table.innerHTML = products.map(p => `
-        <tr class="hover:bg-slate-50/80 transition-colors group">
-          <td class="px-4 md:px-6 py-4">
-            <div class="flex items-center gap-3 md:gap-4">
-              <div class="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-slate-100 overflow-hidden shrink-0 border border-slate-200 shadow-sm">
-                <img src="${p.image || 'https://via.placeholder.com/100'}" class="w-full h-full object-cover" />
-              </div>
-              <div><p class="font-bold text-dark text-sm truncate max-w-[150px] md:max-w-[200px]">${p.name}</p></div>
-            </div>
-          </td>
-          <td class="px-4 md:px-6 py-4 hidden md:table-cell"><span class="text-[11px] font-bold bg-primary/10 text-primary px-3 py-1.5 rounded-lg">${p.category}</span></td>
-          <td class="px-4 md:px-6 py-4 text-sm font-black text-dark">${formatRWF(p.price)}</td>
-          <td class="px-4 md:px-6 py-4 hidden md:table-cell"><span class="text-[11px] font-bold ${p.stock===0?'bg-red-100 text-red-600':p.stock<5?'bg-accent/10 text-accent':'bg-green-100 text-green-700'} px-3 py-1.5 rounded-lg">${p.stock || 0} pcs</span></td>
-          <td class="px-4 md:px-6 py-4 text-right">
-            <button onclick="deleteProduct('${p.id}')" class="text-red-500 hover:bg-red-50 hover:text-red-600 w-9 h-9 rounded-xl transition inline-flex items-center justify-center"><i class="fas fa-trash"></i></button>
-          </td>
-        </tr>
-      `).join('');
-
-    } catch (error) {
-      console.error(error);
-      table.innerHTML = '<tr><td colspan="4" class="text-center py-10 text-red-500 font-bold">Habaye ikibazo cyo guhuza na Firebase. Reba Config yawe.</td></tr>';
-    }
+      renderProductsTable();
+      renderInventory();
+      if(document.getElementById('panel-overview').classList.contains('active')) drawCharts();
+    }, (err) => {
+      console.error('Products listener error', err);
+      document.getElementById('productTable').innerHTML = 
+        '<tr><td colspan="5" class="empty-state"><i class="fas fa-exclamation-triangle"></i>Habaye ikibazo cyo kubona ibicuruzwa. Reba Firestore Rules.</td></tr>';
+    });
   }
 
-  // ==== ADD PRODUCT TO FIREBASE ====
+  function startOrdersListener() {
+    if(unsubOrders) unsubOrders();
+    unsubOrders = onSnapshot(collection(db, "orders"), (snap) => {
+      orders = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      orders.sort((a,b) => (b.createdAt?.seconds||0) - (a.createdAt?.seconds||0));
+      document.getElementById('stOrders').textContent = orders.length;
+      document.getElementById('badgeOrders').textContent = orders.length;
+      const total = orders.filter(o => o.status === 'delivered').reduce((s,o) => s + (Number(o.total)||0), 0);
+      document.getElementById('stRevenue').textContent = formatRWF(total);
+      renderOrdersTable();
+      updateNotifications();
+      if(document.getElementById('panel-overview').classList.contains('active')) drawCharts();
+    });
+  }
+
+  function startUsersListener() {
+    if(unsubUsers) unsubUsers();
+    unsubUsers = onSnapshot(collection(db, "users"), (snap) => {
+      users = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      document.getElementById('stUsers').textContent = users.length;
+      document.getElementById('badgeUsers').textContent = users.length;
+      renderUsersTable();
+    });
+  }
+
+  function startChatsListener() {
+    if(unsubChats) unsubChats();
+    unsubChats = onSnapshot(collection(db, "chats"), (snap) => {
+      chats = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      document.getElementById('badgeMessages').textContent = chats.length;
+      renderChatList();
+    });
+  }
+
+  // ================= PRODUCTS =================
+  function renderProductsTable() {
+    const table = document.getElementById('productTable');
+    const search = (document.getElementById('productSearch').value || '').toLowerCase();
+    const cat = document.getElementById('productCatFilter').value;
+    
+    let filtered = products.filter(p => {
+      const matchSearch = !search || (p.name||'').toLowerCase().includes(search);
+      const matchCat = !cat || p.category === cat;
+      return matchSearch && matchCat;
+    });
+
+    if(filtered.length === 0) {
+      table.innerHTML = `<tr><td colspan="5" class="empty-state"><i class="fas fa-box-open"></i>Nta bicuruzwa birahari.</td></tr>`;
+      return;
+    }
+
+    table.innerHTML = filtered.map(p => `
+      <tr class="hover:bg-slate-50/80 transition-colors">
+        <td class="px-4 md:px-6 py-4">
+          <div class="flex items-center gap-3 md:gap-4">
+            <div class="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-slate-100 overflow-hidden shrink-0 border border-slate-200 shadow-sm">
+              <img src="${p.image || 'https://via.placeholder.com/100'}" class="w-full h-full object-cover" onerror="this.src='https://via.placeholder.com/100'" />
+            </div>
+            <div><p class="font-bold text-dark text-sm truncate max-w-[150px] md:max-w-[200px]">${escapeHtml(p.name||'-')}</p></div>
+          </div>
+        </td>
+        <td class="px-4 md:px-6 py-4 hidden md:table-cell"><span class="text-[11px] font-bold bg-primary/10 text-primary px-3 py-1.5 rounded-lg">${escapeHtml(p.category||'-')}</span></td>
+        <td class="px-4 md:px-6 py-4 text-sm font-black text-dark">${formatRWF(p.price)}</td>
+        <td class="px-4 md:px-6 py-4 hidden md:table-cell"><span class="text-[11px] font-bold ${p.stock===0?'bg-red-100 text-red-600':p.stock<5?'bg-accent/10 text-accent':'bg-green-100 text-green-700'} px-3 py-1.5 rounded-lg">${p.stock || 0} pcs</span></td>
+        <td class="px-4 md:px-6 py-4 text-right">
+          <button onclick="editProduct('${p.id}')" class="text-primary hover:bg-primary/10 w-9 h-9 rounded-xl transition inline-flex items-center justify-center" title="Hindura"><i class="fas fa-edit"></i></button>
+          <button onclick="deleteProduct('${p.id}')" class="text-red-500 hover:bg-red-50 w-9 h-9 rounded-xl transition inline-flex items-center justify-center" title="Siba"><i class="fas fa-trash"></i></button>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  document.getElementById('productSearch').addEventListener('input', renderProductsTable);
+  document.getElementById('productCatFilter').addEventListener('change', renderProductsTable);
+  document.getElementById('globalSearch').addEventListener('input', (e) => {
+    const v = e.target.value;
+    if(document.getElementById('panel-products').classList.contains('active')) {
+      document.getElementById('productSearch').value = v;
+      renderProductsTable();
+    } else {
+      switchPanel('products');
+      document.getElementById('productSearch').value = v;
+      renderProductsTable();
+    }
+  });
+
   window.openProductModal = () => {
     document.getElementById('productForm').reset();
+    document.getElementById('pfEditId').value = '';
+    document.getElementById('modalTitle').innerHTML = 'Ongeramo <span class="text-gradient">Igicuruzwa</span>';
+    editingProductId = null;
     currentUploadedImage = null;
     document.getElementById('uploadPlaceholder').classList.remove('hidden');
     document.getElementById('imagePreview').classList.add('hidden');
@@ -683,66 +797,458 @@ tailwind.config = {
     openModal('productModal');
   };
 
+  window.editProduct = (id) => {
+    const p = products.find(x => x.id === id);
+    if(!p) return;
+    editingProductId = id;
+    document.getElementById('pfEditId').value = id;
+    document.getElementById('pfName').value = p.name || '';
+    document.getElementById('pfCategory').value = p.category || 'Telefoni';
+    document.getElementById('pfPrice').value = p.price || 0;
+    document.getElementById('pfStock').value = p.stock || 0;
+    document.getElementById('modalTitle').innerHTML = 'Hindura <span class="text-gradient">Igicuruzwa</span>';
+    
+    if(p.image && p.image.startsWith('data:')) {
+      currentUploadedImage = p.image;
+      document.getElementById('imagePreview').src = p.image;
+      document.getElementById('imagePreview').classList.remove('hidden');
+      document.getElementById('uploadPlaceholder').classList.add('hidden');
+      document.getElementById('uploadArea').classList.add('has-image');
+    } else {
+      currentUploadedImage = null;
+      document.getElementById('uploadPlaceholder').classList.remove('hidden');
+      document.getElementById('imagePreview').classList.add('hidden');
+      document.getElementById('uploadArea').classList.remove('has-image');
+    }
+    openModal('productModal');
+  };
+
+  window.handleImageUpload = (event) => {
+    const file = event.target.files[0];
+    if(!file) return;
+    if(file.size > 1024 * 1024) {
+      showToast('Ifoto ni nini cyane (Max 1MB)', 'error');
+      event.target.value = '';
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      currentUploadedImage = e.target.result;
+      document.getElementById('uploadPlaceholder').classList.add('hidden');
+      const img = document.getElementById('imagePreview');
+      img.src = currentUploadedImage;
+      img.classList.remove('hidden');
+      document.getElementById('uploadArea').classList.add('has-image');
+    };
+    reader.readAsDataURL(file);
+  };
+
   document.getElementById('productForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     const btn = document.getElementById('saveBtn');
     const originalText = btn.innerHTML;
-    
     btn.innerHTML = '<i class="fas fa-circle-notch fa-spin text-lg"></i> Turi kubika...';
     btn.disabled = true;
 
-    const newProduct = {
-      name: document.getElementById('pfName').value,
+    const data = {
+      name: document.getElementById('pfName').value.trim(),
       category: document.getElementById('pfCategory').value,
-      price: parseFloat(document.getElementById('pfPrice').value),
-      stock: parseInt(document.getElementById('pfStock').value),
+      price: parseFloat(document.getElementById('pfPrice').value) || 0,
+      stock: parseInt(document.getElementById('pfStock').value) || 0,
       image: currentUploadedImage || 'https://via.placeholder.com/100',
-      created_at: new Date().toISOString()
+      updatedAt: serverTimestamp()
     };
 
     try {
-      await addDoc(collection(db, "products"), newProduct);
+      if(editingProductId) {
+        await updateDoc(doc(db, "products", editingProductId), data);
+        showToast('✅ Igicuruzwa cyahinduwe!');
+      } else {
+        data.createdAt = serverTimestamp();
+        await addDoc(collection(db, "products"), data);
+        showToast('✅ Igicuruzwa cyongeweho!');
+      }
       closeModal('productModal');
-      showToast('✅ Igicuruzwa cyongeweho kuri Internet!');
-      fetchProducts(); // Refresh table
     } catch (error) {
       console.error(error);
-      showToast('Ntibyakunze kubika igicuruzwa', 'error');
+      showToast('Ntibyakunze kubika: ' + error.message, 'error');
     } finally {
       btn.innerHTML = originalText;
       btn.disabled = false;
     }
   });
 
-  // ==== DELETE PRODUCT ====
   window.deleteProduct = async (id) => {
-    if(!confirm('Uraizeza gusiba iki gicuruzwa kuri Internet?')) return;
+    if(!confirm('Uraizeza gusiba iki gicuruzwa?')) return;
     try {
       await deleteDoc(doc(db, "products", id));
       showToast(`✅ Igicuruzwa cyasibwe!`);
-      fetchProducts(); // Refresh table
     } catch (error) {
       console.error(error);
+      showToast('Ntibyakunze gusiba: ' + error.message, 'error');
+    }
+  };
+
+  window.exportProductsCSV = () => {
+    if(products.length === 0) return showToast('Nta bicuruzwa bihari', 'error');
+    const headers = ['Izina','Icyiciro','Igiciro','Stock'];
+    const rows = products.map(p => [p.name, p.category, p.price, p.stock]);
+    const csv = [headers, ...rows].map(r => r.map(x => `"${(x??'').toString().replace(/"/g,'""')}"`).join(',')).join('\n');
+    const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `ibicuruzwa-${new Date().toISOString().split('T')[0]}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+    showToast('✅ CSV yakozwe!');
+  };
+
+  // ================= ORDERS =================
+  function renderOrdersTable() {
+    const table = document.getElementById('orderTable');
+    const filter = document.getElementById('orderStatusFilter').value;
+    let filtered = orders.filter(o => !filter || o.status === filter);
+
+    if(filtered.length === 0) {
+      table.innerHTML = `<tr><td colspan="6" class="empty-state"><i class="fas fa-shopping-bag"></i>Nta orders zihari.</td></tr>`;
+      return;
+    }
+
+    const statusColors = {
+      pending: 'bg-yellow-100 text-yellow-700',
+      processing: 'bg-blue-100 text-blue-700',
+      shipped: 'bg-purple-100 text-purple-700',
+      delivered: 'bg-green-100 text-green-700',
+      cancelled: 'bg-red-100 text-red-600',
+    };
+
+    table.innerHTML = filtered.map(o => `
+      <tr class="hover:bg-slate-50/80 transition-colors">
+        <td class="px-6 py-4 font-bold text-sm text-dark">#${(o.orderNumber || o.id.slice(0,6)).toString().toUpperCase()}</td>
+        <td class="px-6 py-4">
+          <p class="font-bold text-dark text-sm">${escapeHtml(o.customerName || o.userName || 'Ntibizwi')}</p>
+          <p class="text-[11px] text-slate-400 font-medium">${escapeHtml(o.customerPhone || o.userPhone || '')}</p>
+        </td>
+        <td class="px-6 py-4 text-sm font-black text-dark">${formatRWF(o.total)}</td>
+        <td class="px-6 py-4">
+          <select onchange="updateOrderStatus('${o.id}', this.value)" class="text-[11px] font-bold ${statusColors[o.status]||'bg-slate-100 text-slate-600'} px-2 py-1.5 rounded-lg border-0 cursor-pointer">
+            ${['pending','processing','shipped','delivered','cancelled'].map(s => 
+              `<option value="${s}" ${o.status===s?'selected':''}>${s}</option>`
+            ).join('')}
+          </select>
+        </td>
+        <td class="px-6 py-4 text-[11px] text-slate-500 font-medium">${formatDate(o.createdAt)}</td>
+        <td class="px-6 py-4 text-right">
+          <button onclick="deleteOrder('${o.id}')" class="text-red-500 hover:bg-red-50 w-9 h-9 rounded-xl transition inline-flex items-center justify-center"><i class="fas fa-trash"></i></button>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  document.getElementById('orderStatusFilter').addEventListener('change', renderOrdersTable);
+
+  window.updateOrderStatus = async (id, status) => {
+    try {
+      await updateDoc(doc(db, "orders", id), { status, updatedAt: serverTimestamp() });
+      showToast('✅ Status yahinduwe');
+    } catch(e) {
+      console.error(e);
+      showToast('Ntibyakunze guhindura: ' + e.message, 'error');
+    }
+  };
+
+  window.deleteOrder = async (id) => {
+    if(!confirm('Uraizeza gusiba iyi order?')) return;
+    try {
+      await deleteDoc(doc(db, "orders", id));
+      showToast('✅ Order yasibwe');
+    } catch(e) {
       showToast('Ntibyakunze gusiba', 'error');
     }
   };
 
-  // Charts (Zerekana amakuru ariho ubu)
+  // ================= INVENTORY =================
+  function renderInventory() {
+    const total = products.reduce((s,p) => s + (Number(p.stock)||0), 0);
+    const out = products.filter(p => (p.stock||0) === 0).length;
+    const low = products.filter(p => (p.stock||0) > 0 && (p.stock||0) < 5).length;
+    document.getElementById('invTotal').textContent = total;
+    document.getElementById('invOut').textContent = out;
+    document.getElementById('invLow').textContent = low;
+
+    const table = document.getElementById('inventoryTable');
+    if(products.length === 0) {
+      table.innerHTML = `<tr><td colspan="4" class="empty-state"><i class="fas fa-warehouse"></i>Nta bicuruzwa bihari.</td></tr>`;
+      return;
+    }
+
+    table.innerHTML = products.map(p => `
+      <tr class="hover:bg-slate-50/80 transition-colors">
+        <td class="px-6 py-4">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-slate-100 overflow-hidden border border-slate-200">
+              <img src="${p.image || 'https://via.placeholder.com/100'}" class="w-full h-full object-cover" />
+            </div>
+            <p class="font-bold text-sm text-dark">${escapeHtml(p.name||'-')}</p>
+          </div>
+        </td>
+        <td class="px-6 py-4 text-sm font-black text-dark">${p.stock || 0}</td>
+        <td class="px-6 py-4">
+          <span class="text-[11px] font-bold ${p.stock===0?'bg-red-100 text-red-600':p.stock<5?'bg-accent/10 text-accent':'bg-green-100 text-green-700'} px-3 py-1.5 rounded-lg">
+            ${p.stock===0?'Bishize':p.stock<5?'Bike':'Bihagije'}
+          </span>
+        </td>
+        <td class="px-6 py-4 text-right">
+          <div class="flex items-center justify-end gap-2">
+            <input type="number" min="0" value="${p.stock||0}" onchange="updateStock('${p.id}', this.value)" class="w-20 px-2 py-1.5 rounded-lg border border-slate-200 text-sm font-bold text-center" />
+            <button onclick="updateStock('${p.id}', document.querySelector('#inventoryTable input[onchange*=\\'${p.id}\\']').value)" class="hidden"></button>
+          </div>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  window.updateStock = async (id, newStock) => {
+    const n = parseInt(newStock) || 0;
+    if(n < 0) return showToast('Stock ntishobora kuba munsi ya 0', 'error');
+    try {
+      await updateDoc(doc(db, "products", id), { stock: n, updatedAt: serverTimestamp() });
+      showToast(`✅ Stock yahinduwe: ${n}`);
+    } catch(e) {
+      showToast('Ntibyakunze guhindura stock', 'error');
+    }
+  };
+
+  // ================= USERS =================
+  function renderUsersTable() {
+    const table = document.getElementById('userTable');
+    if(users.length === 0) {
+      table.innerHTML = `<tr><td colspan="4" class="empty-state"><i class="fas fa-users"></i>Nta bakoresha barahari. Bazagaragara iyo biyandikishije.</td></tr>`;
+      return;
+    }
+    table.innerHTML = users.map(u => `
+      <tr class="hover:bg-slate-50/80 transition-colors">
+        <td class="px-6 py-4">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-primary/10 text-primary flex items-center justify-center font-black text-sm">
+              ${(u.name || u.email || '?')[0].toUpperCase()}
+            </div>
+            <p class="font-bold text-sm text-dark">${escapeHtml(u.name || u.displayName || '-')}</p>
+          </div>
+        </td>
+        <td class="px-6 py-4 text-sm text-slate-600">${escapeHtml(u.email || '-')}</td>
+        <td class="px-6 py-4 text-sm text-slate-600">${escapeHtml(u.phone || u.phoneNumber || '-')}</td>
+        <td class="px-6 py-4 text-right">
+          <button onclick="deleteUser('${u.id}')" class="text-red-500 hover:bg-red-50 w-9 h-9 rounded-xl transition inline-flex items-center justify-center"><i class="fas fa-trash"></i></button>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  window.deleteUser = async (id) => {
+    if(!confirm('Uraizeza gusiba uyu ukoresha? (Ntibisiba muri Auth, gusa muri Firestore)')) return;
+    try {
+      await deleteDoc(doc(db, "users", id));
+      showToast('✅ Ukoresha yasibwe');
+    } catch(e) {
+      showToast('Ntibyakunze gusiba', 'error');
+    }
+  };
+
+  // ================= CHAT =================
+  function renderChatList() {
+    const list = document.getElementById('chatList');
+    if(chats.length === 0) {
+      list.innerHTML = `<div class="empty-state text-sm"><i class="fas fa-comments"></i>Nta butumwa buhari.</div>`;
+      return;
+    }
+    list.innerHTML = chats.map(c => `
+      <div onclick="openChat('${c.id}')" class="p-3 rounded-xl cursor-pointer transition ${activeChatId===c.id?'bg-primary text-white':'hover:bg-slate-100'}">
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-full ${activeChatId===c.id?'bg-white/20':'bg-primary/10 text-primary'} flex items-center justify-center font-black text-sm shrink-0">
+            ${(c.userName || c.userEmail || '?')[0].toUpperCase()}
+          </div>
+          <div class="flex-1 min-w-0">
+            <p class="text-sm font-bold truncate">${escapeHtml(c.userName || c.userEmail || 'Umukiriya')}</p>
+            <p class="text-[10px] ${activeChatId===c.id?'text-white/80':'text-slate-400'} font-medium truncate">${escapeHtml(c.lastMessage || 'Nta butumwa')}</p>
+          </div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  window.openChat = (chatId) => {
+    activeChatId = chatId;
+    const chat = chats.find(c => c.id === chatId);
+    if(!chat) return;
+    
+    document.getElementById('chatName').textContent = chat.userName || chat.userEmail || 'Umukiriya';
+    document.getElementById('chatAvatar').textContent = (chat.userName || chat.userEmail || '?')[0].toUpperCase();
+    document.getElementById('chatInput').disabled = false;
+    document.getElementById('chatSendBtn').disabled = false;
+    renderChatList();
+    loadMessages(chatId);
+  };
+
+  function loadMessages(chatId) {
+    if(unsubMessages) unsubMessages();
+    const messagesRef = collection(db, "chats", chatId, "messages");
+    const q = query(messagesRef, orderBy("createdAt", "asc"));
+    const container = document.getElementById('chatMessages');
+    container.innerHTML = '<div class="text-center py-6"><div class="loader"></div></div>';
+
+    unsubMessages = onSnapshot(q, (snap) => {
+      const msgs = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      if(msgs.length === 0) {
+        container.innerHTML = '<div class="empty-state text-sm"><i class="fas fa-comment-slash"></i>Nta butumwa burahari. Tangira ubutumwa!</div>';
+        return;
+      }
+      container.innerHTML = msgs.map(m => `
+        <div class="chat-bubble ${m.sender === 'admin' ? 'me' : 'them'}">
+          ${escapeHtml(m.text || '')}
+          <span class="chat-time">${formatDate(m.createdAt)}</span>
+        </div>
+      `).join('');
+      container.scrollTop = container.scrollHeight;
+    }, (err) => {
+      console.error(err);
+      container.innerHTML = '<div class="empty-state text-sm text-red-500">Ntibyakunze kubona ubutumwa.</div>';
+    });
+  }
+
+  document.getElementById('chatForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if(!activeChatId) return;
+    const input = document.getElementById('chatInput');
+    const text = input.value.trim();
+    if(!text) return;
+    input.value = '';
+    try {
+      await addDoc(collection(db, "chats", activeChatId, "messages"), {
+        text,
+        sender: 'admin',
+        createdAt: serverTimestamp()
+      });
+      await updateDoc(doc(db, "chats", activeChatId), {
+        lastMessage: text,
+        lastAt: serverTimestamp()
+      });
+    } catch(err) {
+      console.error(err);
+      showToast('Ubutumwa ntibwatumwe: ' + err.message, 'error');
+    }
+  });
+
+  // ================= SETTINGS =================
+  async function loadSettings() {
+    try {
+      const snap = await getDoc(doc(db, "settings", "site"));
+      if(snap.exists()) {
+        const s = snap.data();
+        document.getElementById('setSiteName').value = s.siteName || 'ElectroShop RW';
+        document.getElementById('setEmail').value = s.email || 'info@electro.rw';
+        document.getElementById('setPhone').value = s.phone || '+250 788 000 000';
+        document.getElementById('payMomo').checked = s.payMomo !== false;
+        document.getElementById('payAirtel').checked = s.payAirtel !== false;
+        document.getElementById('payCash').checked = s.payCash !== false;
+      }
+    } catch(e) {
+      console.error('Settings load error', e);
+    }
+  }
+
+  window.saveSettings = async () => {
+    const btn = document.getElementById('saveSettingsBtn');
+    const original = btn.innerHTML;
+    btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Turi kubika...';
+    btn.disabled = true;
+    try {
+      await setDoc(doc(db, "settings", "site"), {
+        siteName: document.getElementById('setSiteName').value,
+        email: document.getElementById('setEmail').value,
+        phone: document.getElementById('setPhone').value,
+        payMomo: document.getElementById('payMomo').checked,
+        payAirtel: document.getElementById('payAirtel').checked,
+        payCash: document.getElementById('payCash').checked,
+        updatedAt: serverTimestamp()
+      }, { merge: true });
+      showToast('✅ Igenamiterere ryabitswe!');
+    } catch(e) {
+      showToast('Ntibyakunze kubika: ' + e.message, 'error');
+    } finally {
+      btn.innerHTML = original;
+      btn.disabled = false;
+    }
+  };
+
+  // ================= NOTIFICATIONS =================
+  function updateNotifications() {
+    const pending = orders.filter(o => o.status === 'pending');
+    const low = products.filter(p => (p.stock||0) > 0 && (p.stock||0) < 5);
+    const list = document.getElementById('notifList');
+    const dot = document.getElementById('notifDot');
+    const dot2 = document.getElementById('notifDot2');
+    
+    if(pending.length === 0 && low.length === 0) {
+      list.innerHTML = '<div class="px-5 py-6 text-center text-xs text-slate-400 font-bold">Nta matangazo mashya</div>';
+      dot.classList.add('hidden');
+      dot2.classList.add('hidden');
+      return;
+    }
+    
+    dot.classList.remove('hidden');
+    dot2.classList.remove('hidden');
+    let html = '';
+    pending.slice(0,3).forEach(o => {
+      html += `
+        <div class="px-5 py-4 border-b border-slate-50 hover:bg-slate-50 cursor-pointer transition flex gap-3" onclick="switchPanel('orders')">
+          <div class="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center shrink-0"><i class="fas fa-shopping-bag text-xs"></i></div>
+          <div><p class="text-xs font-bold text-dark">Order nshya #${(o.orderNumber||o.id.slice(0,6)).toString().toUpperCase()}</p><p class="text-[10px] text-slate-400 mt-0.5">${formatDate(o.createdAt)}</p></div>
+        </div>`;
+    });
+    low.slice(0,3).forEach(p => {
+      html += `
+        <div class="px-5 py-4 border-b border-slate-50 hover:bg-slate-50 cursor-pointer transition flex gap-3" onclick="switchPanel('inventory')">
+          <div class="w-8 h-8 rounded-full bg-red-100 text-red-500 flex items-center justify-center shrink-0"><i class="fas fa-exclamation-triangle text-xs"></i></div>
+          <div><p class="text-xs font-bold text-dark">Stock nkeya: ${escapeHtml(p.name)}</p><p class="text-[10px] text-slate-400 mt-0.5">${p.stock} pcs zisigaye</p></div>
+        </div>`;
+    });
+    list.innerHTML = html;
+  }
+
+  // ================= CHARTS =================
   function drawCharts() {
+    // Revenue by month (aggregated from orders if available, else sample)
     const ctxSales = document.getElementById('salesChart');
     if(ctxSales) {
       if(charts.sales) charts.sales.destroy();
+      let monthly = [0,0,0,0,0,0];
+      const now = new Date();
+      orders.filter(o => o.status === 'delivered').forEach(o => {
+        const d = o.createdAt?.toDate ? o.createdAt.toDate() : new Date();
+        const m = d.getMonth();
+        if(m >= now.getMonth()-5 && m <= now.getMonth()) {
+          monthly[m >= now.getMonth()-5 ? m - (now.getMonth()-5) : m] += (Number(o.total)||0);
+        }
+      });
+      const hasData = monthly.some(x => x > 0);
+      if(!hasData) monthly = [1200000,1800000,1500000,2200000,1900000,2800000];
+      
+      const labels = [];
+      for(let i=5;i>=0;i--) {
+        const d = new Date(now.getFullYear(), now.getMonth()-i, 1);
+        labels.push(d.toLocaleDateString('rw-RW', { month:'short' }));
+      }
+      
       charts.sales = new Chart(ctxSales, {
         type:'line',
-        data:{
-          labels:['Jan','Feb','Mar','Apr','May','Jun'],
-          datasets:[{
-            label:'Amafaranga',
-            data:[1200000,1800000,1500000,2200000,1900000,2800000],
-            borderColor:'#0ea5e9', backgroundColor:'rgba(14,165,233,.1)', borderWidth: 3, fill:true, tension:.4, pointRadius:4, pointBackgroundColor: '#fff', pointBorderWidth: 2
-          }]
-        },
-        options:{ responsive:true, maintainAspectRatio: false, plugins:{ legend:{display:false} }, scales:{ y:{ ticks:{ callback:v=>(v/1000000).toFixed(1)+'M' }, grid:{ borderDash: [5,5] } }, x:{ grid:{display:false} } } }
+        data:{ labels, datasets:[{
+          label:'Amafaranga', data: monthly,
+          borderColor:'#0ea5e9', backgroundColor:'rgba(14,165,233,.1)',
+          borderWidth: 3, fill:true, tension:.4, pointRadius:4, pointBackgroundColor:'#fff', pointBorderWidth:2
+        }]},
+        options:{ responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}}, scales:{ y:{ ticks:{callback:v=>v>=1000000?(v/1000000).toFixed(1)+'M':v}, grid:{borderDash:[5,5]} }, x:{grid:{display:false}} } }
       });
     }
 
@@ -750,18 +1256,79 @@ tailwind.config = {
     if(ctxCat) {
       if(charts.category) charts.category.destroy();
       const counts = {};
-      products.forEach(p=>counts[p.category]=(counts[p.category]||0)+1);
+      products.forEach(p => counts[p.category] = (counts[p.category]||0)+1);
+      const labels = Object.keys(counts);
+      const data = Object.values(counts);
       charts.category = new Chart(ctxCat, {
         type:'doughnut',
-        data:{ labels:Object.keys(counts), datasets:[{ data:Object.values(counts), backgroundColor:['#0ea5e9','#8b5cf6','#ec4899','#10b981','#f59e0b','#6366f1'], borderWidth:0, hoverOffset: 10 }] },
-        options:{ responsive:true, maintainAspectRatio: false, plugins:{ legend:{ position:'bottom', labels:{ font:{size:11, family:'Inter', weight:'bold'} } } }, cutout:'70%' }
+        data:{ labels: labels.length?labels:['Nta bicuruzwa'], datasets:[{ data: data.length?data:[1], backgroundColor:['#0ea5e9','#8b5cf6','#ec4899','#10b981','#f59e0b','#6366f1'], borderWidth:0, hoverOffset:10 }] },
+        options:{ responsive:true, maintainAspectRatio:false, plugins:{legend:{position:'bottom', labels:{font:{size:11, family:'Inter', weight:'bold'}}}}, cutout:'70%' }
       });
     }
   }
 
-  // INIT APP
+  function drawAnalyticsCharts() {
+    const ctxW = document.getElementById('weeklyChart');
+    if(ctxW) {
+      if(charts.weekly) charts.weekly.destroy();
+      const days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+      const weekly = [0,0,0,0,0,0,0];
+      orders.filter(o => o.status === 'delivered').forEach(o => {
+        const d = o.createdAt?.toDate ? o.createdAt.toDate() : new Date();
+        weekly[d.getDay()] += (Number(o.total)||0);
+      });
+      const hasData = weekly.some(x => x > 0);
+      charts.weekly = new Chart(ctxW, {
+        type:'bar',
+        data:{ labels:days, datasets:[{ label:'Amafaranga', data: hasData?weekly:[300000,500000,400000,600000,700000,800000,900000], backgroundColor:'#0ea5e9', borderRadius:10 }]},
+        options:{ responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}}, scales:{ y:{ ticks:{callback:v=>v>=1000000?(v/1000000).toFixed(1)+'M':v}, grid:{borderDash:[5,5]} }, x:{grid:{display:false}} } }
+      });
+    }
+
+    const ctxS = document.getElementById('orderStatusChart');
+    if(ctxS) {
+      if(charts.status) charts.status.destroy();
+      const statuses = ['pending','processing','shipped','delivered','cancelled'];
+      const counts = statuses.map(s => orders.filter(o => o.status === s).length);
+      charts.status = new Chart(ctxS, {
+        type:'polarArea',
+        data:{ labels: statuses, datasets:[{ data: counts.some(x=>x>0)?counts:[1,1,1,1,1], backgroundColor:['#f59e0b','#0ea5e9','#8b5cf6','#10b981','#ef4444'] }]},
+        options:{ responsive:true, maintainAspectRatio:false, plugins:{legend:{position:'bottom', labels:{font:{size:11, family:'Inter', weight:'bold'}}}} }
+      });
+    }
+
+    const topList = document.getElementById('topProductsList');
+    const counts = {};
+    orders.forEach(o => {
+      (o.items||[]).forEach(it => {
+        counts[it.name] = (counts[it.name]||0) + (it.qty||1);
+      });
+    });
+    const sorted = Object.entries(counts).sort((a,b) => b[1]-a[1]).slice(0,5);
+    if(sorted.length === 0) {
+      topList.innerHTML = '<div class="text-sm text-slate-400 font-bold text-center py-6">Nta makuru arahari. Bizagaragara iyo orders zibayeho.</div>';
+    } else {
+      topList.innerHTML = sorted.map(([name, qty], i) => `
+        <div class="flex items-center gap-3 p-3 rounded-xl bg-slate-50">
+          <div class="w-8 h-8 rounded-lg bg-primary text-white flex items-center justify-center font-black text-sm">${i+1}</div>
+          <p class="flex-1 font-bold text-sm text-dark truncate">${escapeHtml(name)}</p>
+          <span class="text-xs font-black text-primary">${qty} pcs</span>
+        </div>
+      `).join('');
+    }
+  }
+
+  // ================= HELPERS =================
+  function escapeHtml(s) {
+    return String(s ?? '').replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+  }
+
+  // ================= INIT =================
   function initApp() {
-    fetchProducts();
+    startProductsListener();
+    startOrdersListener();
+    startUsersListener();
+    startChatsListener();
     drawCharts();
   }
 
