@@ -28,19 +28,10 @@ tailwind.config = {
   @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
   @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
   @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-  
-  /* New Login Animations */
   @keyframes blob { 0% { transform: translate(0px, 0px) scale(1); } 33% { transform: translate(30px, -50px) scale(1.1); } 66% { transform: translate(-20px, 20px) scale(0.9); } 100% { transform: translate(0px, 0px) scale(1); } }
   @keyframes gradientShift { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
-  
-  /* Background Text Animation */
   @keyframes bgText { 0% { transform: scale(1) translateY(0); opacity: 0.02; filter: blur(4px); } 50% { transform: scale(1.05) translateY(-10px); opacity: 0.06; filter: blur(2px); } 100% { transform: scale(1) translateY(0); opacity: 0.02; filter: blur(4px); } }
-
-  /* NEW: Rectangle Glow & Orbit Text */
-  @keyframes cardGlow { 
-    0%, 100% { box-shadow: 0 0 30px rgba(14, 165, 233, 0.1); border-color: rgba(255, 255, 255, 0.2); } 
-    50% { box-shadow: 0 0 50px rgba(14, 165, 233, 0.3); border-color: rgba(14, 165, 233, 0.4); } 
-  }
+  @keyframes cardGlow { 0%, 100% { box-shadow: 0 0 30px rgba(14, 165, 233, 0.1); border-color: rgba(255, 255, 255, 0.2); } 50% { box-shadow: 0 0 50px rgba(14, 165, 233, 0.3); border-color: rgba(14, 165, 233, 0.4); } }
   @keyframes orbitText {
     from { transform: rotate(0deg) translateX(300px) rotate(0deg); }
     to { transform: rotate(360deg) translateX(300px) rotate(-360deg); }
@@ -54,6 +45,7 @@ tailwind.config = {
   .anim-gradient { background-size: 200% 200%; animation: gradientShift 5s ease infinite; }
   .anim-bg-text { animation: bgText 6s ease-in-out infinite; }
   .card-animated { animation: cardGlow 4s ease-in-out infinite; }
+  .anim-float { animation: float 3s ease-in-out infinite; }
   
   .stagger-1 { animation-delay: 0.1s; }
   .stagger-2 { animation-delay: 0.2s; }
@@ -134,7 +126,7 @@ tailwind.config = {
   <!-- Background Canvas (Particles) -->
   <canvas id="particleCanvas" class="absolute inset-0 z-0 pointer-events-none"></canvas>
 
-  <!-- Background Text (NINI) -->
+  <!-- Background Text -->
   <div class="absolute inset-0 flex items-center justify-center overflow-hidden pointer-events-none z-0">
     <h1 class="text-[15vw] font-black text-white/5 whitespace-nowrap tracking-tighter select-none">EBENEZER SHOP</h1>
   </div>
@@ -713,7 +705,7 @@ tailwind.config = {
     appId: "1:1080267451705:web:ef3d06355d0011a5fb4ce8"
   };
 
-  // ☁️ CLOUDINARY CONFIG — ivtdrawer
+  // ☁️ CLOUDINARY CONFIG
   const CLOUDINARY_CLOUD_NAME = "ivtdrawer";
   const CLOUDINARY_UPLOAD_PRESET = "ebenezer_shop";
   const CLOUDINARY_URL = `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`;
@@ -721,6 +713,31 @@ tailwind.config = {
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
   const auth = getAuth(app);
+
+  // ============================================================
+  // ⏰ ISAHa YIKORERA (LIVE CLOCK) - YONGEWEHO
+  // ============================================================
+  function startLiveClock() {
+    const clockEl = document.getElementById('liveClock');
+    if (!clockEl) {
+      console.warn('liveClock element ntibonetse');
+      return;
+    }
+
+    function update() {
+      const now = new Date();
+      const h = String(now.getHours()).padStart(2, '0');
+      const m = String(now.getMinutes()).padStart(2, '0');
+      const s = String(now.getSeconds()).padStart(2, '0');
+      clockEl.textContent = `${h}:${m}:${s}`;
+    }
+
+    update(); // Tangiza ako kanya
+    setInterval(update, 1000); // Hindura buri segonda
+  }
+
+  // Tangiza isaha ako kanya (kuri login screen)
+  startLiveClock();
 
   // ================= STATE =================
   let products = [];
@@ -880,11 +897,6 @@ tailwind.config = {
     const email = user.email;
     const initial = (name || email || 'A')[0].toUpperCase();
 
-    document.getElementById('sidebarName').textContent = name;
-    document.getElementById('userEmailDisplay').textContent = email;
-    const sidebarImg = document.getElementById('userAvatarImg');
-    const sidebarText = document.getElementById('userAvatarText');
-
     document.getElementById('topName').textContent = name;
     const topImg = document.getElementById('topAvatarImg');
     const topText = document.getElementById('topAvatarText');
@@ -903,10 +915,6 @@ tailwind.config = {
     document.getElementById('dashAdminId').textContent = adminId;
 
     if (user.photoURL) {
-      sidebarImg.src = user.photoURL;
-      sidebarImg.classList.remove('hidden');
-      sidebarText.classList.add('hidden');
-
       topImg.src = user.photoURL;
       topImg.classList.remove('hidden');
       topText.classList.add('hidden');
@@ -919,10 +927,6 @@ tailwind.config = {
       document.getElementById('profileImgPreview').classList.remove('hidden');
       document.getElementById('profileImgLetter').classList.add('hidden');
     } else {
-      sidebarImg.classList.add('hidden');
-      sidebarText.classList.remove('hidden');
-      sidebarText.textContent = initial;
-
       topImg.classList.add('hidden');
       topText.classList.remove('hidden');
       topText.textContent = initial;
@@ -1031,7 +1035,12 @@ tailwind.config = {
   };
   
   document.querySelectorAll('.sidebar-link').forEach(l=>{
-    l.addEventListener('click', e=>{ e.preventDefault(); switchPanel(l.dataset.panel); });
+    l.addEventListener('click', e=>{ 
+      if(l.dataset.panel) {
+        e.preventDefault(); 
+        switchPanel(l.dataset.panel); 
+      }
+    });
   });
 
   // ================= DATA LISTENERS =================
