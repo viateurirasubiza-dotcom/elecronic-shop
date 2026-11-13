@@ -100,21 +100,16 @@ tailwind.config = {
 <!-- LOGIN SCREEN (ANIMATED) -->
 <div id="loginScreen" class="fixed inset-0 z-[60] bg-slate-900 overflow-y-auto flex items-center justify-center p-4 transition-opacity duration-500 font-sans">
   
-  <!-- Animated Background Elements -->
   <div class="absolute inset-0 overflow-hidden pointer-events-none">
-    
-    <!-- Large Background Text -->
     <div class="absolute inset-0 flex items-center justify-center overflow-hidden pointer-events-none">
       <h1 class="text-[12vw] font-black text-white/5 whitespace-nowrap tracking-tighter anim-bg-text select-none">EBENEZER SHOP</h1>
     </div>
 
-    <!-- Blobs -->
     <div class="absolute -top-[10%] -left-[10%] w-[40vw] h-[40vw] bg-primary/30 rounded-full mix-blend-screen filter blur-[100px] anim-blob"></div>
     <div class="absolute top-[20%] -right-[10%] w-[35vw] h-[35vw] bg-purple/30 rounded-full mix-blend-screen filter blur-[100px] anim-blob" style="animation-delay: 2s;"></div>
     <div class="absolute -bottom-[20%] left-[20%] w-[45vw] h-[45vw] bg-pink/20 rounded-full mix-blend-screen filter blur-[100px] anim-blob" style="animation-delay: 4s;"></div>
   </div>
 
-  <!-- Login Card -->
   <div class="bg-white/10 backdrop-blur-xl border border-white/20 rounded-[2.5rem] shadow-2xl max-w-md w-full p-8 md:p-12 relative z-10 anim-scale my-auto">
     <div class="text-center mb-10">
       <div class="w-20 h-20 mx-auto rounded-3xl bg-gradient-to-tr from-primary to-blue-500 flex items-center justify-center text-3xl text-white shadow-xl shadow-primary/40 mb-6 anim-gradient">
@@ -141,7 +136,6 @@ tailwind.config = {
         </div>
       </div>
       
-      <!-- FORGET PASSWORD LINK -->
       <div class="flex justify-end anim-fade-up stagger-2">
         <button type="button" onclick="handleForgetPassword()" class="text-xs font-bold text-primary hover:text-blue-400 transition-colors">Wibagiwe Ijambo ry'Ibanga?</button>
       </div>
@@ -175,6 +169,11 @@ tailwind.config = {
       <p class="px-6 text-[10px] uppercase tracking-widest text-slate-400 font-bold mb-2">Main</p>
       <a href="#" data-panel="overview" class="sidebar-link active flex items-center gap-3 px-6 py-3 text-slate-600"><i class="fas fa-chart-pie w-5 text-center"></i> Dashboard</a>
 
+      <!-- NEW BUTTON: Reba Website -->
+      <a href="index.html" target="_blank" class="sidebar-link flex items-center gap-3 px-6 py-3 text-green-600 font-bold bg-green-50 hover:bg-green-100 transition">
+        <i class="fas fa-external-link-alt w-5 text-center"></i> Reba Website
+      </a>
+
       <p class="px-6 text-[10px] uppercase tracking-widest text-slate-400 font-bold mt-6 mb-2">Ubucuruzi</p>
       <a href="#" data-panel="products" class="sidebar-link flex items-center gap-3 px-6 py-3 text-slate-600"><i class="fas fa-box-open w-5 text-center"></i> Ibicuruzwa <span id="badgeProducts" class="ml-auto bg-primary/10 text-primary text-[10px] font-bold px-2 py-0.5 rounded-full">0</span></a>
       <a href="#" data-panel="orders" class="sidebar-link flex items-center gap-3 px-6 py-3 text-slate-600"><i class="fas fa-shopping-bag w-5 text-center"></i> Orders <span id="badgeOrders" class="ml-auto bg-accent/10 text-accent text-[10px] font-bold px-2 py-0.5 rounded-full">0</span></a>
@@ -186,11 +185,9 @@ tailwind.config = {
       <p class="px-6 text-[10px] uppercase tracking-widest text-slate-400 font-bold mt-6 mb-2">Sisitemu</p>
       <a href="#" data-panel="settings" class="sidebar-link flex items-center gap-3 px-6 py-3 text-slate-600"><i class="fas fa-cog w-5 text-center"></i> Igenamiterere</a>
       
-      <!-- PROFILE YAJYANYWE HASI -->
       <a href="#" data-panel="profile" class="sidebar-link flex items-center gap-3 px-6 py-3 text-slate-600"><i class="fas fa-user-circle w-5 text-center"></i> Profil Yanjye</a>
     </nav>
 
-    <!-- HASI: BUTO YA SOHOKA GUSA -->
     <div class="border-t border-slate-100 p-4 shrink-0">
       <button onclick="handleLogout()" class="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-2xl bg-red-50 hover:bg-red-100 text-red-500 text-sm font-black transition">
         <i class="fas fa-sign-out-alt"></i> Sohoka
@@ -229,7 +226,6 @@ tailwind.config = {
           </div>
         </div>
 
-        <!-- PROFILE MU CORNER (IBURYO HEJURU) -->
         <div onclick="switchPanel('profile')" class="flex items-center gap-3 cursor-pointer p-1.5 rounded-2xl hover:bg-slate-100 transition pr-3 group">
           <div class="w-10 h-10 rounded-full border border-slate-200 bg-slate-50 overflow-hidden flex items-center justify-center shrink-0">
              <img id="topAvatarImg" src="" class="w-full h-full object-cover hidden" />
@@ -274,6 +270,24 @@ tailwind.config = {
           </div>
         </div>
 
+        <!-- NEW: Reba Website Button (Injiye muri Dashboard) -->
+        <div class="mb-6 anim-fade-up stagger-3">
+          <div class="bg-white rounded-2xl p-4 border border-slate-100 shadow-sm flex items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-green-100 text-green-600 flex items-center justify-center">
+                <i class="fas fa-globe"></i>
+              </div>
+              <div>
+                <p class="text-sm font-bold text-dark">Reba Website ya Abakiriya</p>
+                <p class="text-xs text-slate-500">Fungura urupapuro urwo abakiriya bakoreramo.</p>
+              </div>
+            </div>
+            <a href="index.html" target="_blank" class="px-4 py-2 bg-green-500 hover:bg-green-600 text-white font-bold text-xs rounded-lg transition">
+              Fungura <i class="fas fa-external-link-alt ml-1"></i>
+            </a>
+          </div>
+        </div>
+
         <button onclick="switchPanel('products')" class="w-full bg-gradient-to-r from-primary to-blue-600 hover:from-blue-600 hover:to-primary text-white font-black text-sm md:text-base py-4 rounded-2xl shadow-xl shadow-primary/30 transition-all transform hover:-translate-y-1 mb-8 flex items-center justify-center gap-3 anim-fade-up stagger-3">
           <i class="fas fa-plus-circle text-xl"></i> Ongeramo Igicuruzwa Gishya
         </button>
@@ -303,7 +317,7 @@ tailwind.config = {
         </div>
       </section>
 
-      <!-- PROFILE PANEL (NKA IGENAMITERERE) -->
+      <!-- PROFILE PANEL -->
       <section id="panel-profile" class="panel">
         
         <div class="bg-primary/5 border border-primary/20 rounded-2xl p-4 mb-6 flex items-start gap-3 anim-fade-up">
@@ -367,7 +381,6 @@ tailwind.config = {
           </div>
         </div>
 
-        <!-- Sohoka (Mobile View) -->
         <button onclick="handleLogout()" class="w-full mt-6 py-3 bg-red-50 hover:bg-red-100 text-red-500 rounded-2xl text-sm font-black transition md:hidden">
           <i class="fas fa-sign-out-alt mr-2"></i> Sohoka
         </button>
@@ -495,11 +508,10 @@ tailwind.config = {
         </div>
       </section>
 
-      <!-- SETTINGS (IGENAMITERERE) -->
+      <!-- SETTINGS -->
       <section id="panel-settings" class="panel">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
           
-          <!-- Amakuru y'Urubuga -->
           <div class="bg-white rounded-3xl p-6 md:p-8 border border-slate-100 anim-fade-up shadow-sm">
             <h3 class="font-black text-base mb-6 text-dark flex items-center gap-2"><i class="fas fa-store text-primary bg-primary/10 p-2 rounded-lg"></i> Amakuru y'urubuga</h3>
             <div class="space-y-5">
@@ -519,7 +531,6 @@ tailwind.config = {
             </div>
           </div>
 
-          <!-- Uburyo bwo Kwishyura -->
           <div class="bg-white rounded-3xl p-6 md:p-8 border border-slate-100 anim-fade-up stagger-2 shadow-sm">
             <h3 class="font-black text-base mb-6 text-dark flex items-center gap-2"><i class="fas fa-credit-card text-primary bg-primary/10 p-2 rounded-lg"></i> Uburyo bwo kwishyura</h3>
             <div class="space-y-4">
@@ -626,9 +637,7 @@ tailwind.config = {
     updateProfile, sendPasswordResetEmail 
   } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
 
-  // ============================================================
   // ⚠️ CONFIG — SIMBUZA IZI NA ZAWE NYAYO
-  // ============================================================
   const firebaseConfig = {
     apiKey: "AIzaSyAfoZb5XdYaGUh6yYAvZTf9iFVAC5heggQ",
     authDomain: "ebenezer-a8396.firebaseapp.com",
@@ -638,9 +647,7 @@ tailwind.config = {
     appId: "1:1080267451705:web:ef3d06355d0011a5fb4ce8"
   };
 
-  // ============================================================
   // ☁️ CLOUDINARY CONFIG — ivtdrawer
-  // ============================================================
   const CLOUDINARY_CLOUD_NAME = "ivtdrawer";
   const CLOUDINARY_UPLOAD_PRESET = "ebenezer_shop";
   const CLOUDINARY_URL = `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`;
@@ -807,23 +814,19 @@ tailwind.config = {
     const email = user.email;
     const initial = (name || email || 'A')[0].toUpperCase();
 
-    // Sidebar
     document.getElementById('sidebarName').textContent = name;
     document.getElementById('userEmailDisplay').textContent = email;
     const sidebarImg = document.getElementById('userAvatarImg');
     const sidebarText = document.getElementById('userAvatarText');
 
-    // Topbar Corner
     document.getElementById('topName').textContent = name;
     const topImg = document.getElementById('topAvatarImg');
     const topText = document.getElementById('topAvatarText');
 
-    // Dash
     document.getElementById('dashName').textContent = name;
     document.getElementById('dashFullName').textContent = name;
     document.getElementById('dashEmail').textContent = email;
     
-    // Profile Panel
     document.getElementById('profileName').textContent = name;
     document.getElementById('profileEmail').textContent = email;
     document.getElementById('profName').value = name;
@@ -834,42 +837,34 @@ tailwind.config = {
     document.getElementById('dashAdminId').textContent = adminId;
 
     if (user.photoURL) {
-      // Sidebar Img
       sidebarImg.src = user.photoURL;
       sidebarImg.classList.remove('hidden');
       sidebarText.classList.add('hidden');
 
-      // Topbar Img
       topImg.src = user.photoURL;
       topImg.classList.remove('hidden');
       topText.classList.add('hidden');
 
-      // Dash Img
       document.getElementById('dashProfileImg').src = user.photoURL;
       document.getElementById('dashProfileImg').classList.remove('hidden');
       document.getElementById('dashProfileLetter').classList.add('hidden');
 
-      // Profile Panel Img
       document.getElementById('profileImgPreview').src = user.photoURL;
       document.getElementById('profileImgPreview').classList.remove('hidden');
       document.getElementById('profileImgLetter').classList.add('hidden');
     } else {
-      // Sidebar Text
       sidebarImg.classList.add('hidden');
       sidebarText.classList.remove('hidden');
       sidebarText.textContent = initial;
 
-      // Topbar Text
       topImg.classList.add('hidden');
       topText.classList.remove('hidden');
       topText.textContent = initial;
 
-      // Dash Text
       document.getElementById('dashProfileImg').classList.add('hidden');
       document.getElementById('dashProfileLetter').classList.remove('hidden');
       document.getElementById('dashProfileLetter').textContent = initial;
 
-      // Profile Panel Text
       document.getElementById('profileImgPreview').classList.add('hidden');
       document.getElementById('profileImgLetter').classList.remove('hidden');
       document.getElementById('profileImgLetter').textContent = initial;
