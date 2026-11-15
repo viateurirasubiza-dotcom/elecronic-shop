@@ -686,28 +686,67 @@ tailwind.config = {
   let deferredPrompt;
   const installBtn = document.getElementById('installAppBtn');
 
+  // 1. Reba niba App isanzwe iri gukora nka App (Standalone) cyangwa yarashyizweho mbere
+  function checkAppStatus() {
+    const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+    
+    if (isStandalone) {
+      // Niba iri gukora nka App, hisha buto
+      if (installBtn) installBtn.classList.add('hidden');
+    } else {
+      // Niba itarashyizweho, reka buto igaragare
+      if (installBtn) installBtn.classList.remove('hidden');
+    }
+  }
+
+  // 2. Iyo browser yiteguye kohereza prompt yo gushyiraho app
   window.addEventListener('beforeinstallprompt', (e) => {
     e.preventDefault();
     deferredPrompt = e;
-    if (installBtn) {
-      installBtn.classList.remove('hidden');
+    
+    // Hisha buto niba app isanzwe iri gukora nka standalone
+    if (!window.matchMedia('(display-mode: standalone)').matches) {
+      if (installBtn) installBtn.classList.remove('hidden');
     }
   });
 
+  // 3. Iyo user amaze gushyiraho app (Install)
+  window.addEventListener('appinstalled', () => {
+    if (installBtn) installBtn.classList.add('hidden');
+    localStorage.setItem('ebenezer_app_installed', 'true'); // Bika ko yarashyizweho
+    deferredPrompt = null;
+    console.log('PWA was installed');
+  });
+
+  // 4. Iyo urubuga rufungutse, reba niba app yarashyizweho mbere cyangwa iracyakora
+  window.addEventListener('load', () => {
+    checkAppStatus();
+  });
+
+  // 5. Kanda buto ya Install
   if (installBtn) {
     installBtn.addEventListener('click', async () => {
-      if (!deferredPrompt) return;
+      if (!deferredPrompt) {
+        // Niba deferredPrompt itabonetse (bishobora kuba bitewe nuko browser itabyemera ubu),
+        // Twerka ubutumwa bukurikira:
+        alert("Kanda 'Menu' (utuzu dutatu) hejuru iburyo h'incamake ya browser, hanyuma uhitemo 'Install App' cyangwa 'Add to Home Screen' kugira ngo ubone app.");
+        return;
+      }
+      
       deferredPrompt.prompt();
       const { outcome } = await deferredPrompt.userChoice;
+      console.log(`User response to the install prompt: ${outcome}`);
+      
+      if (outcome === 'accepted') {
+        localStorage.setItem('ebenezer_app_installed', 'true');
+      }
+      
       deferredPrompt = null;
       installBtn.classList.add('hidden');
     });
   }
 
-  window.addEventListener('appinstalled', () => {
-    if (installBtn) installBtn.classList.add('hidden');
-  });
-
+  // 6. Kwandikisha Service Worker
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
       navigator.serviceWorker.register('./sw.js').catch(err => console.log('SW registration failed', err));
