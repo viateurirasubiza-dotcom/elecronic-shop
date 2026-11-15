@@ -36,10 +36,7 @@ tailwind.config = {
   @keyframes gradientShift { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
   @keyframes bgText { 0% { transform: scale(1) translateY(0); opacity: 0.02; filter: blur(4px); } 50% { transform: scale(1.05) translateY(-10px); opacity: 0.06; filter: blur(2px); } 100% { transform: scale(1) translateY(0); opacity: 0.02; filter: blur(4px); } }
   @keyframes cardGlow { 0%, 100% { box-shadow: 0 0 30px rgba(14, 165, 233, 0.1); border-color: rgba(255, 255, 255, 0.2); } 50% { box-shadow: 0 0 50px rgba(14, 165, 233, 0.3); border-color: rgba(14, 165, 233, 0.4); } }
-  @keyframes orbitText {
-    from { transform: rotate(0deg) translateX(300px) rotate(0deg); }
-    to { transform: rotate(360deg) translateX(300px) rotate(-360deg); }
-  }
+  @keyframes orbitText { from { transform: rotate(0deg) translateX(300px) rotate(0deg); } to { transform: rotate(360deg) translateX(300px) rotate(-360deg); } }
 
   .anim-fade-up { animation: fadeInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; }
   .anim-scale { animation: fadeInScale 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; }
@@ -101,48 +98,35 @@ tailwind.config = {
   .empty-state i { font-size: 3rem; color: #e2e8f0; margin-bottom: 1rem; display: block; }
 
   /* Orbiting Text & Dots */
-  .orbit-text {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    font-size: 1rem;
-    font-weight: 900;
-    letter-spacing: 0.3em;
-    color: rgba(14, 165, 233, 0.8);
-    white-space: nowrap;
-    text-shadow: 0 0 10px rgba(14, 165, 233, 0.8), 0 0 20px rgba(14, 165, 233, 0.5);
-    animation: orbitText 25s linear infinite;
-    pointer-events: none;
-    z-index: 5;
-  }
+  .orbit-text { position: absolute; top: 50%; left: 50%; font-size: 1rem; font-weight: 900; letter-spacing: 0.3em; color: rgba(14, 165, 233, 0.8); white-space: nowrap; text-shadow: 0 0 10px rgba(14, 165, 233, 0.8), 0 0 20px rgba(14, 165, 233, 0.5); animation: orbitText 25s linear infinite; pointer-events: none; z-index: 5; }
   .dot { position: absolute; top: 50%; left: 50%; border-radius: 50%; margin: -6px 0 0 -6px; pointer-events: none; z-index: 4; }
   .dot-1 { width: 10px; height: 10px; background: #0ea5e9; box-shadow: 0 0 15px #0ea5e9; animation: orbitText 15s linear infinite; }
   .dot-2 { width: 8px; height: 8px; background: #8b5cf6; box-shadow: 0 0 15px #8b5cf6; animation: orbitText 12s linear infinite reverse; animation-delay: -5s; }
   .dot-3 { width: 6px; height: 6px; background: #f59e0b; box-shadow: 0 0 15px #f59e0b; animation: orbitText 18s linear infinite; animation-delay: -10s; }
+
+  /* Mobile Fixes */
+  @media (max-width: 768px) {
+    .mobile-hide { display: none; }
+    .mobile-card { display: block; padding: 1rem; border-bottom: 1px solid #f1f5f9; }
+    .desktop-table { display: none; }
+    .mobile-table { display: block; }
+  }
 </style>
 </head>
 
 <body class="text-slate-800">
 
-<!-- LOGIN SCREEN (ANIMATED) -->
+<!-- LOGIN SCREEN -->
 <div id="loginScreen" class="fixed inset-0 z-[60] bg-slate-900 overflow-y-auto flex items-center justify-center p-4 transition-opacity duration-500 font-sans">
-  
-  <!-- Background Canvas (Particles) -->
   <canvas id="particleCanvas" class="absolute inset-0 z-0 pointer-events-none"></canvas>
-
-  <!-- Background Text -->
   <div class="absolute inset-0 flex items-center justify-center overflow-hidden pointer-events-none z-0">
     <h1 class="text-[15vw] font-black text-white/5 whitespace-nowrap tracking-tighter select-none">EBENEZER SHOP</h1>
   </div>
-
-  <!-- Glowing Blobs -->
   <div class="absolute inset-0 overflow-hidden pointer-events-none z-0">
     <div class="absolute -top-[10%] -left-[10%] w-[40vw] h-[40vw] bg-primary/30 rounded-full mix-blend-screen filter blur-[100px] anim-blob"></div>
     <div class="absolute top-[20%] -right-[10%] w-[35vw] h-[35vw] bg-purple/30 rounded-full mix-blend-screen filter blur-[100px] anim-blob" style="animation-delay: 2s;"></div>
     <div class="absolute -bottom-[20%] left-[20%] w-[45vw] h-[45vw] bg-pink/20 rounded-full mix-blend-screen filter blur-[100px] anim-blob" style="animation-delay: 4s;"></div>
   </div>
-
-  <!-- Isaha (Hagati) -->
   <div class="absolute top-6 left-1/2 -translate-x-1/2 z-20">
     <div class="bg-white/10 backdrop-blur-md border border-white/20 text-primary font-black px-6 py-2 rounded-full shadow-lg flex items-center gap-3 anim-float">
       <i class="far fa-clock text-xl"></i>
@@ -150,28 +134,19 @@ tailwind.config = {
     </div>
   </div>
 
-  <!-- Login Card Container (Relative for Orbit) -->
   <div class="relative z-10 my-auto">
-    
-    <!-- ORBITING DOTS -->
     <div class="absolute inset-0 flex items-center justify-center pointer-events-none z-0">
       <div class="relative w-full h-full">
-        <div class="dot dot-1"></div>
-        <div class="dot dot-2"></div>
-        <div class="dot dot-3"></div>
+        <div class="dot dot-1"></div><div class="dot dot-2"></div><div class="dot dot-3"></div>
       </div>
     </div>
-
-    <!-- ORBITING TEXT (EBENEZER SHOP) -->
     <div class="absolute inset-0 flex items-center justify-center pointer-events-none z-0 overflow-visible">
       <div class="relative w-full h-full flex items-center justify-center">
         <div class="orbit-text">EBENEZER SHOP</div>
       </div>
     </div>
 
-    <!-- LOGIN FORM (Rectangle) -->
     <div class="bg-white/10 backdrop-blur-xl border border-white/20 rounded-[2.5rem] shadow-2xl max-w-md w-full p-8 md:p-12 relative z-10 card-animated">
-      
       <div class="text-center mb-10">
         <div class="w-20 h-20 mx-auto rounded-3xl bg-gradient-to-tr from-primary to-blue-500 flex items-center justify-center text-3xl text-white shadow-xl shadow-primary/40 mb-6 anim-gradient">
           <i class="fas fa-bolt"></i>
@@ -188,7 +163,6 @@ tailwind.config = {
             <input required id="adEmail" type="email" placeholder="admin@ebenezer.com" class="w-full pl-12 pr-5 py-4 rounded-2xl bg-white/5 border border-white/10 text-white placeholder-slate-500 text-sm focus:bg-white/10 focus:border-primary/50 transition-all font-medium" />
           </div>
         </div>
-        
         <div class="anim-fade-up stagger-2">
           <label class="text-xs font-bold text-slate-300 mb-2 block uppercase tracking-wider">Ijambo ry'ibanga</label>
           <div class="relative group">
@@ -196,15 +170,12 @@ tailwind.config = {
             <input required id="adPassword" type="password" placeholder="••••••••" class="w-full pl-12 pr-12 py-4 rounded-2xl bg-white/5 border border-white/10 text-white placeholder-slate-500 text-sm focus:bg-white/10 focus:border-primary/50 transition-all font-medium" />
           </div>
         </div>
-        
         <div class="flex justify-end anim-fade-up stagger-2">
           <button type="button" onclick="handleForgetPassword()" class="text-xs font-bold text-primary hover:text-blue-400 transition-colors">Wibagiwe Ijambo ry'Ibanga?</button>
         </div>
-
         <div id="loginError" class="hidden text-red-400 text-xs font-bold text-center bg-red-400/10 py-3 rounded-xl border border-red-400/20 anim-shake">
           <i class="fas fa-exclamation-circle mr-1"></i> <span id="loginErrorMsg">Email cyangwa password sibyo!</span>
         </div>
-        
         <button type="submit" id="loginBtn" class="w-full justify-center py-4 rounded-2xl text-base font-black tracking-wide text-white shadow-xl shadow-primary/20 hover:shadow-primary/40 transition-all transform hover:-translate-y-1 bg-gradient-to-r from-primary to-blue-600 anim-fade-up stagger-3 mt-2">
           <i class="fas fa-sign-in-alt mr-2"></i> Injira muri Sisitemu
         </button>
@@ -213,7 +184,7 @@ tailwind.config = {
   </div>
 </div>
 
-<!-- MAIN APP (Dashboard) -->
+<!-- MAIN APP -->
 <div id="app" class="flex min-h-screen">
   
   <!-- SIDEBAR -->
@@ -231,22 +202,17 @@ tailwind.config = {
     <nav class="flex-1 overflow-y-auto py-4 text-sm font-medium">
       <p class="px-6 text-[10px] uppercase tracking-widest text-slate-400 font-bold mb-2">Main</p>
       <a href="#" data-panel="overview" class="sidebar-link active flex items-center gap-3 px-6 py-3 text-slate-600"><i class="fas fa-chart-pie w-5 text-center"></i> Dashboard</a>
-
       <a href="index.html" target="_blank" class="sidebar-link flex items-center gap-3 px-6 py-3 text-green-600 font-bold bg-green-50 hover:bg-green-100 transition">
         <i class="fas fa-external-link-alt w-5 text-center"></i> Reba Website
       </a>
-
       <p class="px-6 text-[10px] uppercase tracking-widest text-slate-400 font-bold mt-6 mb-2">Ubucuruzi</p>
       <a href="#" data-panel="products" class="sidebar-link flex items-center gap-3 px-6 py-3 text-slate-600"><i class="fas fa-box-open w-5 text-center"></i> Ibicuruzwa <span id="badgeProducts" class="ml-auto bg-primary/10 text-primary text-[10px] font-bold px-2 py-0.5 rounded-full">0</span></a>
       <a href="#" data-panel="orders" class="sidebar-link flex items-center gap-3 px-6 py-3 text-slate-600"><i class="fas fa-shopping-bag w-5 text-center"></i> Orders <span id="badgeOrders" class="ml-auto bg-accent/10 text-accent text-[10px] font-bold px-2 py-0.5 rounded-full">0</span></a>
       <a href="#" data-panel="inventory" class="sidebar-link flex items-center gap-3 px-6 py-3 text-slate-600"><i class="fas fa-warehouse w-5 text-center"></i> Ububiko</a>
-
       <p class="px-6 text-[10px] uppercase tracking-widest text-slate-400 font-bold mt-6 mb-2">Abantu</p>
       <a href="#" data-panel="users" class="sidebar-link flex items-center gap-3 px-6 py-3 text-slate-600"><i class="fas fa-users w-5 text-center"></i> Abakoresha <span id="badgeUsers" class="ml-auto bg-purple-100 text-purple-600 text-[10px] font-bold px-2 py-0.5 rounded-full">0</span></a>
-
       <p class="px-6 text-[10px] uppercase tracking-widest text-slate-400 font-bold mt-6 mb-2">Sisitemu</p>
       <a href="#" data-panel="settings" class="sidebar-link flex items-center gap-3 px-6 py-3 text-slate-600"><i class="fas fa-cog w-5 text-center"></i> Igenamiterere</a>
-      
       <a href="#" data-panel="profile" class="sidebar-link flex items-center gap-3 px-6 py-3 text-slate-600"><i class="fas fa-user-circle w-5 text-center"></i> Profil Yanjye</a>
     </nav>
 
@@ -308,12 +274,10 @@ tailwind.config = {
 
       <!-- OVERVIEW -->
       <section id="panel-overview" class="panel active">
-        
         <div class="mb-6 anim-fade-up">
           <h1 class="text-2xl md:text-3xl font-black text-dark">👋 Murakaza neza, <span class="text-primary" id="dashName">Admin</span> ✨</h1>
           <p class="text-xs md:text-sm font-bold text-slate-400 mt-2"><i class="fas fa-sun text-accent mr-1"></i> Mwirwe - <span id="dashDate">Kuwa gatanu, 13 Ugushyingo 2026</span></p>
         </div>
-
 
         <div class="bg-gradient-to-r from-primary/10 to-white rounded-3xl p-5 md:p-6 border border-primary/20 mb-6 anim-fade-up stagger-2 flex flex-col md:flex-row items-center md:items-start gap-6 shadow-sm hover:shadow-md transition">
           <div class="w-24 h-24 md:w-28 md:h-28 rounded-full border-4 border-white shadow-lg overflow-hidden shrink-0 bg-slate-100 flex items-center justify-center relative">
@@ -377,7 +341,6 @@ tailwind.config = {
 
       <!-- PROFILE -->
       <section id="panel-profile" class="panel">
-        
         <div class="bg-primary/5 border border-primary/20 rounded-2xl p-4 mb-6 flex items-start gap-3 anim-fade-up">
           <i class="fas fa-info-circle text-primary mt-0.5 text-lg"></i>
           <div>
@@ -455,8 +418,7 @@ tailwind.config = {
               </div>
               <select id="productCatFilter" class="px-4 py-2.5 rounded-xl border border-slate-200 text-sm font-bold text-slate-600 w-full sm:w-auto">
                 <option value="">Ibyiciro byose</option>
-                <option>Telefoni</option><option>Laptops</option><option>Audio</option>
-                <option>Accessories</option><option>TV</option><option>Gaming</option>
+                <!-- Categories will be loaded dynamically -->
               </select>
             </div>
             <div class="flex gap-2 w-full md:w-auto">
@@ -496,21 +458,26 @@ tailwind.config = {
               <option value="cancelled">Cancelled</option>
             </select>
           </div>
-          <div class="overflow-x-auto w-full">
-            <table class="w-full text-sm min-w-[700px]">
+          
+          <!-- DESKTOP VIEW -->
+          <div class="hidden md:block overflow-x-auto w-full">
+            <table class="w-full text-sm min-w-[800px]">
               <thead class="bg-white text-slate-400 text-[11px] uppercase tracking-wider border-b border-slate-100">
                 <tr>
                   <th class="text-left px-6 py-4 font-black">#</th>
                   <th class="text-left px-6 py-4 font-black">Umukiriya</th>
+                  <th class="text-left px-6 py-4 font-black">Ibicuruzwa (Items)</th>
                   <th class="text-left px-6 py-4 font-black">Total</th>
                   <th class="text-left px-6 py-4 font-black">Status</th>
-                  <th class="text-left px-6 py-4 font-black">Itariki</th>
-                  <th class="text-right px-6 py-4 font-black">Hindura</th>
+                  <th class="text-right px-6 py-4 font-black">Ibikorwa</th>
                 </tr>
               </thead>
               <tbody id="orderTable" class="divide-y divide-slate-50"></tbody>
             </table>
           </div>
+
+          <!-- MOBILE VIEW (Cards) -->
+          <div id="orderMobileList" class="md:hidden divide-y divide-slate-100"></div>
         </div>
       </section>
 
@@ -569,7 +536,6 @@ tailwind.config = {
       <!-- SETTINGS -->
       <section id="panel-settings" class="panel">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-          
           <div class="bg-white rounded-3xl p-6 md:p-8 border border-slate-100 anim-fade-up shadow-sm">
             <h3 class="font-black text-base mb-6 text-dark flex items-center gap-2"><i class="fas fa-store text-primary bg-primary/10 p-2 rounded-lg"></i> Amakuru y'urubuga</h3>
             <div class="space-y-5">
@@ -607,7 +573,6 @@ tailwind.config = {
               <button onclick="saveSettings()" class="btn-primary text-white px-5 py-3 rounded-xl text-sm font-bold w-full mt-4 shadow-lg shadow-primary/30 transition-all hover:-translate-y-0.5">Bika Uburyo</button>
             </div>
           </div>
-
         </div>
       </section>
 
@@ -616,14 +581,6 @@ tailwind.config = {
 </div>
 
 <div id="toastBox" class="fixed top-4 right-4 md:top-6 md:right-6 z-[100] space-y-3"></div>
-
-<!-- ============================================================ -->
-<!-- 🟢 HANO NI HO BUTO YA DOWNLOAD APP YASHYIZWE (FLOATING BUTTON) -->
-<!-- ============================================================ -->
-<button id="installAppBtn" class="hidden fixed bottom-6 right-6 z-[90] w-16 h-16 rounded-full bg-gradient-to-tr from-primary to-blue-500 text-white shadow-2xl shadow-primary/50 hover:scale-110 transition-transform flex items-center justify-center group cursor-pointer" title="Download App">
-  <i class="fas fa-download text-2xl group-hover:animate-bounce"></i>
-</button>
-<!-- ============================================================ -->
 
 <!-- PRODUCT MODAL -->
 <div id="productModal" class="hidden fixed inset-0 z-[70] modal-overlay flex items-center justify-center p-4">
@@ -667,6 +624,7 @@ tailwind.config = {
           <label class="text-xs font-bold text-slate-700 mb-1.5 block uppercase tracking-wide">Icyiciro *</label>
           <select id="pfCategory" class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm font-bold text-slate-700 bg-slate-50 focus:bg-white transition">
             <option>Telefoni</option><option>Laptops</option><option>Audio</option><option>Accessories</option><option>TV</option><option>Gaming</option>
+            <!-- New categories will be added here -->
           </select>
         </div>
         <div>
@@ -741,7 +699,6 @@ tailwind.config = {
       if (!deferredPrompt) return;
       deferredPrompt.prompt();
       const { outcome } = await deferredPrompt.userChoice;
-      console.log(`User response to the install prompt: ${outcome}`);
       deferredPrompt = null;
       installBtn.classList.add('hidden');
     });
@@ -749,7 +706,6 @@ tailwind.config = {
 
   window.addEventListener('appinstalled', () => {
     if (installBtn) installBtn.classList.add('hidden');
-    console.log('PWA was installed');
   });
 
   if ('serviceWorker' in navigator) {
@@ -777,7 +733,6 @@ tailwind.config = {
     update(); 
     setInterval(update, 1000); 
   }
-
   startLiveClock();
 
   // ================= STATE =================
@@ -847,7 +802,7 @@ tailwind.config = {
           if (xhr.status >= 200 && xhr.status < 300 && res.secure_url) {
             resolve(res.secure_url);
           } else {
-            const errorMsg = res.error?.message || 'Cloudinary upload yanze (Reba Cloudinary settings)';
+            const errorMsg = res.error?.message || 'Cloudinary upload yanze';
             reject(new Error(errorMsg));
           }
         } catch (err) {
@@ -855,7 +810,7 @@ tailwind.config = {
         }
       };
 
-      xhr.onerror = () => reject(new Error('Network error kuri Cloudinary (Reba internet)'));
+      xhr.onerror = () => reject(new Error('Network error kuri Cloudinary'));
       xhr.send(fd);
     });
   }
@@ -898,10 +853,9 @@ tailwind.config = {
   window.handleForgetPassword = async () => {
     const email = document.getElementById('adEmail').value.trim();
     if (!email) return showToast('Shyiramo Email yawe mbere.', 'error');
-
     try {
       await sendPasswordResetEmail(auth, email);
-      showToast('✅ Email yoherejwe! Reba inbox yawe guhindura ijambo ry\'ibanga.', 'success');
+      showToast('✅ Email yoherejwe! Reba inbox yawe.', 'success');
     } catch (error) {
       showToast('Ntibyakunze kohereza: ' + error.message, 'error');
     }
@@ -915,9 +869,6 @@ tailwind.config = {
 
   onAuthStateChanged(auth, (user) => {
     if(user) {
-      const emailDisplay = document.getElementById('userEmailDisplay');
-      if (emailDisplay) emailDisplay.textContent = user.email;
-      
       document.getElementById('loginScreen').style.opacity = '0';
       setTimeout(()=>{
         document.getElementById('loginScreen').style.display = 'none';
@@ -1091,6 +1042,10 @@ tailwind.config = {
       products = snap.docs.map(d => ({ id: d.id, ...d.data() }));
       document.getElementById('stProducts').textContent = products.length;
       document.getElementById('badgeProducts').textContent = products.length;
+      
+      // Update categories dropdown
+      updateCategories();
+      
       renderProductsTable();
       renderInventory();
       if(document.getElementById('panel-overview').classList.contains('active')) drawCharts();
@@ -1100,6 +1055,54 @@ tailwind.config = {
         '<tr><td colspan="5" class="empty-state"><i class="fas fa-exclamation-triangle"></i>Habaye ikibazo cyo kubona ibicuruzwa. Reba Firestore Rules.</td></tr>';
     });
   }
+
+  // Update categories dynamically
+  function updateCategories() {
+    const catSelect = document.getElementById('pfCategory');
+    const filterSelect = document.getElementById('productCatFilter');
+    
+    // Get unique categories
+    const cats = [...new Set(products.map(p => p.category).filter(Boolean))];
+    
+    // Save current selection
+    const currentFilter = filterSelect.value;
+    
+    // Reset options (keep first empty option for filter)
+    filterSelect.innerHTML = '<option value="">Ibyiciro byose</option>';
+    
+    // Keep existing categories in modal, add new ones
+    const existingModalCats = Array.from(catSelect.options).map(o => o.value);
+    
+    cats.forEach(cat => {
+      if (!existingModalCats.includes(cat)) {
+        const opt = document.createElement('option');
+        opt.value = cat;
+        opt.textContent = cat;
+        catSelect.appendChild(opt);
+      }
+      
+      const optFilter = document.createElement('option');
+      optFilter.value = cat;
+      optFilter.textContent = cat;
+      filterSelect.appendChild(optFilter);
+    });
+    
+    filterSelect.value = currentFilter;
+  }
+
+  // Add new category function
+  window.addNewCategory = () => {
+    const newCat = prompt("Andika izina ry'icyiciro gishya (Urugero: Printers):");
+    if (newCat && newCat.trim()) {
+      const catSelect = document.getElementById('pfCategory');
+      const opt = document.createElement('option');
+      opt.value = newCat.trim();
+      opt.textContent = newCat.trim();
+      catSelect.appendChild(opt);
+      catSelect.value = newCat.trim();
+      showToast('Icyiciro gishya cyongeweho!');
+    }
+  };
 
   function startOrdersListener() {
     if(unsubOrders) unsubOrders();
@@ -1111,6 +1114,7 @@ tailwind.config = {
       const total = orders.filter(o => o.status === 'delivered').reduce((s,o) => s + (Number(o.total)||0), 0);
       document.getElementById('stRevenue').textContent = formatRWF(total);
       renderOrdersTable();
+      renderMobileOrders();
       updateNotifications();
       if(document.getElementById('panel-overview').classList.contains('active')) drawCharts();
     });
@@ -1343,12 +1347,31 @@ tailwind.config = {
       cancelled: 'bg-red-100 text-red-600',
     };
 
-    table.innerHTML = filtered.map(o => `
+    table.innerHTML = filtered.map(o => {
+      // Generate items html
+      let itemsHtml = '';
+      if (o.items && o.items.length > 0) {
+        itemsHtml = o.items.map(item => `
+          <div class="flex items-center gap-2 mb-1 last:mb-0">
+            <div class="w-6 h-6 rounded bg-slate-100 flex items-center justify-center overflow-hidden shrink-0">
+              <img src="${item.image || 'https://via.placeholder.com/50'}" class="w-full h-full object-cover" onerror="this.src='https://via.placeholder.com/50'" />
+            </div>
+            <span class="text-xs font-bold text-slate-700 truncate">${escapeHtml(item.name)} (x${item.qty})</span>
+          </div>
+        `).join('');
+      } else {
+        itemsHtml = `<span class="text-xs text-slate-400 italic">No items details</span>`;
+      }
+
+      return `
       <tr class="hover:bg-slate-50/80 transition-colors">
         <td class="px-6 py-4 font-bold text-sm text-dark">#${(o.orderNumber || o.id.slice(0,6)).toString().toUpperCase()}</td>
         <td class="px-6 py-4">
           <p class="font-bold text-dark text-sm">${escapeHtml(o.customerName || o.userName || 'Ntibizwi')}</p>
           <p class="text-[11px] text-slate-400 font-medium">${escapeHtml(o.customerPhone || o.userPhone || '')}</p>
+        </td>
+        <td class="px-6 py-4 max-w-[200px]">
+          ${itemsHtml}
         </td>
         <td class="px-6 py-4 text-sm font-black text-dark">${formatRWF(o.total)}</td>
         <td class="px-6 py-4">
@@ -1358,15 +1381,79 @@ tailwind.config = {
             ).join('')}
           </select>
         </td>
-        <td class="px-6 py-4 text-[11px] text-slate-500 font-medium">${formatDate(o.createdAt)}</td>
         <td class="px-6 py-4 text-right">
           <button onclick="deleteOrder('${o.id}')" class="text-red-500 hover:bg-red-50 w-9 h-9 rounded-xl transition inline-flex items-center justify-center"><i class="fas fa-trash"></i></button>
         </td>
       </tr>
-    `).join('');
+      `;
+    }).join('');
   }
 
-  document.getElementById('orderStatusFilter').addEventListener('change', renderOrdersTable);
+  // Mobile Orders View
+  function renderMobileOrders() {
+    const container = document.getElementById('orderMobileList');
+    const filter = document.getElementById('orderStatusFilter').value;
+    let filtered = orders.filter(o => !filter || o.status === filter);
+
+    if(filtered.length === 0) {
+      container.innerHTML = `<div class="text-center py-8 text-slate-400 text-sm font-bold">Nta orders zihari.</div>`;
+      return;
+    }
+
+    const statusColors = {
+      pending: 'bg-yellow-100 text-yellow-700',
+      processing: 'bg-blue-100 text-blue-700',
+      shipped: 'bg-purple-100 text-purple-700',
+      delivered: 'bg-green-100 text-green-700',
+      cancelled: 'bg-red-100 text-red-600',
+    };
+
+    container.innerHTML = filtered.map(o => {
+      let itemsHtml = '';
+      if (o.items && o.items.length > 0) {
+        itemsHtml = o.items.map(item => `
+          <div class="flex items-center gap-2 mb-1 last:mb-0">
+            <div class="w-6 h-6 rounded bg-slate-100 flex items-center justify-center overflow-hidden shrink-0">
+              <img src="${item.image || 'https://via.placeholder.com/50'}" class="w-full h-full object-cover" onerror="this.src='https://via.placeholder.com/50'" />
+            </div>
+            <span class="text-xs font-bold text-slate-700 truncate">${escapeHtml(item.name)} (x${item.qty})</span>
+          </div>
+        `).join('');
+      } else {
+        itemsHtml = `<span class="text-xs text-slate-400 italic">No items details</span>`;
+      }
+
+      return `
+      <div class="p-4 bg-white hover:bg-slate-50 transition">
+        <div class="flex justify-between items-start mb-2">
+          <div>
+            <p class="font-bold text-dark text-sm">#${(o.orderNumber || o.id.slice(0,6)).toString().toUpperCase()}</p>
+            <p class="text-xs text-slate-500">${escapeHtml(o.customerName || 'Ntibizwi')} • ${escapeHtml(o.customerPhone || '')}</p>
+          </div>
+          <span class="text-xs font-black text-dark">${formatRWF(o.total)}</span>
+        </div>
+        
+        <div class="mb-3">
+          ${itemsHtml}
+        </div>
+
+        <div class="flex justify-between items-center gap-2">
+          <select onchange="updateOrderStatus('${o.id}', this.value)" class="text-[11px] font-bold ${statusColors[o.status]||'bg-slate-100 text-slate-600'} px-2 py-1.5 rounded-lg border-0 cursor-pointer">
+            ${['pending','processing','shipped','delivered','cancelled'].map(s => 
+              `<option value="${s}" ${o.status===s?'selected':''}>${s}</option>`
+            ).join('')}
+          </select>
+          <button onclick="deleteOrder('${o.id}')" class="text-red-500 hover:bg-red-50 w-8 h-8 rounded-xl transition inline-flex items-center justify-center"><i class="fas fa-trash text-xs"></i></button>
+        </div>
+      </div>
+      `;
+    }).join('');
+  }
+
+  document.getElementById('orderStatusFilter').addEventListener('change', () => {
+    renderOrdersTable();
+    renderMobileOrders();
+  });
 
   window.updateOrderStatus = async (id, status) => {
     try {
