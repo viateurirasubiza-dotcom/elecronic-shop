@@ -5,6 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Admin Dashboard — Ebenezer Shop</title>
 
+<!-- PWA MANIFEST -->
+<link rel="manifest" href="./manifest.json">
+<meta name="theme-color" content="#0ea5e9">
+
 <script src="https://cdn.tailwindcss.com"></script>
 <script>
 tailwind.config = {
@@ -246,7 +250,11 @@ tailwind.config = {
       <a href="#" data-panel="profile" class="sidebar-link flex items-center gap-3 px-6 py-3 text-slate-600"><i class="fas fa-user-circle w-5 text-center"></i> Profil Yanjye</a>
     </nav>
 
-    <div class="border-t border-slate-100 p-4 shrink-0">
+    <!-- HANO NI HO BUTO YA DOWNLOAD APP YONGEWEHO -->
+    <div class="border-t border-slate-100 p-4 shrink-0 space-y-2">
+      <button id="installAppBtn" class="hidden w-full flex items-center justify-center gap-2 px-4 py-3 rounded-2xl bg-indigo-50 hover:bg-indigo-100 text-indigo-600 text-sm font-black transition">
+        <i class="fas fa-download"></i> Download App
+      </button>
       <button onclick="handleLogout()" class="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-2xl bg-red-50 hover:bg-red-100 text-red-500 text-sm font-black transition">
         <i class="fas fa-sign-out-alt"></i> Sohoka
       </button>
@@ -715,7 +723,53 @@ tailwind.config = {
   const auth = getAuth(app);
 
   // ============================================================
-  // ⏰ ISAHa YIKORERA (LIVE CLOCK) - YONGEWEHO
+  // 📱 PWA (DOWNLOAD APP) LOGIC
+  // ============================================================
+  let deferredPrompt;
+  const installBtn = document.getElementById('installAppBtn');
+
+  window.addEventListener('beforeinstallprompt', (e) => {
+    // Zapisha prompt isanzwe ya browser
+    e.preventDefault();
+    // Bika event kugira ngo tuyikoreshe nyuma
+    deferredPrompt = e;
+    // Erekana buto ya "Download App"
+    if (installBtn) {
+      installBtn.classList.remove('hidden');
+    }
+  });
+
+  if (installBtn) {
+    installBtn.addEventListener('click', async () => {
+      if (!deferredPrompt) return;
+      // Erekana prompt yo kwishyira kuri telefone
+      deferredPrompt.prompt();
+      // Tegereza igisubizo cy'umukoresha
+      const { outcome } = await deferredPrompt.userChoice;
+      console.log(`User response to the install prompt: ${outcome}`);
+      // Ntukongere gukoresha iyi prompt
+      deferredPrompt = null;
+      // Hisha buto
+      installBtn.classList.add('hidden');
+    });
+  }
+
+  window.addEventListener('appinstalled', () => {
+    // Hisha buto niba App yamaze kwishyirwa
+    if (installBtn) installBtn.classList.add('hidden');
+    console.log('PWA was installed');
+  });
+
+  // Kwiyandikisha Service Worker
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('./sw.js').catch(err => console.log('SW registration failed', err));
+    });
+  }
+  // ============================================================
+
+  // ============================================================
+  // ⏰ ISAHa YIKORERA (LIVE CLOCK)
   // ============================================================
   function startLiveClock() {
     const clockEl = document.getElementById('liveClock');
