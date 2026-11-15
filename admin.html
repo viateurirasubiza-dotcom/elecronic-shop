@@ -250,11 +250,7 @@ tailwind.config = {
       <a href="#" data-panel="profile" class="sidebar-link flex items-center gap-3 px-6 py-3 text-slate-600"><i class="fas fa-user-circle w-5 text-center"></i> Profil Yanjye</a>
     </nav>
 
-    <!-- HANO NI HO BUTO YA DOWNLOAD APP YONGEWEHO -->
-    <div class="border-t border-slate-100 p-4 shrink-0 space-y-2">
-      <button id="installAppBtn" class="hidden w-full flex items-center justify-center gap-2 px-4 py-3 rounded-2xl bg-indigo-50 hover:bg-indigo-100 text-indigo-600 text-sm font-black transition">
-        <i class="fas fa-download"></i> Download App
-      </button>
+    <div class="border-t border-slate-100 p-4 shrink-0">
       <button onclick="handleLogout()" class="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-2xl bg-red-50 hover:bg-red-100 text-red-500 text-sm font-black transition">
         <i class="fas fa-sign-out-alt"></i> Sohoka
       </button>
@@ -625,6 +621,14 @@ tailwind.config = {
 
 <div id="toastBox" class="fixed top-4 right-4 md:top-6 md:right-6 z-[100] space-y-3"></div>
 
+<!-- ============================================================ -->
+<!-- 🟢 HANO NI HO BUTO YA DOWNLOAD APP YASHYIZWE (FLOATING BUTTON) -->
+<!-- ============================================================ -->
+<button id="installAppBtn" class="hidden fixed bottom-6 right-6 z-[90] w-16 h-16 rounded-full bg-gradient-to-tr from-primary to-blue-500 text-white shadow-2xl shadow-primary/50 hover:scale-110 transition-transform flex items-center justify-center group cursor-pointer" title="Download App">
+  <i class="fas fa-download text-2xl group-hover:animate-bounce"></i>
+</button>
+<!-- ============================================================ -->
+
 <!-- PRODUCT MODAL -->
 <div id="productModal" class="hidden fixed inset-0 z-[70] modal-overlay flex items-center justify-center p-4">
   <div class="bg-white rounded-[2rem] max-w-lg w-full p-6 md:p-8 max-h-[90vh] overflow-y-auto anim-scale shadow-2xl relative">
@@ -729,11 +733,8 @@ tailwind.config = {
   const installBtn = document.getElementById('installAppBtn');
 
   window.addEventListener('beforeinstallprompt', (e) => {
-    // Zapisha prompt isanzwe ya browser
     e.preventDefault();
-    // Bika event kugira ngo tuyikoreshe nyuma
     deferredPrompt = e;
-    // Erekana buto ya "Download App"
     if (installBtn) {
       installBtn.classList.remove('hidden');
     }
@@ -742,25 +743,19 @@ tailwind.config = {
   if (installBtn) {
     installBtn.addEventListener('click', async () => {
       if (!deferredPrompt) return;
-      // Erekana prompt yo kwishyira kuri telefone
       deferredPrompt.prompt();
-      // Tegereza igisubizo cy'umukoresha
       const { outcome } = await deferredPrompt.userChoice;
       console.log(`User response to the install prompt: ${outcome}`);
-      // Ntukongere gukoresha iyi prompt
       deferredPrompt = null;
-      // Hisha buto
       installBtn.classList.add('hidden');
     });
   }
 
   window.addEventListener('appinstalled', () => {
-    // Hisha buto niba App yamaze kwishyirwa
     if (installBtn) installBtn.classList.add('hidden');
     console.log('PWA was installed');
   });
 
-  // Kwiyandikisha Service Worker
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
       navigator.serviceWorker.register('./sw.js').catch(err => console.log('SW registration failed', err));
@@ -773,10 +768,7 @@ tailwind.config = {
   // ============================================================
   function startLiveClock() {
     const clockEl = document.getElementById('liveClock');
-    if (!clockEl) {
-      console.warn('liveClock element ntibonetse');
-      return;
-    }
+    if (!clockEl) return;
 
     function update() {
       const now = new Date();
@@ -786,11 +778,10 @@ tailwind.config = {
       clockEl.textContent = `${h}:${m}:${s}`;
     }
 
-    update(); // Tangiza ako kanya
-    setInterval(update, 1000); // Hindura buri segonda
+    update(); 
+    setInterval(update, 1000); 
   }
 
-  // Tangiza isaha ako kanya (kuri login screen)
   startLiveClock();
 
   // ================= STATE =================
