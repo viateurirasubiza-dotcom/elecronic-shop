@@ -1,0 +1,5 @@
+
+User-agent: *
+Allow: /
+
+Sitemap: https://electronic-shop-ashen-nine.vercel.app/sitemap.xml
