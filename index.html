@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html lang="rw">
 <head>
-
-<head>
     <!-- Basic Configuration -->
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -12,9 +10,7 @@
 
     <!-- SEO Description -->
     <meta name="description" content="Welcome to Ebenezer Electronic Shop in Nyagatare Town, Rwanda. Discover quality electronics, computers, laptops, phones, accessories and more at competitive prices." />
-
     <meta name="keywords" content="Ebenezer Electronic Shop, Electronics Shop Nyagatare, Electronics Rwanda, Computer Shop Nyagatare, Laptops Rwanda, Phones Nyagatare, Computer Accessories Rwanda, Buy Electronics Rwanda" />
-
     <meta name="author" content="Ebenezer Electronic Shop" />
     <meta name="robots" content="index, follow, max-image-preview:large" />
     <meta name="googlebot" content="index, follow" />
@@ -67,87 +63,84 @@
     }
     </script>
 
-</head>
-
-
-<script src="https://cdn.tailwindcss.com"></script>
-<script>
-tailwind.config = {
-  theme: {
-    extend: {
-      colors: { 
-        primary: '#10b981', 
-        primaryDark: '#059669',
-        dark: '#0f172a', 
-        accent: '#f59e0b' 
-      },
-      fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] }
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: { 
+            primary: '#10b981', 
+            primaryDark: '#059669',
+            dark: '#0f172a', 
+            accent: '#f59e0b' 
+          },
+          fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] }
+        }
+      }
     }
-  }
-}
-</script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
 
-<style>
-  body { font-family: 'Inter', sans-serif; background-color: #f8fafc; overflow-x: hidden; }
-  ::-webkit-scrollbar { width: 6px; height: 6px; }
-  ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
-  
-  .hide-scroll::-webkit-scrollbar { display: none; }
-  .hide-scroll { -ms-overflow-style: none; scrollbar-width: none; }
+    <style>
+      body { font-family: 'Inter', sans-serif; background-color: #f8fafc; overflow-x: hidden; }
+      ::-webkit-scrollbar { width: 6px; height: 6px; }
+      ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+      
+      .hide-scroll::-webkit-scrollbar { display: none; }
+      .hide-scroll { -ms-overflow-style: none; scrollbar-width: none; }
 
-  /* Keyframes */
-  @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-  @keyframes fadeInScale { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
-  @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
-  @keyframes pulseSoft { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
-  @keyframes slideInRight { from { transform: translateX(100%); } to { transform: translateX(0); } }
-  @keyframes gradientShift { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
-  @keyframes clockPulse { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.05); opacity: 0.8; } }
+      /* Keyframes */
+      @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+      @keyframes fadeInScale { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+      @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+      @keyframes pulseSoft { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
+      @keyframes slideInRight { from { transform: translateX(100%); } to { transform: translateX(0); } }
+      @keyframes gradientShift { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+      @keyframes clockPulse { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.05); opacity: 0.8; } }
 
-  /* Animation Classes */
-  .anim-fade-up { animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; }
-  .anim-scale { animation: fadeInScale 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; }
-  .anim-float { animation: float 3s ease-in-out infinite; }
-  .anim-pulse { animation: pulseSoft 2s ease-in-out infinite; }
-  .anim-clock { animation: clockPulse 2s ease-in-out infinite; }
-  .anim-slide { animation: slideInRight 0.3s ease forwards; }
-  .anim-gradient { background-size: 200% 200%; animation: gradientShift 5s ease infinite; }
-  
-  .stagger-1 { animation-delay: 0.1s; }
-  .stagger-2 { animation-delay: 0.2s; }
-  .stagger-3 { animation-delay: 0.3s; }
-  .stagger-4 { animation-delay: 0.4s; }
+      /* Animation Classes */
+      .anim-fade-up { animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; }
+      .anim-scale { animation: fadeInScale 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; }
+      .anim-float { animation: float 3s ease-in-out infinite; }
+      .anim-pulse { animation: pulseSoft 2s ease-in-out infinite; }
+      .anim-clock { animation: clockPulse 2s ease-in-out infinite; }
+      .anim-slide { animation: slideInRight 0.3s ease forwards; }
+      .anim-gradient { background-size: 200% 200%; animation: gradientShift 5s ease infinite; }
+      
+      .stagger-1 { animation-delay: 0.1s; }
+      .stagger-2 { animation-delay: 0.2s; }
+      .stagger-3 { animation-delay: 0.3s; }
+      .stagger-4 { animation-delay: 0.4s; }
 
-  .btn-primary { background: #10b981; transition: all 0.3s ease; }
-  .btn-primary:hover { background: #059669; transform: translateY(-3px); box-shadow: 0 10px 20px -10px rgba(16, 185, 129, 0.6); }
-  .btn-primary:active { transform: translateY(-1px); }
+      .btn-primary { background: #10b981; transition: all 0.3s ease; }
+      .btn-primary:hover { background: #059669; transform: translateY(-3px); box-shadow: 0 10px 20px -10px rgba(16, 185, 129, 0.6); }
+      .btn-primary:active { transform: translateY(-1px); }
 
-  /* Product Card Effects */
-  .product-card { transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
-  .product-card:hover { transform: translateY(-8px); box-shadow: 0 20px 40px -10px rgba(0,0,0,0.1); }
-  .product-card:hover .product-img { transform: scale(1.1); }
-  .product-card:hover .product-action { opacity: 1; transform: translateY(0); }
-  
-  .product-img { transition: transform 0.5s ease; }
-  .product-action { opacity: 0; transform: translateY(10px); transition: all 0.3s ease; }
+      /* Product Card Effects */
+      .product-card { transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+      .product-card:hover { transform: translateY(-8px); box-shadow: 0 20px 40px -10px rgba(0,0,0,0.1); }
+      .product-card:hover .product-img { transform: scale(1.1); }
+      .product-card:hover .product-action { opacity: 1; transform: translateY(0); }
+      
+      .product-img { transition: transform 0.5s ease; }
+      .product-action { opacity: 0; transform: translateY(10px); transition: all 0.3s ease; }
 
-  /* Nav Link Effect */
-  .nav-link { position: relative; }
-  .nav-link::after { content: ''; position: absolute; bottom: -4px; left: 0; width: 0%; height: 2px; background: #10b981; transition: width 0.3s ease; }
-  .nav-link:hover::after { width: 100%; }
+      /* Nav Link Effect */
+      .nav-link { position: relative; }
+      .nav-link::after { content: ''; position: absolute; bottom: -4px; left: 0; width: 0%; height: 2px; background: #10b981; transition: width 0.3s ease; }
+      .nav-link:hover::after { width: 100%; }
 
-  /* Footer Specific Animations */
-  @keyframes footerGlow { 0% { transform: translate(0, 0) scale(1); opacity: 0.3; } 50% { transform: translate(-20px, -20px) scale(1.1); opacity: 0.5; } 100% { transform: translate(0, 0) scale(1); opacity: 0.3; } }
-  .footer-glow { animation: footerGlow 8s ease-in-out infinite alternate; }
-  
-  .footer-card { transition: all 0.3s ease; }
-  .footer-card:hover { transform: translateX(5px); background: rgba(255,255,255,0.1); border-color: rgba(16, 185, 129, 0.3); }
+      /* Footer Specific Animations */
+      @keyframes footerGlow { 0% { transform: translate(0, 0) scale(1); opacity: 0.3; } 50% { transform: translate(-20px, -20px) scale(1.1); opacity: 0.5; } 100% { transform: translate(0, 0) scale(1); opacity: 0.3; } }
+      .footer-glow { animation: footerGlow 8s ease-in-out infinite alternate; }
+      
+      .footer-card { transition: all 0.3s ease; }
+      .footer-card:hover { transform: translateX(5px); background: rgba(255,255,255,0.1); border-color: rgba(16, 185, 129, 0.3); }
 
-  /* Modal Animation */
-  .modal-enter { animation: fadeInScale 0.3s ease forwards; }
-</style>
+      /* Modal Animation */
+      .modal-enter { animation: fadeInScale 0.3s ease forwards; }
+    </style>
 </head>
 
 <body class="text-slate-800 flex flex-col min-h-screen">
@@ -573,6 +566,7 @@ tailwind.config = {
         <label class="text-xs font-bold text-slate-500 mb-1 block">Aho uherereye *</label>
         <input required id="coAddress" type="text" class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:border-primary bg-slate-50 focus:bg-white transition" placeholder="Nka: Nyagatare, Kigali..." />
       </div>
+      
       <div>
         <label class="text-xs font-bold text-slate-500 mb-2 block">Uburyo bwo Kwishyura</label>
         <div class="grid grid-cols-2 gap-2">
@@ -591,6 +585,19 @@ tailwind.config = {
         </div>
       </div>
       
+      <!-- 🔥 MOMO PAYMENT BOX (USSD PUSH) -->
+      <div id="momoPaymentBox" class="bg-yellow-50 border border-yellow-200 p-4 rounded-xl mt-4">
+        <p class="text-xs font-bold text-yellow-700 mb-2"><i class="fas fa-info-circle"></i> Icyitonderwa: Urasabwa kwishyura kuri iyi numero:</p>
+        <div class="flex items-center justify-between bg-white p-2 rounded-lg border border-yellow-300">
+            <span class="font-black text-lg text-dark">1629789</span>
+            <span class="text-xs font-bold text-slate-500">MTN MoMo Pay Code</span>
+        </div>
+        <p class="text-[11px] text-slate-500 mt-2">Kanda buto yo kwishyura hepfo kugira ngo ujye kuri MoMo ukande <b>*182*8*1*1629789#</b> cyangwa ukoreshe link y'ukwishyura.</p>
+        <button type="button" onclick="triggerMomoUSSD()" class="mt-2 w-full bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 rounded-lg transition text-sm shadow-md">
+            <i class="fas fa-mobile-alt mr-2"></i> Kanda hano Wishyure
+        </button>
+      </div>
+
       <div class="bg-primary/5 p-4 rounded-xl border border-primary/20 mt-4">
         <div class="flex justify-between font-bold text-sm mb-1 text-slate-600">
           <span>Igiciro cyose:</span>
@@ -600,7 +607,7 @@ tailwind.config = {
       </div>
 
       <button type="submit" id="coSubmitBtn" class="btn-primary w-full py-4 rounded-xl text-white font-black text-lg shadow-lg shadow-primary/30 mt-4 flex justify-center items-center gap-2 transition-transform hover:-translate-y-1">
-        <i class="fas fa-check-circle"></i> Emeza Kugura
+        <i class="fas fa-check-circle"></i> Emeza Kugura no Kwishyura
       </button>
     </form>
   </div>
@@ -612,8 +619,9 @@ tailwind.config = {
 <a href="https://wa.me/250788995481?text=Muraho%20Ebenezer%20Shop,%20ndifuza%20gufata%20ibicuruzwa." target="_blank" class="fixed bottom-24 right-4 md:bottom-8 md:right-6 z-[90] w-14 h-14 bg-[#25D366] text-white rounded-full flex items-center justify-center shadow-2xl shadow-[#25D366]/50 hover:scale-110 hover:bg-[#1ebd5b] transition-all duration-300 anim-float" title="Twandikire kuri WhatsApp">
   <i class="fab fa-whatsapp text-3xl"></i>
 </a>
+
 <!-- ============================================================ -->
-<!-- FIREBASE & JAVASCRIPT LOGIC (IKORA NEZA) -->
+<!-- FIREBASE & JAVASCRIPT LOGIC -->
 <!-- ============================================================ -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
@@ -704,12 +712,6 @@ tailwind.config = {
     filterAndRender();
   };
 
-  const searchInput = document.getElementById('searchInput');
-  if(searchInput) searchInput.addEventListener('input', (e) => {
-    currentSearch = e.target.value.toLowerCase();
-    filterAndRender();
-  });
-  
   const searchInputMobile = document.getElementById('searchInputMobile');
   if(searchInputMobile) searchInputMobile.addEventListener('input', (e) => {
     currentSearch = e.target.value.toLowerCase();
@@ -980,7 +982,7 @@ tailwind.config = {
     subEl.textContent = formatRWF(currentTotal);
   }
 
-  // ================= CHECKOUT LOGIC =================
+  // ================= CHECKOUT & MOMO USSD LOGIC =================
   window.openCheckout = () => {
     if(cart.length === 0) return showToast('Agatebo kawe karimo ubusa. Shyiramo ibicuruzwa.', 'error');
     toggleCart();
@@ -988,12 +990,71 @@ tailwind.config = {
     const total = cart.reduce((s, c) => s + (c.price * c.qty), 0);
     document.getElementById('coTotal').textContent = formatRWF(total);
     document.getElementById('checkoutModal').classList.remove('hidden');
+
+    // 🟢 HANO: Kora USSD Push iyo umukiriya ahisemo MTN MoMo
+    document.querySelectorAll('input[name="coPay"]').forEach(radio => {
+      radio.addEventListener('change', (e) => {
+        const momoBox = document.getElementById('momoPaymentBox');
+        if (e.target.value === 'MTN MoMo') {
+          momoBox.classList.remove('hidden');
+        } else {
+          momoBox.classList.add('hidden');
+        }
+      });
+    });
   };
 
   window.closeCheckout = () => document.getElementById('checkoutModal').classList.add('hidden');
 
+  // 🔥 IYI NI YO NKURU YO GUKORA USSD PUSH (Frontend)
+  window.triggerMomoUSSD = () => {
+    const total = cart.reduce((s, c) => s + (c.price * c.qty), 0);
+    const ussdCode = '*182*8*1*1629789#';
+    
+    // Kuri Android, gukoresha tel: cyangwa se ubutumwa
+    // Turakoresha window.location kugira ngo dufungure dialer (Niba ari telefone)
+    // Cyangwa se tukerekana message
+    if (/Android|iPhone/i.test(navigator.userAgent)) {
+        window.location.href = `tel:${encodeURIComponent(ussdCode)}`;
+    } else {
+        alert(`Urasabwa kwishyura ${formatRWF(total)} kuri MoMo Pay Code: 1629789\n\nKanda *182*8*1*1629789# kuri telefone yawe.`);
+    }
+  };
+
   document.getElementById('checkoutForm').addEventListener('submit', async (e) => {
     e.preventDefault();
+    
+    const payMethod = document.querySelector('input[name="coPay"]:checked').value;
+    const total = cart.reduce((s, c) => s + (c.price * c.qty), 0);
+
+    if (payMethod === 'MTN MoMo') {
+      // 📌 Kora USSD Push (Guhuza na API yawe ya MoMo cyangwa ukoreshe code ya USSD)
+      showToast('Turi kuguhuza na MoMo...', 'info');
+      
+      setTimeout(() => {
+        // 🟢 HANO: Koresha *182*8*1*1629789# kuri telefone yawe
+        const ussdCode = '*182*8*1*1629789#';
+        
+        if (/Android|iPhone/i.test(navigator.userAgent)) {
+            window.location.href = `tel:${encodeURIComponent(ussdCode)}`;
+        } else {
+            alert(`Urasabwa kwishyura ${formatRWF(total)} kuri MoMo Pay Code: 1629789\n\nKanda *182*8*1*1629789# kuri telefone yawe.`);
+        }
+        
+        // Nyuma y'uko umukiriya yishyuye (Tuvuge ko yamaze), emeza order
+        setTimeout(() => {
+          submitOrderToFirebase(payMethod);
+        }, 2000);
+        
+      }, 1500);
+
+    } else {
+      // Niba ari Cash cyangwa Airtel, kora order isanzwe
+      submitOrderToFirebase(payMethod);
+    }
+  });
+
+  async function submitOrderToFirebase(payMethod) {
     const btn = document.getElementById('coSubmitBtn');
     const originalText = btn.innerHTML;
     btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Turi kohereza...';
@@ -1002,8 +1063,7 @@ tailwind.config = {
     const name = document.getElementById('coName').value.trim();
     const phone = document.getElementById('coPhone').value.trim();
     const address = document.getElementById('coAddress').value.trim();
-    const payMethod = document.querySelector('input[name="coPay"]:checked').value;
-
+    
     const total = cart.reduce((s, c) => s + (c.price * c.qty), 0);
     const orderData = {
       customerName: name,
@@ -1013,6 +1073,7 @@ tailwind.config = {
       items: cart.map(c => ({ id: c.id, name: c.name, price: c.price, qty: c.qty })),
       total: total,
       status: 'pending',
+      momoCode: '1629789',
       createdAt: serverTimestamp()
     };
 
@@ -1025,7 +1086,7 @@ tailwind.config = {
       showToast('🎉 Murakoze! Order yawe yoherejwe. Turakuhamagara vuba.');
       closeCheckout();
       document.getElementById('checkoutForm').reset();
-
+      
     } catch(err) {
       console.error(err);
       showToast('Habaye ikibazo mu kohereza order: ' + err.message, 'error');
@@ -1033,7 +1094,7 @@ tailwind.config = {
       btn.innerHTML = originalText;
       btn.disabled = false;
     }
-  });
+  }
 
   // ================= CHAT LOGIC =================
   window.toggleChat = () => {
